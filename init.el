@@ -22,7 +22,7 @@
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
-(yas-global-mode)
+(yas-global-mode t)
 (add-hook 'term-mode-hook (lambda()
         (setq yas-dont-activate t)))
 
@@ -78,9 +78,6 @@ scroll-step 1)
   "sf" 'save-buffer
   "sa" 'save-some-buffers
   "g" 'magit-status
-  "e" 'evil-ace-jump-word-mode
-  "l" 'evil-ace-jump-line-mode
-  "c" 'evil-ace-jump-char-mode
   "pt" 'projectile-find-other-file
   "qr" 'ggtags-query-replace
   "r" 'replace-string
@@ -300,6 +297,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      (340 . "#2790C3")
      (360 . "#66D9EF"))))
  '(vc-annotate-very-old-color nil)
+ '(web-mode-enable-auto-expanding t)
  '(weechat-color-list
    (unspecified "#272822" "#3E3D31" "#A20C41" "#F92672" "#67930F" "#A6E22E" "#968B26" "#E6DB74" "#21889B" "#66D9EF" "#A41F99" "#FD5FF0" "#349B8D" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 

@@ -2,6 +2,7 @@
 
 ;; ----- ido-last-directory-list -----
 (
+ ("/home/jonve547/projects/date/" . "src/")
  ("/home/jonve547/projects/cards/" . "src/")
  ("/home/jonve547/projects/spacerust/" . "src/")
  ("/home/jonve547/projects/scrabble/" . "src/")
@@ -11,7 +12,7 @@
  ("/home/jonve547/projects/dining_philosophers/" . "src/")
  ("/home/jonve547/projects/guessing_game/" . "src/")
  ("/home/jonve547/projects/hello_world/" . "src/")
- ("/home/jonve547/projects/" . "cards/")
+ ("/home/jonve547/projects/" . "date/")
  ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/snippets/" . "c++-mode/")
  ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/" . "snippets/")
  ("/home/jonve547/tdp007-laborationer/opponering3/" . "DEL_01/")
@@ -27,6 +28,9 @@
 ;; ----- ido-work-directory-list -----
 (
  "/home/jonve547/.config/i3/"
+ "/home/jonve547/projects/date/src/"
+ "/home/jonve547/"
+ "/home/jonve547/tdts04-laborationer/labb5/"
  "/home/jonve547/projects/cards/src/"
  "/home/jonve547/projects/spacerust/src/"
  "/home/jonve547/projects/guessing_game/src/"
@@ -36,13 +40,11 @@
  "/home/jonve547/projects/"
  "/home/jonve547/projects/spacecraze/"
  "/home/jonve547/.emacs.d/"
- "/home/jonve547/tdts04-laborationer/labb5/"
  "/home/jonve547/i3-4.12/"
  "/home/jonve547/.emacs.d/elpa/badwolf-theme-20160120.938/"
  "/home/jonve547/duggaplugg/"
  "/home/jonve547/tdp007-laborationer/labb4/"
  "/home/jonve547/.config/gtk-3.0/"
- "/home/jonve547/"
  "/home/jonve547/.i3/"
  "/home/jonve547/tdts04-laborationer/labb5/ChatApp/"
  "/home/jonve547/tdts04-laborationer/labb5/orb.db/"
@@ -70,31 +72,39 @@
 (
  "config"
  "main.rs"
+ "date.cc"
+ "scrabble.cc"
+ "ChatServer.java"
+ "ChatClient.java"
  "Cargo.toml"
  "init.el"
  "Makefile"
- "ChatServer.java"
  "i3.config"
- "badwolf-theme.el"
- "triples.rb"
- "unit_tests.rb"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/jonve547/" (22246 51502 492650 578000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" "tenta/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" "Public/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" "dotfiles/" "tdts04-laborationer/")
+ ("/home/jonve547/.config/i3/" (22253 47536 632287 76000) "./" "../" "config")
 
- ("/home/jonve547/.config/i3/" (22245 19371 652972 561000) "./" "../" "config")
+ ("/home/jonve547/.config/" (22253 23669 557033 225000) ".fonts/" "./" "unity/" "software-center/" "xfce4/" "cef_user_data/" "eog/" "ibus/" "update-notifier/" "../" "libreoffice/" "user-dirs.dirs" "gnome-session/" "upstart/" "gedit/" "libaccounts-glib/" "pulse/" ".git/" "nautilus/" "enchant/" "dconf/" "README.md" "evolution/" "Thunar/" "gtk-2.0/" "mimeapps.list" ".gitignore" "spotify/" "user-dirs.locale" "i3/" "compiz-1/" "gtk-3.0/")
 
- ("/home/jonve547/.config/" (22244 23498 75189 584000) "./" "unity/" "xfce4/" "cef_user_data/" "ibus/" "update-notifier/" "../" "user-dirs.dirs" "gnome-session/" "upstart/" "gedit/" "libaccounts-glib/" "pulse/" ".git/" "nautilus/" "enchant/" "dconf/" "evolution/" "Thunar/" "gtk-2.0/" "mimeapps.list" "spotify/" "user-dirs.locale" "i3/" "compiz-1/" "gtk-3.0/")
+ ("/home/jonve547/" (22255 6108 100190 615000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" "tenta/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" "date.cc" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" "dotfiles/" "tdts04-laborationer/")
+
+ ("/home/jonve547/projects/date/src/" (22252 25590 316131 764000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/date/" (22252 25590 316131 764000) "./" "../" "src/" "Cargo.toml" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/" (22252 25590 312131 803000) "./" "date/" "cards/" "../" "guessing_game/" "currency/" "scrabble/" "portfolio/" "spacecraze/")
+
+ ("/home/jonve547/projects/spacecraze/src/" (22249 16113 302974 668000) "./" "asset_manager.cc" "world.cc" "sprite.cc" "object_factory.cc" "blaster.cc" "aabb.cc" "font.cc" "../" "player.cc" "texture.cc" "main.cc" "laser.cc" "asteroid.cc" "game_object.cc" "play.cc" "game.cc" "laser_manager.cc" "music.cc" "enemy_generator.cc" "enemy.cc" "drone.cc")
+
+ ("/home/jonve547/tdts04-laborationer/labb5/" (22248 5609 476412 782000) "Chat.idl" "./" "ChatClient.java" "../" "ChatServer.class" "ChatCallbackImpl.class" "orb.db/" "ChatImpl.class" "ChatClient.class" "Makefile" "ChatApp/" "ChatServer.java")
 
  ("/home/jonve547/projects/spacecraze/" (22245 18419 815544 779000) ".clang_complete" "GPATH" "./" "GTAGS" ".dir-locals.el" "build/" "../" "src/" "fonts/" "include/" ".git/" "sprites/" "README.md" "GRTAGS" ".gitignore" "sounds/" "Makefile" "todo.org" ".projectile" "GSYMS" "a")
 
  ("/home/jonve547/projects/cards/src/" (22244 40706 782166 955000) "./" "../" "main.rs")
 
  ("/home/jonve547/projects/cards/" (22244 40706 782166 955000) "./" "../" "src/" "Cargo.toml" ".git/" ".gitignore")
-
- ("/home/jonve547/projects/" (22244 40706 782166 955000) "./" "cards/" "../" "spacerust/" "guessing_game/" "scrabble/" "spacecraze/")
 
  ("/home/jonve547/projects/spacerust/src/" (22244 40672 866773 924000) "./" "../" "main.rs")
 
@@ -112,15 +122,11 @@
 
  ("/home/jonve547/.emacs.d/" (22244 8556 22594 134000) "themes/" "eshell/" "./" "recentf" "irony/" "ido.last" "../" "init.el~" "projectile-bookmarks.eld" "ac-comphist.dat" ".git/" "snippets/" "ido.last~" "smex-items" "auto-save-list/" "projectile.cache" ".gitignore" "session.106d818783f8de07c8145470939546068700000020980034" "elpa/" "url/" "init.el")
 
- ("/home/jonve547/projects/spacecraze/src/" (22243 59913 557220 960000) "./" "asset_manager.cc" "world.cc" "sprite.cc" "object_factory.cc" "blaster.cc" "aabb.cc" "font.cc" "../" "player.cc" "texture.cc" "main.cc" "laser.cc" "asteroid.cc" "game_object.cc" "play.cc" "game.cc" "laser_manager.cc" "music.cc" "enemy_generator.cc" "enemy.cc" "drone.cc")
-
  ("/home/jonve547/.emacs.d/themes/" (22243 23185 604650 284000) "tomorrow-day-theme.el" "./" "color-theme-tomorrow.el" "../" "blackboard-theme.el" "tomorrow-night-theme.el" "tomorrow-night-blue-theme.el" "tomorrow-night-bright-theme.el" "rippedcasts-theme-source-code.el" "graham-theme.el" "tomorrow-night-eighties-theme.el")
 
  ("/home/jonve547/.config/gtk-3.0/" (22243 58828 384673 892000) "bookmarks" "./" "../" "settings.ini")
 
  ("/home/jonve547/projects/spacecraze/include/" (22243 57272 130913 95000) "./" "game.h" "enums.h" "music.h" "font.h" "gamestate.h" "asset_manager.h" "game_object.h" "../" "aabb.h" "play.h" "texture.h" "point.h" "enemy_generator.h" "sprite.h" "player.h" "asteroid.h" "enemy.h" "object_factory.h" "blaster.h" "user_interface.h" "laser_manager.h" "drone.h" "constants.h" "laser.h" "game_world.h" "world.h")
-
- ("/home/jonve547/tdts04-laborationer/labb5/" (22241 46019 867728 498000) ".#ChatServer.java" "ChatClient.class" "../" "ChatClient.java" "ChatServer.java" "ChatImpl.class" "Makefile" "./" "orb.db/" "Chat.idl" "ChatApp/" "ChatCallbackImpl.class" "ChatServer.class")
 
  ("/home/jonve547/i3-conf/" (22240 33461 552909 251000) "../" "./")
 
