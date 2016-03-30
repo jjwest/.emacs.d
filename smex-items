@@ -1,47 +1,53 @@
 
 ;; ----- smex-history -----
 (
- yas-minor-mode
- yas-expand
- yas-minor-mode-on
- yas-global-mode
- flycheck-verify-setup
  projectile-cleanup-known-projects
  ggtags-create-tags
+ irony-cdb-autosetup-compile-options
+ irony-cdb-menu
+ irony-install-server
+ kill-some-buffers
+ customize-face
 )
 
 ;; ----- smex-data -----
 (
- (list-packages . 12)
+ (list-packages . 18)
  (menu-bar-mode . 6)
- (menu-bar-options-save . 6)
+ (menu-bar-options-save . 7)
  (ido-find-file . 1)
  (term . 1)
- (yas-minor-mode-on . 6)
- (yas-minor-mode . 8)
- (ggtags-create-tags . 9)
- (load-theme . 80)
+ (yas-minor-mode-on . 7)
+ (yas-minor-mode . 18)
+ (ggtags-create-tags . 10)
+ (load-theme . 89)
  (delete-selection-repeat-replace-region . 1)
- (linum-relative-mode . 2)
+ (linum-relative-mode . 12)
  (landmark . 1)
  (eshell . 1)
  (customize-variable . 3)
- (customize-face . 4)
+ (customize-face . 8)
  (tmm-menubar . 1)
  (company-mode . 4)
  (yas-global-mode . 13)
- (customize-group . 6)
+ (customize-group . 10)
  (butterfly . 2)
  (tetris . 1)
- (projectile-cleanup-known-projects . 3)
+ (projectile-cleanup-known-projects . 5)
  (conf-mode . 1)
  (text-mode . 1)
  (version . 1)
- (flycheck-verify-setup . 10)
+ (flycheck-verify-setup . 11)
  (add-dir-local-variable . 5)
  (irony-version . 1)
- (irony-install-server . 3)
- (irony-mode . 2)
- (irony-cdb-menu . 2)
+ (irony-install-server . 6)
+ (irony-mode . 4)
+ (irony-cdb-menu . 16)
  (yas-expand . 1)
+ (irony-cdb-autosetup-compile-options . 9)
+ (linum-mode . 9)
+ (irony-server-kill . 2)
+ (yas-reload-all . 2)
+ (company-irony-c-headers-reload-compiler-output . 1)
+ (kill-some-buffers . 1)
 )

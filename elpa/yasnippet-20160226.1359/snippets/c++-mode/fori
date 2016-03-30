@@ -2,7 +2,6 @@
 # name: fori
 # key: fori
 # --
-for (auto ${1:i} : ${2:var}) 
-{
+for (${1:const auto&} ${2:var} : ${3:var}) {
     $0
 }

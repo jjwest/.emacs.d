@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: cerr
-# key: cerr
+# name: unique_ptr
+# key: uni
 # --
 `(progn (save-excursion) (goto-char (point-min)) (unless (re-search-forward
 "^using\\s-+namespace std;" nil 'no-errer) "std::"))
-`cerr << $0${1: << '\n'};
+`unique_ptr<${1:Class}> ${2:var}; $0
