@@ -202,7 +202,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;;; Syntax-checking ;;;;;;;;
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(global-flycheck-mode)
 (setq-default flycheck-disabled-checkers '(c/c++-clang))
 
 

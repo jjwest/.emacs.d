@@ -25,12 +25,13 @@
  ("/home/jonve547/duggaplugg/" . "dugga2/")
  ("/home/jonve547/tdp007-laborationer/" . "labb4/")
  ("/home/jonve547/tdts04-laborationer/" . "labb5/")
- ("/home/jonve547/" . ".config/")
+ ("/home/jonve547/" . ".emacs.d/")
  ("/home/jonve547/projects/spacecraze/" . "build/")
 )
 
 ;; ----- ido-work-directory-list -----
 (
+ "/home/jonve547/.emacs.d/"
  "/home/jonve547/.config/i3/"
  "/home/jonve547/projects/spacecraze/include/"
  "/home/jonve547/projects/spacecraze/"
@@ -55,7 +56,6 @@
  "/home/jonve547/projects/spacerust/"
  "/home/jonve547/projects/scrabble/src/"
  "/home/jonve547/projects/scrabble/"
- "/home/jonve547/.emacs.d/"
  "/home/jonve547/i3-4.12/"
  "/home/jonve547/.emacs.d/elpa/badwolf-theme-20160120.938/"
  "/home/jonve547/duggaplugg/"
@@ -84,6 +84,7 @@
 
 ;; ----- ido-work-file-list -----
 (
+ "init.el"
  "config"
  "play.h"
  "syldavian.cc"
@@ -93,12 +94,13 @@
  "stack.cc"
  "stack.h"
  "main.rs"
- "exchange_rates.txt"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/jonve547/" (22266 16831 260313 308000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" ".vimrc" "dotfiles/" "tdts04-laborationer/")
+ ("/home/jonve547/.emacs.d/" (22268 12257 218448 893000) "themes/" ".fonts/" "eshell/" "./" "recentf" "irony/" "ido.last" "../" "init.el~" "projectile-bookmarks.eld" "ac-comphist.dat" ".git/" "snippets/" "ido.last~" "smex-items" "auto-save-list/" "projectile.cache" "README.md" ".gitignore" "session.106d818783f8de07c8145470939546068700000020980034" "elpa/" "url/" "init.el" "i3/")
+
+ ("/home/jonve547/" (22268 10266 852295 658000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" ".vimrc" "dotfiles/" "tdts04-laborationer/")
 
  ("/home/jonve547/projects/spacecraze/include/" (22266 20341 859685 550000) "button.h" "./" "game.h" "enums.h" "music.h" "font.h" "menu.h" "gamestate.h" "asset_manager.h" "game_object.h" "../" "aabb.h" "play.h" "texture.h" "point.h" "enemy_generator.h" "sprite.h" "player.h" "asteroid.h" "enemy.h" "object_factory.h" "blaster.h" "user_interface.h" "laser_manager.h" "drone.h" "constants.h" "laser.h" "world.h")
 
@@ -109,8 +111,6 @@
  ("/home/jonve547/projects/stack/" (22265 16679 771252 241000) "stack.h" "./" "a.out" "../" "stack.cc" "main.cc")
 
  ("/home/jonve547/projects/" (22265 16769 422691 865000) "./" "date/" "nixlista/" "cards/" "../" "guessing_game/" "currency/" "scrabble/" "crypto/" "stack/" "portfolio/" "spacecraze/" "produktsummering/")
-
- ("/home/jonve547/.emacs.d/" (22265 15414 131151 46000) "themes/" ".fonts/" "eshell/" "./" "recentf" "irony/" "ido.last" "../" "init.el~" "projectile-bookmarks.eld" "ac-comphist.dat" ".git/" "snippets/" "ido.last~" "smex-items" "auto-save-list/" "projectile.cache" "README.md" ".gitignore" "session.106d818783f8de07c8145470939546068700000020980034" "elpa/" "url/" "init.el" "i3/")
 
  ("/home/jonve547/projects/spacecraze/build/" (22265 13719 797300 93000) "button.o" "music.o" "./" "asteroid.o" "../" "main.o" "world.o" "object_factory.o" "menu.o" "enemy.o" "play.o" "aabb.o" "laser_manager.o" "enemy_generator.o" "game_object.o" "player.o" "drone.o" "font.o" "laser.o" "game.o" "blaster.o" "asset_manager.o" "sprite.o" "texture.o")
 
