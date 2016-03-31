@@ -1,1 +1,1 @@
-("~/.emacs.d/" "~/projects/spacecraze/" "~/projects/portfolio/" "~/tdts04-laborationer/" "~/projects/guessing_game/" "~/projects/date/" "~/projects/scrabble/" "~/projects/momslista/" "~/.config/" "~/projects/currency/" "~/projects/cards/" "~/dotfiles/")
+("~/.emacs.d/" "~/projects/spacecraze/" "~/projects/currency/" "~/projects/scrabble/" "~/projects/portfolio/" "~/tdts04-laborationer/" "~/projects/guessing_game/" "~/projects/date/" "~/projects/momslista/" "~/.config/" "~/projects/cards/" "~/dotfiles/")

@@ -3,16 +3,16 @@
 (
  list-packages
  package-install
- flycheck-irony-setup
- customize-group
  irony-install-server
  irony-server-kill
- delete-selection-repeat-replace-region
+ irony-cdb-menu
+ irony-cdb-autosetup-compile-options
+ eldoc-mode
 )
 
 ;; ----- smex-data -----
 (
- (list-packages . 22)
+ (list-packages . 34)
  (menu-bar-mode . 6)
  (menu-bar-options-save . 7)
  (ido-find-file . 1)
@@ -30,7 +30,7 @@
  (tmm-menubar . 1)
  (company-mode . 4)
  (yas-global-mode . 13)
- (customize-group . 11)
+ (customize-group . 16)
  (butterfly . 2)
  (tetris . 1)
  (projectile-cleanup-known-projects . 5)
@@ -40,16 +40,20 @@
  (flycheck-verify-setup . 11)
  (add-dir-local-variable . 5)
  (irony-version . 1)
- (irony-install-server . 7)
- (irony-mode . 4)
- (irony-cdb-menu . 18)
+ (irony-install-server . 10)
+ (irony-mode . 5)
+ (irony-cdb-menu . 24)
  (yas-expand . 1)
- (irony-cdb-autosetup-compile-options . 10)
+ (irony-cdb-autosetup-compile-options . 12)
  (linum-mode . 9)
- (irony-server-kill . 3)
+ (irony-server-kill . 6)
  (yas-reload-all . 2)
  (company-irony-c-headers-reload-compiler-output . 1)
  (kill-some-buffers . 1)
  (flycheck-irony-setup . 1)
- (package-install . 1)
+ (package-install . 2)
+ (flycheck-color-mode-line-mode . 3)
+ (semantic-mode . 2)
+ (irony-eldoc . 1)
+ (eldoc-mode . 8)
 )

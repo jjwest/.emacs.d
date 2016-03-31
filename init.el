@@ -27,7 +27,7 @@
 (add-hook 'prog-mode-hook 'yas-minor-mode)
 
 ;; COMPANY MODE
-(add-hook 'prog-mode-hook 'company-mode-on)
+(global-company-mode)
 (setq company-idle-delay 0)
 (setq company-minimum-prefix-length 2)
 (with-eval-after-load 'company
@@ -84,7 +84,6 @@ scroll-step 1)
   "r" 'replace-string
   "x" 'ansi-term
   "jd" 'ggtags-find-definition
-  "?" 'ggtags-show-definition
   "dir" 'dired)
 
 ;; EVIL SURROUND
@@ -149,14 +148,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; SMEX
 (global-set-key (kbd "M-x") 'smex)
 
-;; CMAKE
-(require 'rtags) ;; optional, must have rtags installed
-(cmake-ide-setup)
-
 ;; IRONY
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'irony-mode-hook 'eldoc-mode)
+(add-hook 'irony-mode-hook 'irony-eldoc)
 
 ;; replace the `completion-at-point' and `complete-symbol' bindings in
 ;; irony-mode's buffers by irony-mode's asynchronous function
@@ -165,14 +162,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     'irony-completion-at-point-async)
   (define-key irony-mode-map [remap complete-symbol]
     'irony-completion-at-point-async))
-
 (add-hook 'irony-mode-hook 'my-irony-mode-hook)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-hook 'irony-mode-hook (lambda() (diminish 'irony-mode)))
 
+;; Flycheck-irony
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+
 (require 'company)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
 (require 'company-irony-c-headers)
    ;; Load with `irony-mode` as a grouped backend
    (eval-after-load 'company
@@ -203,6 +201,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;; Syntax-checking ;;;;;;;;
 (global-flycheck-mode)
+(with-eval-after-load 'flycheck
+  (flycheck-pos-tip-mode))
 (setq-default flycheck-disabled-checkers '(c/c++-clang))
 
 
@@ -227,6 +227,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(ansi-color-names-vector
    ["#272822" "#F92672" "chartreuse" "#E6DB74" "#66D9EF" "#FD5FF0" "#A1EFE4" "#F8F8F2"])
  '(column-number-mode t)
+ '(company-clang-executable "/usr/bin/clang-3.7")
  '(company-idle-delay 0)
  '(compilation-message-face (quote default))
  '(custom-enabled-themes (quote (gruvbox)))

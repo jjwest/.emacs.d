@@ -2,108 +2,232 @@
 
 ;; ----- ido-last-directory-list -----
 (
+ ("/home/jonve547/projects/produktsummering/" . "src/")
+ ("/home/jonve547/projects/nixlista/" . "src/")
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/" . "c++-mode/")
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/" . "snippets/")
+ ("/home/jonve547/projects/date/" . "src/")
+ ("/home/jonve547/projects/cards/" . "src/")
+ ("/home/jonve547/projects/spacerust/" . "src/")
+ ("/home/jonve547/projects/scrabble/" . "src/")
+ ("/home/jonve547/.config/" . "i3/")
+ ("/home/jonve547/tdts04-laborationer/labb5/orb.db/" . "logs/")
+ ("/home/jonve547/tdts04-laborationer/labb5/" . "ChatApp/")
  ("/home/jonve547/projects/dining_philosophers/" . "src/")
  ("/home/jonve547/projects/guessing_game/" . "src/")
  ("/home/jonve547/projects/hello_world/" . "src/")
- ("/home/jonve547/projects/" . "spacecraze/")
+ ("/home/jonve547/projects/" . "test/")
  ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/snippets/" . "c++-mode/")
  ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/" . "snippets/")
  ("/home/jonve547/tdp007-laborationer/opponering3/" . "DEL_01/")
- ("/home/jonve547/.emacs.d/elpa/" . "yasnippet-20160122.1056/")
+ ("/home/jonve547/.emacs.d/elpa/" . "gruvbox-theme-20151227.113/")
  ("/home/jonve547/.emacs.d/" . "elpa/")
  ("/home/jonve547/duggaplugg/" . "dugga2/")
- ("/home/jonve547/tdp007-laborationer/" . "labb3/")
- ("/home/jonve547/tdts04-laborationer/" . "labb4/")
+ ("/home/jonve547/tdp007-laborationer/" . "labb4/")
+ ("/home/jonve547/tdts04-laborationer/" . "labb5/")
  ("/home/jonve547/" . ".emacs.d/")
- ("/home/jonve547/projects/spacecraze/" . "include/")
+ ("/home/jonve547/projects/spacecraze/" . "build/")
 )
 
 ;; ----- ido-work-directory-list -----
 (
- "/home/jonve547/projects/spacecraze/"
- "/home/jonve547/projects/spacecraze/src/"
  "/home/jonve547/.emacs.d/"
+ "/home/jonve547/projects/"
  "/home/jonve547/"
+ "/home/jonve547/projects/test/"
+ "/home/jonve547/.config/i3/"
  "/home/jonve547/projects/spacecraze/include/"
+ "/home/jonve547/projects/spacecraze/"
+ "/home/jonve547/projects/crypto/"
+ "/home/jonve547/projects/stack/"
+ "/home/jonve547/projects/produktsummering/src/"
+ "/home/jonve547/projects/nixlista/src/"
+ "/home/jonve547/projects/currency/src/"
+ "/home/jonve547/.emacs.d/elpa/gruvbox-theme-20151227.113/"
+ "/home/jonve547/projects/spacecraze/src/"
+ "/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/c++-mode/"
+ "/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/cc-mode/"
+ "/home/jonve547/.emacs.d/elpa/moe-theme-20160322.115/"
+ "/home/jonve547/projects/spacecraze/build/"
+ "/home/jonve547/projects/date/src/"
+ "/home/jonve547/tdts04-laborationer/labb5/"
+ "/home/jonve547/projects/cards/src/"
+ "/home/jonve547/projects/spacerust/src/"
+ "/home/jonve547/projects/guessing_game/src/"
+ "/home/jonve547/projects/spacerust/"
+ "/home/jonve547/projects/scrabble/src/"
+ "/home/jonve547/projects/scrabble/"
+ "/home/jonve547/i3-4.12/"
+ "/home/jonve547/.emacs.d/elpa/badwolf-theme-20160120.938/"
+ "/home/jonve547/duggaplugg/"
+ "/home/jonve547/tdp007-laborationer/labb4/"
+ "/home/jonve547/.config/gtk-3.0/"
+ "/home/jonve547/.i3/"
+ "/home/jonve547/tdts04-laborationer/labb5/ChatApp/"
+ "/home/jonve547/tdts04-laborationer/labb5/orb.db/"
+ "/home/jonve547/tdts04-laborationer/"
+ "/home/jonve547/tdp007-laborationer/opponering4/sem4/"
+ "/home/jonve547/tdp019-language/"
  "/home/jonve547/tdts04-laborationer/labb4/"
+ "/home/jonve547/.emacs.d/themes/"
+ "/home/jonve547/tdts04-laborationer/labb2/"
  "/home/jonve547/projects/dining_philosophers/src/"
  "/home/jonve547/tdp007-laborationer/labb3/"
- "/home/jonve547/tdp007-laborationer/labb4/"
- "/home/jonve547/projects/guessing_game/src/"
  "/home/jonve547/projects/hello_world/src/"
  "/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/snippets/c++-mode/"
- "/home/jonve547/tdts04-laborationer/labb2/"
- "/home/jonve547/tdp019-language/"
  "/home/jonve547/tdts04-laborationer/labb3/"
  "/home/jonve547/tdp007-laborationer/opponering3/DEL_01/"
  "/home/jonve547/tdp007-laborationer/opponering3/DEL_02/"
  "/home/jonve547/tdp007-laborationer/opponering3/"
- "/home/jonve547/.emacs.d/themes/"
- "/home/jonve547/.emacs.d/elpa/badwolf-theme-20160120.938/"
  "/home/jonve547/duggaplugg/dugga2/"
  "/home/jonve547/tdp007-laborationer/labb2/"
- "/home/jonve547/duggaplugg/"
 )
 
 ;; ----- ido-work-file-list -----
 (
- "script.py"
  "init.el"
- ".bashrc"
- "world.h"
- "RouterSimulator.java"
- "RouterNode.java"
- ".bash_rc"
- ".bash_aliases"
- "GuiTextArea.java"
- "F.java"
+ "stack.cc"
+ "stack.h"
+ "config"
+ "play.h"
+ "syldavian.cc"
+ "syldavian.h"
+ "encryption.h"
+ "main.cc"
+ "main.rs"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/jonve547/projects/spacecraze/" (22235 22996 35888 996000) "src/" "../" "README.md" ".clang_complete" "sprites/" "sounds/" "script.py" ".git/" "fonts/" ".projectile" "Makefile" "./" ".gitignore" "todo.org" "build/" "include/")
+ ("/home/jonve547/.emacs.d/" (22268 14895 166961 825000) "themes/" ".fonts/" "eshell/" "./" "recentf" "irony/" "ido.last" "../" "init.el~" "projectile-bookmarks.eld" "ac-comphist.dat" ".git/" "snippets/" "ido.last~" "smex-items" "auto-save-list/" "projectile.cache" "README.md" ".gitignore" "session.106d818783f8de07c8145470939546068700000020980034" "elpa/" "url/" "init.el" "i3/")
 
- ("/home/jonve547/projects/spacecraze/src/" (22235 21422 407901 608000) "music.cc" "game_object.cc" "laser_manager.cc" "../" "enemy_generator.cc" "object_factory.cc" "asset_manager.cc" "aabb.cc" "play.cc" "drone.cc" "world.cc" "player.cc" "main.cc" "texture.cc" "asteroid.cc" "./" "enemy.cc" "sprite.cc" "blaster.cc" "font.cc" "laser.cc" "game.cc")
+ ("/home/jonve547/projects/test/" (22268 13535 734958 283000) "stack.h" "./" "../" "stack.cc")
 
- ("/home/jonve547/projects/spacecraze/build/" (22235 22089 399896 263000) "../" "Makefile" "./")
+ ("/home/jonve547/projects/" (22268 13402 664029 198000) "test/" "./" "date/" "cards/" "../" "momslista/" "guessing_game/" "currency/" "scrabble/" "portfolio/" "spacecraze/")
 
- ("/home/jonve547/.emacs.d/" (22235 21880 191897 939000) "projectile-bookmarks.eld" "init.el" "recentf" "../" "ido.last~" "session.106d818783f8de07c8145470939546068700000020980034" "ido.last" "ac-comphist.dat" "init.el~" ".git/" "snippets/" "eshell/" "auto-save-list/" "./" "themes/" "projectile.cache" "irony/" ".gitignore" "url/" "elpa/")
+ ("/home/jonve547/" (22268 12738 757704 603000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" ".vimrc" "dotfiles/" "tdts04-laborationer/")
 
- ("/home/jonve547/projects/spacecraze/include/" (22235 21422 327901 609000) "constants.h" "world.h" "enums.h" "blaster.h" "point.h" "enemy.h" "asteroid.h" "../" "sprite.h" "drone.h" "font.h" "object_factory.h" "game_object.h" "music.h" "player.h" "texture.h" "asset_manager.h" "game_world.h" "enemy_generator.h" "aabb.h" "./" "gamestate.h" "laser.h" "user_interface.h" "play.h" "game.h" "laser_manager.h")
+ ("/home/jonve547/projects/spacecraze/include/" (22266 20341 859685 550000) "button.h" "./" "game.h" "enums.h" "music.h" "font.h" "menu.h" "gamestate.h" "asset_manager.h" "game_object.h" "../" "aabb.h" "play.h" "texture.h" "point.h" "enemy_generator.h" "sprite.h" "player.h" "asteroid.h" "enemy.h" "object_factory.h" "blaster.h" "user_interface.h" "laser_manager.h" "drone.h" "constants.h" "laser.h" "world.h")
 
- ("/home/jonve547/projects/" (22235 21417 447901 648000) "../" "spacecraze/" "./")
+ ("/home/jonve547/projects/spacecraze/" (22265 32787 830359 912000) ".clang_complete" "./" ".dir-locals.el" "../" "src/" "fonts/" "include/" ".git/" "sprites/" "README.md" ".gitignore" "sounds/" "Makefile" "todo.org" ".projectile")
 
- ("/home/jonve547/" (22235 21405 767901 742000) ".bash_logout" ".nvidia-settings-rc" ".gnome2_private/" ".profile" ".Xauthority" ".dmrc" ".bashrc" ".cache/" "../" ".cinnamon/" ".local/" ".gksu.lock" ".bash_aliases" ".gconf/" ".ICEauthority" ".java/" "target/" "tdts04-laborationer/" ".config/" ".linuxmint/" ".ssh/" ".xsession-errors" ".mozilla/" ".emacs.d/" "./" "Downloads/" "Desktop/" ".nv/" ".bash_history" "projects/" ".dbus/" ".gnome2/")
+ ("/home/jonve547/projects/crypto/" (22265 18068 163420 568000) "./" "../" "main.cc" "encryption.h" "syldavian.cc" "syldavian.h")
 
- ("/home/jonve547/tdts04-laborationer/labb4/" (22235 20593 120672 498000) "RouterPacket.java" "../" "RouterSimulator.java" "RouterNode.java" "F.java" "Makefile" "./" "GuiTextArea.java" "test/" "todo.org")
+ ("/home/jonve547/projects/stack/" (22265 16679 771252 241000) "stack.h" "./" "a.out" "../" "stack.cc" "main.cc")
 
- ("/home/jonve547/tdts04-laborationer/" (22235 20525 18638 799000) "labb2/" "../" ".git/" "labb3/" "labb4/" "./" "labb1/" ".gitignore")
+ ("/home/jonve547/projects/spacecraze/build/" (22265 13719 797300 93000) "button.o" "music.o" "./" "asteroid.o" "../" "main.o" "world.o" "object_factory.o" "menu.o" "enemy.o" "play.o" "aabb.o" "laser_manager.o" "enemy_generator.o" "game_object.o" "player.o" "drone.o" "font.o" "laser.o" "game.o" "blaster.o" "asset_manager.o" "sprite.o" "texture.o")
 
- ("/home/jonve547/.emacs.d/elpa/badwolf-theme-20160120.938/" (22235 19534 455068 747000) "../" "badwolf-theme-pkg.elc" "badwolf-theme-autoloads.el~" "./" "badwolf-theme-autoloads.el" "badwolf-theme.el" "badwolf-theme-pkg.el")
+ ("/home/jonve547/projects/spacecraze/src/" (22265 13872 88466 948000) "./" "asset_manager.cc" "world.cc" "sprite.cc" "object_factory.cc" "blaster.cc" "aabb.cc" "font.cc" "../" "player.cc" "texture.cc" "main.cc" "menu.cc" "laser.cc" "asteroid.cc" "game_object.cc" "play.cc" "game.cc" "laser_manager.cc" "music.cc" "enemy_generator.cc" "enemy.cc" "drone.cc")
 
- ("/home/jonve547/.emacs.d/themes/" (22235 19534 523068 746000) "tomorrow-night-blue-theme.el" "graham-theme.el" "../" "tomorrow-night-theme.el" "blackboard-theme.el" "rippedcasts-theme-source-code.el" "color-theme-tomorrow.el" "tomorrow-day-theme.el" "./" "tomorrow-night-eighties-theme.el" "tomorrow-night-bright-theme.el")
+ ("/home/jonve547/.emacs.d/elpa/gruvbox-theme-20151227.113/" (22261 16326 78528 724000) "./" "../" "gruvbox-theme-pkg.el" "gruvbox-theme-pkg.elc" "gruvbox-theme-autoloads.el" "gruvbox-theme.el" "gruvbox-theme.elc")
 
- ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/snippets/c++-mode/" (22235 19534 511068 746000) "io" "operator_ostream" "module" "constructor" "friend" "template" "d+=" "inline" "operator=" "boost_require" "delete" "cin" "operator_istream" "ns" "cpp" "../" "public" "d_operator[]_const" "std" "protected" "fixture" "std_colon" "delete[]" "cstd" "ostream" "operator+=" "tryw" "test_main" "ignore" "operator!=" "operator[]" "dynamic_casting" "d_operator_istream" "gtest" "fun_declaration" "enum" "class" "iterator" "cerr" "vector" "d_operator" "throw" "cout" "doc" "d_operator_ostream" "test_suite" "str" "d_operator[]" "namespace" "test case" "ifndef" "operator==" "./" "function" ".yas-parents" "const_[]" "this" "private" "try" "sstream" "map" "fori" "beginend" "operator+" "pack" "using" "assert")
+ ("/home/jonve547/projects/nixlista/src/" (22265 15341 839600 537000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/produktsummering/src/" (22265 15432 179038 775000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/produktsummering/" (22265 15404 7214 16000) "./" "../" "src/" "Cargo.toml" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/nixlista/" (22265 15024 721566 850000) "./" "../" "src/" "Cargo.toml" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/currency/src/" (22261 36465 512899 413000) "./" "exchange_rates.txt" "../" "main.rs")
+
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/c++-mode/" (22261 2592 105120 972000) "test_suite" "./" "io" "map" "assert" "private" "constructor" "operator+" "namespace" "module" "cstd" "../" "unique_ptr" "operator[]" "operator!=" "fun_declaration" "d_operator" "iterator" "protected" "d_operator[]_const" "doc" "d+=" "delete" "this" "dynamic_casting" "delete[]" "sstream" "str" "fori" "std_colon" "cout" "using" ".yas-parents" "tryw" "cin" "boost_require" "test_main" "try" "beginend" "fixture" "gtest" "test case" "vector" "cerr" "inline" "operator_ostream" "public" "friend" "const_[]" "operator_istream" "ignore" "pack" "std" "enum" "d_operator_ostream" "ifndef" "throw" "d_operator[]" "template" "cpp" "d_operator_istream" "ostream" "operator+=" "ns" "operator==" "operator=" "function" "class")
+
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/cc-mode/" (22261 2487 541867 737000) "once" "struct" "./" "member_description" "for_n" "for" "../" "ternary" "main" "file_description" "inc" "printf" "function_description" "else" "math" "while" "switch" "elif" "case" "inc.1" "fopen" "typedef" "do" "if")
+
+ ("/home/jonve547/.emacs.d/themes/" (22258 41137 662657 348000) "tomorrow-day-theme.el" "./" "color-theme-tomorrow.el" "../" "blackboard-theme.el" "tomorrow-night-theme.el" "tomorrow-night-blue-theme.el" "moe-dark-theme.el" "moe-theme.el" "tomorrow-night-bright-theme.el" "rippedcasts-theme-source-code.el" "graham-theme.el" "moe-light-theme.el" "tomorrow-night-eighties-theme.el")
+
+ ("/home/jonve547/tdts04-laborationer/labb5/" (22258 700 119805 910000) "Chat.idl" "./" "ChatClient.java" "../" "ChatServer.class" "ChatCallbackImpl.class" "orb.db/" "ChatImpl.class" "ChatClient.class" "Makefile" "ChatApp/" "ChatServer.java")
+
+ ("/home/jonve547/projects/date/src/" (22258 42017 593271 542000) "./" "../" "main.rs")
+
+ ("/home/jonve547/.emacs.d/elpa/moe-theme-20160322.115/" (22258 41089 635236 580000) "moe-theme-switcher.el" "./" "moe-theme.elc" "../" "moe-theme-autoloads.el" "moe-theme-pkg.el" "moe-dark-theme.el" "moe-theme.el" "moe-theme-switcher.elc" "moe-light-theme.el")
+
+ ("/home/jonve547/.config/i3/" (22258 34931 373551 800000) "./" "../" "config")
+
+ ("/home/jonve547/projects/currency/" (22246 58750 197245 692000) "./" "../" "src/" "Cargo.toml" "Cargo.lock" "target/" ".git/" ".gitignore")
+
+ ("/home/jonve547/.emacs.d/elpa/" (22258 35813 378637 873000) "seq-1.11/" "powerline-20160224.2052/" "ido-ubiquitous-20160220.1642/" "linum-relative-20160117.2200/" "gnupg/" "company-inf-ruby-20140805.1354/" "company-readme.txt" "mustard-theme-20141115.2302/" "web-mode-20160308.1556/" "./" "pkg-info-20150517.443/" "evil-surround-20160226.721/" "company-irony-20150810.239/" "flycheck-20160307.739/" "projectile-20160307.2332/" "irony-readme.txt" "cl-lib-0.5/" "git-commit-20160130.649/" "flymake-python-pyflakes-readme.txt" "monokai-theme-20160104.1312/" "diminish-20151215.915/" "robe-20160303.827/" "smex-20151212.1409/" "../" "yasnippet-20160226.1359/" "archives/" "evil-leader-20140606.543/" "company-20160311.448/" "company-irony-c-headers-readme.txt" "auto-complete-readme.txt" "epl-20150517.433/" "sublime-themes-20160111.122/" "let-alist-1.0.4/" "load-theme-buffer-local-20120702.1336/" "darktooth-theme-20151121.1722/" "badwolf-theme-20160227.1154/" "levenshtein-20051013.1056/" "flx-ido-20151030.1112/" "robe-readme.txt" "irony-20160203.1207/" "pos-tip-20150318.813/" "dash-20160306.1222/" "undo-tree-20140509.522/" "ido-completing-read+-20160220.1642/" "company-irony-readme.txt" "evil-surround-readme.txt" "mustang-theme-20141017.1623/" "async-20160223.146/" "gruvbox-theme-20151227.113/" "goto-last-change-20150109.1023/" "ido-vertical-mode-20151003.1833/" "flycheck-status-emoji-readme.txt" "afternoon-theme-20140104.1059/" "magit-readme.txt" "cmake-ide-20160227.115/" "goto-chg-20131228.659/" "inf-ruby-20160301.532/" "flycheck-rust-20151225.713/" "company-irony-c-headers-20151018.209/" "flx-20151030.1112/" "rust-mode-20160310.2058/" "popup-20151222.1339/" "flycheck-readme.txt" "ggtags-20151214.1344/" "powerline-evil-20151112.710/" "evil-20160310.1023/" "ruby-electric-20150424.752/" "ggtags-0.8.11.signed" "rtags-20160311.413/" "gruvbox-theme-readme.txt" "gtags-3.3/" "smartparens-20160225.705/" "with-editor-20160223.1155/" "color-theme-sanityinc-solarized-readme.txt" "color-theme-buffer-local-20151012.1628/" "color-theme-sanityinc-tomorrow-readme.txt" "magit-popup-20160302.322/" "flycheck-pyflakes-readme.txt" "moe-theme-20160322.115/" "color-theme-sanityinc-solarized-20160228.1728/" "ggtags-0.8.11/" "powerline-readme.txt" "magit-20160305.2218/")
+
+ ("/home/jonve547/.config/" (22255 50943 673497 624000) ".fonts/" "./" "unity/" "software-center/" "xfce4/" "cef_user_data/" "eog/" "ibus/" "update-notifier/" "../" "libreoffice/" "user-dirs.dirs" "gnome-session/" "upstart/" "gedit/" "libaccounts-glib/" "pulse/" ".git/" "nautilus/" "enchant/" "dconf/" "README.md" "evolution/" "Thunar/" "gtk-2.0/" "mimeapps.list" ".gitignore" "spotify/" "user-dirs.locale" "i3/" "compiz-1/" "gtk-3.0/")
+
+ ("/home/" (22243 19780 685351 326000) "./" "../" "jonve547/")
+
+ ("/home/jonve547/tdts04-laborationer/labb3/" (22246 48406 621352 342000) "./" "download_1_ack.txt" "labb3.odt" "download_1_seq.txt" "filtered_573_packets_anonymized.pcap" "tdts04_laboration3.pdf" "../" "upload_1_seq.txt" "calcs.ods" "tdts04_laboration3.odt" "upload_1_ack.txt" "tcp-ethereal-trace-1" "labb3.txt")
+
+ ("/home/jonve547/tdts04-laborationer/labb2/" (22246 48406 609352 472000) "./" "proxy.py" "user_manual.odt" "../" "lab2.tar.gz" "report.pdf" "report.odt")
+
+ ("/home/jonve547/tdts04-laborationer/labb4/" (22246 48406 625352 298000) "RouterNode.java" "test/" "./" "TDP003mall.cls" "../" "dokumentation.out" "F.java" "GuiTextArea.class" "dokumentation.pdf" "dokumentation.tex" "RouterPacket.class" "ida.png" "RouterPacket.java" "GuiTextArea.java" "lith.png" "RouterSimulator.class" "RouterSimulator.java" "RouterNode.class" "Event.class" "Makefile" "todo.org")
+
+ ("/home/jonve547/tdts04-laborationer/" (22246 48406 625352 298000) "labb2/" "./" "labb1/" "labb4/" "../" ".git/" "labb5/" "labb3/" ".gitignore")
+
+ ("/home/jonve547/tdts04-laborationer/labb5/orb.db/" (22257 11315 701991 954000) "./" "../" "NC0" "logs/" "counter" "servers.db")
+
+ ("/home/jonve547/tdts04-laborationer/labb5/ChatApp/" (22257 11304 594955 366000) "ChatOperations.java" "./" "ChatCallbackPOA.java" "ChatCallback.java" "ChatCallback.class" "ChatCallbackHelper.java" "ChatPOA.class" "ChatHolder.java" "ChatCallbackOperations.class" "ChatPOA.java" "../" "ChatOperations.class" "Chat.class" "Chat.java" "_ChatStub.java" "ChatHelper.class" "ChatCallbackHolder.java" "_ChatCallbackStub.java" "_ChatCallbackStub.class" "ChatHolder.class" "ChatCallbackHelper.class" "ChatCallbackOperations.java" "ChatCallbackPOA.class" "ChatCallbackHolder.class" "_ChatStub.class" "ChatHelper.java")
+
+ ("/home/jonve547/.config/gtk-3.0/" (22246 50561 474737 616000) "bookmarks" "./" "../" "settings.ini")
+
+ ("/home/jonve547/projects/scrabble/" (22244 13831 82794 331000) "./" "../" "src/" "Cargo.toml" "Cargo.lock" "target/" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/scrabble/src/" (22252 25311 798814 298000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/cards/src/" (22252 16660 50587 674000) "./" "../" "main.rs")
+
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/" (22246 53632 327747 81000) "js2-mode" "ruby-mode/" "csharp-mode/" "c-mode/" "./" "makefile-automake-mode/" "latex-mode/" "web-mode" "cider-repl-mode" "applescript-mode/" "go-mode/" "perl-mode/" "ned-mode/" "chef-mode/" "git-commit-mode/" "f90-mode/" "cc-mode/" "python-mode/" "../" "nxml-mode/" "prog-mode/" "nesc-mode/" "makefile-mode/" "ensime-mode" "java-mode/" "cperl-mode/" "sh-mode/" "antlr-mode/" "octave-mode/" "yaml-mode/" "emacs-lisp-mode/" "sql-mode/" "conf-unix-mode/" "rename_add_contr.py" "erc-mode/" "udev-mode/" "markdown-mode/" "tuareg-mode/" "snippets/" "makefile-bsdmake-mode/" "lua-mode/" "html-mode/" "makefile-gmake-mode/" "lisp-mode/" "README.md" "org-mode/" "rst-mode/" "enh-ruby-mode" "clojure-mode/" ".gitignore" "m4-mode/" "scala-mode/" "fundamental-mode/" "nsis-mode/" "malabar-mode/" "cmake-mode/" "CONTRIBUTORS.txt" "lisp-interaction-mode/" "snippet-mode/" "elixir-mode/" "cpp-omnet-mode/" "LICENSE" "text-mode/" "groovy-mode/" "haskell-mode/" "css-mode/" "erlang-mode/" "js-mode/" "c++-mode/" "typerex-mode" ".nosearch")
+
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/" (22246 53632 291747 425000) "./" "../" "yasnippet-autoloads.el" "yasnippet.el" "snippets/" "yasnippet.elc" "yasnippet-pkg.el")
+
+ ("/home/jonve547/projects/date/" (22252 25590 316131 764000) "./" "../" "src/" "Cargo.toml" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/cards/" (22244 40706 782166 955000) "./" "../" "src/" "Cargo.toml" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/spacerust/src/" (22244 40672 866773 924000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/guessing_game/src/" (22244 38325 639409 957000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/guessing_game/" (22244 35871 618354 433000) "./" "../" "src/" "Cargo.toml" "Cargo.lock" "target/" ".git/" ".gitignore")
+
+ ("/home/jonve547/projects/spacerust/" (22244 34835 209173 202000) "./" "../" "src/" "Cargo.toml" "Cargo.lock" "target/" ".git/" "README.md" ".gitignore")
+
+ ("/home/jonve547/.emacs.d/elpa/badwolf-theme-20160227.1154/" (22244 19237 110518 731000) "./" "../" "badwolf-theme.el" "badwolf-theme-autoloads.el" "badwolf-theme-pkg.elc" "badwolf-theme-pkg.el")
+
+ ("/home/jonve547/i3-conf/" (22240 33461 552909 251000) "../" "./")
+
+ ("/home/jonve547/i3-4.12/" (22240 32735 48915 74000) "i3.config" "generate-command-parser.pl" "i3.xsession.desktop" "src/" "i3-msg/" "i3.config.keycodes" "i3-config-wizard/" "i3.applications.desktop" "../" "common.mk" "i3-sensible-pager" "i3-migrate-config-to-v4" "testcases/" "pseudo-doc.doxygen" "DEPENDS" "i3-sensible-editor" "RELEASE-NOTES-4.12" "i3-save-tree" "i3-sensible-terminal" "i3-nagbar/" "man/" "LAST_VERSION" "i3-dmenu-desktop" "VERSION" "Makefile" "./" "libi3/" "parser-specs/" "i3bar/" "PACKAGE-MAINTAINER" "LICENSE" "I3_VERSION" "docs/" "i3-input/" "i3-with-shmlog.xsession.desktop" "i3-dump-log/" "include/")
+
+ ("/home/jonve547/duggaplugg/" (22241 17891 775375 539000) ".#upg3.rb" "solutions.rb" "constraint_networks.rb" "triples.rb" "../" "upg3.rb" "upg2.rb" ".#fuskpapper.txt" "./" "dugga.txt" "fuskpapper.txt" "pelles.rb" ".#upg2.rb")
+
+ ("/home/jonve547/tdp007-laborationer/" (22238 54713 481395 438000) "labb2/" "labb4.tar.gz" "../" "opponering4/" "opponering1/" "opponering2/" ".git/" "labb3/" "labb4/" "./" "labb1/" "opponering3/")
+
+ ("/home/jonve547/tdp007-laborationer/labb4/" (22240 23834 880986 406000) "constraint_networks.rb" "../" "unit_tests.rb" "constraint-parser.rb" "upg1.rb" "utvecklarblogg.txt" "./")
+
+ ("/home/jonve547/.i3/" (22240 27358 756958 163000) "../" "config" "./")
+
+ ("/home/jonve547/tdts04-laborationer/labb5/orb.db/logs/" (22239 64937 717027 681000) "../" "./")
+
+ ("/home/jonve547/tdp007-laborationer/opponering4/sem4/" (22238 55962 185582 885000) "constraint_networks.rb" "../" "test_constraint_parser.rb" "test_constraint_networks.rb" "constraint-parser.rb" "opponering4.txt" "upp1.rb" "./" "blogg.txt" "constraint-parser.rb~")
+
+ ("/home/jonve547/tdp019-language/" (22238 41402 258208 443000) "dokumentation.pdf" "TDP003-mall.out" "ida.png" "TDP003mall.cls" "TDP003-mall.fls" "../" "README.md" "TDP003-mall.fdb_latexmk" "dokumentation.fdb_latexmk" "dokumentation.aux" "dokumentation.log" "lith.png" "dokumentation.out" "TDP003-mall.log" "TDP003-mall.aux" ".git/" "grammar.txt" "dokumentation.tex" "TDP003-mall.pdf" "./" "dokumentation.fls" "README")
+
+ ("/home/jonve547/tdp007-laborationer/labb2/" (22237 29464 229182 134000) "football.rb" "events.rb" "../" "events.html" "weather.rb" "testfile.rb" "utvecklarblogg.txt" "./" "streamlistener.rb" "events2.html" "weather.txt" "football.txt")
+
+ ("/home/jonve547/.emacs.d/elpa/badwolf-theme-20160120.938/" (22236 17591 580229 763000) "../" "badwolf-theme-pkg.elc" "badwolf-theme-autoloads.el~" "./" "badwolf-theme-autoloads.el" "badwolf-theme.el" "badwolf-theme-pkg.el")
+
+ ("/home/jonve547/tdp007-laborationer/opponering3/" (22237 29464 229182 134000) "opponering.txt" "../" "DEL_02/" "utvecklarblogg.txt" "./" "DEL_01/")
+
+ ("/home/jonve547/tdp007-laborationer/opponering3/DEL_02/" (22237 29464 229182 134000) "main.rb" "../" "tests.rb" "./")
+
+ ("/home/jonve547/tdp007-laborationer/opponering3/DEL_01/" (22237 29464 229182 134000) "opponering.txt" "main.rb" "../" "tests.rb" "./" "policy.rb")
+
+ ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/snippets/c++-mode/" (22236 17351 916231 684000) "io" "operator_ostream" "module" "constructor" "friend" "template" "d+=" "inline" "operator=" "boost_require" "delete" "cin" "operator_istream" "ns" "cpp" "../" "public" "d_operator[]_const" "std" "protected" "fixture" "std_colon" "delete[]" "cstd" "ostream" "operator+=" "tryw" "test_main" "ignore" "operator!=" "operator[]" "dynamic_casting" "d_operator_istream" "gtest" "fun_declaration" "enum" "class" "iterator" "cerr" "vector" "d_operator" "throw" "cout" "doc" "d_operator_ostream" "test_suite" "str" "d_operator[]" "namespace" "test case" "ifndef" "operator==" "./" "function" ".yas-parents" "const_[]" "this" "private" "try" "sstream" "map" "fori" "beginend" "operator+" "pack" "using" "assert")
+
+ ("/home/jonve547/tdp007-laborationer/labb3/" (22237 29464 229182 134000) "rdparse.rb" "opponering.txt" "../" "tester.rb" "person.rb" "utvecklarblogg.txt" "./" "labb3.tar.gz" "policy.rb")
 
  ("/home/jonve547/projects/dining_philosophers/src/" (22230 464 506590 508000) "main.rs" "./" "../")
 
  ("/home/jonve547/projects/dining_philosophers/" (22230 464 506590 508000) ".git/" "Cargo.toml" ".gitignore" "src/" "./" "../")
 
- ("/home/jonve547/projects/guessing_game/src/" (22229 64480 569064 112000) "main.rs" "./" "../")
-
- ("/home/jonve547/tdp007-laborationer/labb4/" (22229 26053 783918 635000) "constraint_networks.rb" "unit_tests.rb" "upg1.rb" "./" "../")
-
- ("/home/jonve547/tdp007-laborationer/" (22229 22328 921364 86000) ".git/" "opponering2/" "opponering1/" "labb2/" "labb4/" "labb1/" "labb3/" "opponering3/" "./" "../")
-
- ("/home/jonve547/tdts04-laborationer/labb3/" (22228 8813 591330 130000) "tcp-ethereal-trace-1" "tdts04_laboration3.odt" "download_1_ack.txt" "upload_1_seq.txt" "tdts04_laboration3.pdf" "download_1_seq.txt" "labb3.odt" "upload_1_ack.txt" "filtered_573_packets_anonymized.pcap" "calcs.ods" "./" "../" "labb3.txt")
-
- ("/home/jonve547/tdp019-language/" (22228 25775 3327 915000) ".git/" "bnf.txt" "./" "../")
-
- ("/home/jonve547/tdts04-laborationer/labb2/" (22228 38841 260224 1000) "report.pdf" "proxy.py" "user_manual.odt" "report.odt" "./" "lab2.tar.gz" "../")
-
  ("/home/jonve547/projects/hello_world/src/" (22227 21371 135995 462000) "main.rs" "./" "../")
-
- ("/home/jonve547/projects/guessing_game/" (22227 21346 667995 658000) ".git/" "Cargo.toml" ".gitignore" "src/" "./" "../")
 
  ("/home/jonve547/projects/hello_world/" (22227 21051 568793 22000) ".git/" "Cargo.toml" ".gitignore" "src/" "./" "../")
 
@@ -111,29 +235,13 @@
 
  ("/home/jonve547/.emacs.d/elpa/yasnippet-20160122.1056/" (22222 12294 81970 419000) "yasnippet.el" "yasnippet-pkg.el" "snippets/" "yasnippet-autoloads.el" "yasnippet-autoloads.el~" "./" "yasnippet.elc" "../")
 
- ("/home/jonve547/.emacs.d/elpa/" (22226 51888 232796 355000) "company-irony-readme.txt" "pos-tip-20150318.813/" "ruby-electric-20150424.752/" "irony-20160203.1207/" "flymake-python-pyflakes-readme.txt" "company-irony-c-headers-readme.txt" "company-irony-c-headers-20151018.209/" "let-alist-1.0.4/" "yasnippet-20160122.1056/" "flx-20151030.1112/" "magit-popup-20160130.649/" "cl-lib-0.5/" "company-20160211.520/" "badwolf-theme-20160120.938/" "inf-ruby-20160221.410/" "company-readme.txt" "projectile-20160124.940/" "gtags-3.3/" "afternoon-theme-20140104.1059/" "linum-relative-20160117.2200/" "powerline-readme.txt" "sublime-themes-20150915.3/" "rtags-20160123.1532/" "magit-20160210.555/" "company-irony-20150810.239/" "powerline-evil-20151112.710/" "evil-leader-20140606.543/" "with-editor-20160128.1201/" "color-theme-sanityinc-tomorrow-readme.txt" "archives/" "cmake-ide-20160211.550/" "ace-jump-mode-20140616.115/" "mustang-theme-20141017.1623/" "rust-mode-20160116.1155/" "auto-complete-readme.txt" "undo-tree-20140509.522/" "yasnippet-20160104.129/" "projectile-20160103.1010/" "seq-1.11/" "goto-chg-20131228.659/" "epl-20150517.433/" "popup-20151222.1339/" "inf-ruby-20151104.1237/" "rtags-20160213.546/" "load-theme-buffer-local-20120702.1336/" "evil-surround-readme.txt" "powerline-20151008.1449/" "ggtags-0.8.11.signed" "flx-ido-20151030.1112/" "flycheck-readme.txt" "badwolf-theme-20151215.925/" "flycheck-20160129.311/" "git-commit-20160130.649/" "ggtags-0.8.11/" "flycheck-pyflakes-readme.txt" "robe-readme.txt" "goto-last-change-20150109.1023/" "diminish-20151215.915/" "gnupg/" "levenshtein-20051013.1056/" "company-inf-ruby-20140805.1354/" "evil-surround-20160226.721/" "magit-readme.txt" "async-20160108.1249/" "pkg-info-20150517.443/" "smartparens-20160108.1403/" "color-theme-buffer-local-20151012.1628/" "evil-20160215.948/" "./" "mustard-theme-20141115.2302/" "irony-readme.txt" "robe-20151230.449/" "dash-20151216.1315/" "monokai-theme-20160104.1312/" "ggtags-20151214.1344/" "flycheck-20160128.108/" "../")
-
- ("/home/jonve547/tdp007-laborationer/opponering3/DEL_02/" (22220 11253 688444 366000) "tests.rb" "main.rb" "./" "../")
-
- ("/home/jonve547/tdp007-laborationer/opponering3/DEL_01/" (22220 11251 420444 487000) "tests.rb" "main.rb" "policy.rb" "opponering.txt" "./" "../")
-
- ("/home/" (22203 20623 739711 760000) "lost+found/" "jonve547/" "./" "../")
-
- ("/home/jonve547/tdp007-laborationer/opponering3/" (22220 9896 752517 81000) "DEL_01/" "utvecklarblogg.txt" "DEL_02/" "opponering.txt" "./" "../")
-
- ("/home/jonve547/tdp007-laborationer/labb3/" (22220 9832 920520 502000) "person.rb" "utvecklarblogg.txt" "tester.rb" "rdparse.rb" "policy.rb" "labb3.tar.gz" "opponering.txt" "./" "../")
-
  ("/home/jonve547/.emacs.d/elpa/evil-1.0.8/" (22219 15017 813365 523000) "evil.elc" "evil-states.el" "evil-pkg.el" "evil-types.el" "evil-macros.el" "evil-states.elc" "evil-ex.elc" "evil-pkg.elc" "evil-search.elc" "COPYING" "evil-common.el" "evil-commands.elc" "evil-macros.elc" "evil-common.elc" "evil-repeat.el" "evil-search.el" "evil-digraphs.el" "evil-maps.elc" "evil-repeat.elc" "evil-ex.el" "evil-vars.el" "evil-core.elc" "evil-maps.el" "evil-types.elc" "./" "evil-vars.elc" "evil-core.el" "evil-commands.el" "evil-integration.el" "evil.el" "evil-integration.elc" "evil-digraphs.elc" "evil-autoloads.el" "../")
 
  ("/home/jonve547/tomorrow-theme/" (22219 6102 216340 20000) ".git/" "Coda/" "OS X Terminal/" "Visual Studio/" "Mate-Terminal/" ".gitignore" "textmate/" "textmate2/" "Eclipse/" "Images/" "LightPaper/" "Espresso/" "ipythonqt/" "Xdefaults/" "iTerm2/" "Brackets/" "KDE/" "Web Inspector/" "Atom/" "Apple Colour Picker/" "Photoshop Color Swatches/" "JetBrains/" "Xcode 4/" "GNU Emacs/" "LICENSE.md" "PuTTY/" "Mou/" "Gnome-Terminal/" "QtCreator/" "README.md" "notepad++/" "lilyterm/" "termite/" "./" "Google Chrome Developer Tools/" "Console2/" "Ace/" "vim/" "GEdit/" "../" "BBEdit/")
 
  ("/home/jonve547/.emacs.d/elpa/rtags-20160213.546/" (22214 18534 26454 231000) "rtags-autoloads.el" "rtags-ac.elc" "rtags-pkg.el" "company-rtags.el" "rtags.elc" "./" "rtags.el" "../" "rtags-ac.el")
 
- ("/home/jonve547/duggaplugg/" (22214 5412 643753 714000) "myclass.rb" "dugga.txt" "solutions.rb" "dugga2/" "upg3.rb" "./" "tab112.txt" "anteckningar.txt" "../")
-
  ("/home/jonve547/duggaplugg/dugga2/" (22214 2093 459780 316000) "streamlistener.rb" "animals.xml" "inventory.xml" "upg1.xml" "dugga.txt" "solutions.rb" "key.dtd" "note2.xml" "pelles.rb" "newspaper.dtd" "./" "print_tree.rb" "../" "upg2.rb" "upg2.xml")
-
- ("/home/jonve547/tdp007-laborationer/labb2/" (22203 22826 295087 818000) "streamlistener.rb" "events.html" "events2.html" "testfile.rb" "events.rb" "utvecklarblogg.txt" "weather.txt" "./" "weather.rb" "../" "football.txt" "football.rb")
 )
 
 ;; ----- ido-unc-hosts-cache -----
