@@ -1,18 +1,18 @@
 
 ;; ----- smex-history -----
 (
+ abbrev-mode
  list-packages
- package-install
- irony-install-server
- irony-server-kill
+ imenu
+ load-theme
+ customize-group
  irony-cdb-menu
  irony-cdb-autosetup-compile-options
- eldoc-mode
 )
 
 ;; ----- smex-data -----
 (
- (list-packages . 34)
+ (list-packages . 38)
  (menu-bar-mode . 6)
  (menu-bar-options-save . 7)
  (ido-find-file . 1)
@@ -20,7 +20,7 @@
  (yas-minor-mode-on . 7)
  (yas-minor-mode . 18)
  (ggtags-create-tags . 10)
- (load-theme . 89)
+ (load-theme . 93)
  (delete-selection-repeat-replace-region . 2)
  (linum-relative-mode . 12)
  (landmark . 1)
@@ -30,7 +30,7 @@
  (tmm-menubar . 1)
  (company-mode . 4)
  (yas-global-mode . 13)
- (customize-group . 16)
+ (customize-group . 19)
  (butterfly . 2)
  (tetris . 1)
  (projectile-cleanup-known-projects . 5)
@@ -38,13 +38,13 @@
  (text-mode . 1)
  (version . 1)
  (flycheck-verify-setup . 11)
- (add-dir-local-variable . 5)
+ (add-dir-local-variable . 6)
  (irony-version . 1)
  (irony-install-server . 10)
  (irony-mode . 5)
- (irony-cdb-menu . 24)
+ (irony-cdb-menu . 27)
  (yas-expand . 1)
- (irony-cdb-autosetup-compile-options . 12)
+ (irony-cdb-autosetup-compile-options . 13)
  (linum-mode . 9)
  (irony-server-kill . 6)
  (yas-reload-all . 2)
@@ -56,4 +56,8 @@
  (semantic-mode . 2)
  (irony-eldoc . 1)
  (eldoc-mode . 8)
+ (shrink-window-if-larger-than-buffer . 1)
+ (shrink-window-horizontally . 1)
+ (imenu . 3)
+ (abbrev-mode . 1)
 )

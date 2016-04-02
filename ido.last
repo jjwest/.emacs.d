@@ -25,30 +25,31 @@
  ("/home/jonve547/duggaplugg/" . "dugga2/")
  ("/home/jonve547/tdp007-laborationer/" . "labb4/")
  ("/home/jonve547/tdts04-laborationer/" . "labb5/")
- ("/home/jonve547/" . "projects/")
- ("/home/jonve547/projects/spacecraze/" . "build/")
+ ("/home/jonve547/" . ".emacs.d/")
+ ("/home/jonve547/projects/spacecraze/" . "src/")
 )
 
 ;; ----- ido-work-directory-list -----
 (
+ "/home/jonve547/.emacs.d/"
+ "/home/jonve547/projects/spacecraze/src/"
+ "/home/jonve547/projects/spacecraze/include/"
+ "/home/jonve547/projects/spacecraze/build/"
+ "/home/jonve547/projects/currency/src/"
+ "/home/jonve547/"
+ "/home/jonve547/test/"
  "/home/jonve547/projects/"
  "/home/jonve547/projects/stack/"
  "/home/jonve547/projects/spacecraze/"
- "/home/jonve547/projects/spacecraze/include/"
- "/home/jonve547/projects/spacecraze/src/"
- "/home/jonve547/.emacs.d/"
- "/home/jonve547/"
  "/home/jonve547/projects/test/"
  "/home/jonve547/.config/i3/"
  "/home/jonve547/projects/crypto/"
  "/home/jonve547/projects/produktsummering/src/"
  "/home/jonve547/projects/nixlista/src/"
- "/home/jonve547/projects/currency/src/"
  "/home/jonve547/.emacs.d/elpa/gruvbox-theme-20151227.113/"
  "/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/c++-mode/"
  "/home/jonve547/.emacs.d/elpa/yasnippet-20160226.1359/snippets/cc-mode/"
  "/home/jonve547/.emacs.d/elpa/moe-theme-20160322.115/"
- "/home/jonve547/projects/spacecraze/build/"
  "/home/jonve547/projects/date/src/"
  "/home/jonve547/tdts04-laborationer/labb5/"
  "/home/jonve547/projects/cards/src/"
@@ -80,46 +81,49 @@
  "/home/jonve547/tdp007-laborationer/opponering3/DEL_02/"
  "/home/jonve547/tdp007-laborationer/opponering3/"
  "/home/jonve547/duggaplugg/dugga2/"
- "/home/jonve547/tdp007-laborationer/labb2/"
 )
 
 ;; ----- ido-work-file-list -----
 (
- "stack.cc"
- "stack.h"
- ".clang_complete"
+ "init.el"
+ "highscore.cc"
+ "highscore.h"
+ "rendered_text.cc"
+ "rendered_text.h"
  "user_interface.cc"
  "user_interface.h"
- "init.el"
- "config"
- "play.h"
- "syldavian.cc"
- "syldavian.h"
+ "exchange_rates.txt"
+ "test.py"
+ "stack.cc"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
+ ("/home/jonve547/.emacs.d/" (22272 12945 88101 663000) "themes/" ".fonts/" "eshell/" "./" "recentf" "irony/" "ido.last" "../" "#init.el#" "init.el~" "projectile-bookmarks.eld" "ac-comphist.dat" ".git/" "snippets/" "ido.last~" "smex-items" "auto-save-list/" "projectile.cache" "README.md" ".gitignore" "session.106d818783f8de07c8145470939546068700000020980034" "elpa/" "url/" "init.el" "i3/")
+
+ ("/home/jonve547/projects/spacecraze/include/" (22272 4144 24459 434000) "button.h" "rendered_text.h" "./" "game.h" "enums.h" "music.h" "font.h" "menu.h" "gamestate.h" "asset_manager.h" "game_object.h" "../" "aabb.h" "play.h" "texture.h" "point.h" "enemy_generator.h" "sprite.h" "player.h" "asteroid.h" "enemy.h" "object_factory.h" "blaster.h" "user_interface.h" "laser_manager.h" "drone.h" "constants.h" "laser.h" "highscore.h" "world.h")
+
+ ("/home/jonve547/projects/spacecraze/" (22272 4008 385697 613000) ".clang_complete" "GPATH" "./" "GTAGS" ".dir-locals.el" "build/" "../" "src/" "fonts/" "include/" ".git/" "sprites/" "README.md" "GRTAGS" ".gitignore" "sounds/" "Makefile" "todo.org" ".projectile" "spacecraze")
+
+ ("/home/jonve547/projects/spacecraze/build/" (22272 4008 373697 723000) "button.o" "music.o" "./" "asteroid.o" "../" "main.o" "world.o" "object_factory.o" "menu.o" "enemy.o" "play.o" "rendered_text.o" "aabb.o" "laser_manager.o" "enemy_generator.o" "user_interface.o" "game_object.o" "player.o" "drone.o" "font.o" "laser.o" "game.o" "blaster.o" "asset_manager.o" "sprite.o" "texture.o")
+
+ ("/home/jonve547/projects/spacecraze/src/" (22272 3966 762079 790000) "./" "asset_manager.cc" "button.cc" "world.cc" "sprite.cc" "object_factory.cc" "blaster.cc" "aabb.cc" "font.cc" "../" "player.cc" "texture.cc" "main.cc" "menu.cc" "laser.cc" "user_interface.cc" "asteroid.cc" "game_object.cc" "play.cc" "rendered_text.cc" "game.cc" "laser_manager.cc" "music.cc" "enemy_generator.cc" "enemy.cc" "drone.cc")
+
+ ("/home/jonve547/projects/scrabble/src/" (22270 26235 188035 11000) "./" "../" "main.rs")
+
+ ("/home/jonve547/projects/" (22270 27084 261004 257000) "./" "date/" "cards/" "../" "momslista/" "guessing_game/" "currency/" "scrabble/" "portfolio/" "spacecraze/")
+
+ ("/home/jonve547/" (22271 54044 691915 62000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" ".vimrc" "dotfiles/" "tdts04-laborationer/")
+
+ ("/home/jonve547/test/" (22269 18507 888713 116000) "./" "../")
+
  ("/home/jonve547/projects/stack/" (22269 15838 98364 911000) ".clang_complete" "stack.h" "./" "../" "stack.cc")
 
  ("/home/jonve547/projects/guessing_game/src/" (22266 48655 225872 145000) "./" "../" "main.rs")
 
  ("/home/jonve547/projects/date/src/" (22266 30405 914897 615000) "./" "../" "main.rs")
 
- ("/home/jonve547/projects/spacecraze/build/" (22269 13980 354774 904000) "button.o" "music.o" "./" "asteroid.o" "../" "main.o" "world.o" "object_factory.o" "menu.o" "enemy.o" "play.o" "aabb.o" "laser_manager.o" "enemy_generator.o" "game_object.o" "player.o" "drone.o" "font.o" "laser.o" "game.o" "blaster.o" "asset_manager.o" "sprite.o" "texture.o")
-
  ("/home/jonve547/projects/currency/src/" (22265 36732 871090 719000) "./" "exchange_rates.txt" "../" "main.rs")
-
- ("/home/jonve547/projects/spacecraze/" (22269 15248 831154 815000) ".clang_complete" "GPATH" "./" "GTAGS" ".dir-locals.el" "build/" "../" "src/" "fonts/" "include/" ".git/" "sprites/" "README.md" "GRTAGS" ".gitignore" "sounds/" "Makefile" "todo.org" ".projectile" "spacecraze")
-
- ("/home/jonve547/.emacs.d/" (22269 15167 323711 376000) "themes/" ".fonts/" "eshell/" "./" "recentf" "irony/" "ido.last" "../" "init.el~" "projectile-bookmarks.eld" "ac-comphist.dat" ".git/" "snippets/" "ido.last~" "smex-items" "auto-save-list/" "projectile.cache" "README.md" ".gitignore" "session.106d818783f8de07c8145470939546068700000020980034" "elpa/" "url/" "init.el" "i3/")
-
- ("/home/jonve547/projects/spacecraze/src/" (22269 15283 494908 258000) "./" "asset_manager.cc" "button.cc" "world.cc" "sprite.cc" "object_factory.cc" "blaster.cc" "aabb.cc" "font.cc" "../" "player.cc" "texture.cc" "main.cc" "menu.cc" "laser.cc" "asteroid.cc" "game_object.cc" "play.cc" "game.cc" "laser_manager.cc" "music.cc" "enemy_generator.cc" "enemy.cc" "drone.cc")
-
- ("/home/jonve547/projects/spacecraze/include/" (22269 14662 358300 250000) "button.h" "./" "game.h" "enums.h" "music.h" "font.h" "menu.h" "gamestate.h" "asset_manager.h" "game_object.h" "../" "aabb.h" "play.h" "texture.h" "point.h" "enemy_generator.h" "sprite.h" "player.h" "asteroid.h" "enemy.h" "object_factory.h" "blaster.h" "laser_manager.h" "drone.h" "constants.h" "laser.h" "world.h")
-
- ("/home/jonve547/projects/" (22269 15302 550770 626000) "./" "date/" "cards/" "../" "momslista/" "guessing_game/" "currency/" "scrabble/" "stack/" "portfolio/" "spacecraze/")
-
- ("/home/jonve547/" (22269 13742 320222 879000) ".xinitrc" ".fehbg" ".cache/" ".fonts/" ".dmrc" "./" ".gtkrc-2.0" ".profile" ".gvfs/" ".emacs.d/" ".Xauthority" ".ICEauthority" ".mozilla/" ".adobe/" ".pki/" "Downloads/" "wallpapers/" "../" ".gconf/" ".gksu.lock" ".bash_logout" ".icons/" ".cargo/" ".bash_history" ".sudo_as_admin_successful" ".viminfo" ".bashrc" ".gitconfig" ".config/" "projects/" ".macromedia/" "Desktop/" ".dbus/" ".ssh/" ".xsession-errors" ".xsession-errors.old" ".local/" ".gnupg/" ".vimrc" "dotfiles/" "tdts04-laborationer/")
 
  ("/home/jonve547/projects/test/" (22268 13535 734958 283000) "stack.h" "./" "../" "stack.cc")
 
@@ -170,8 +174,6 @@
  ("/home/jonve547/.config/gtk-3.0/" (22246 50561 474737 616000) "bookmarks" "./" "../" "settings.ini")
 
  ("/home/jonve547/projects/scrabble/" (22244 13831 82794 331000) "./" "../" "src/" "Cargo.toml" "Cargo.lock" "target/" ".git/" ".gitignore")
-
- ("/home/jonve547/projects/scrabble/src/" (22252 25311 798814 298000) "./" "../" "main.rs")
 
  ("/home/jonve547/projects/cards/src/" (22252 16660 50587 674000) "./" "../" "main.rs")
 

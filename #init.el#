@@ -1,49 +1,37 @@
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(package-initialize)
+(use-package package
+  :ensure t
+  :config
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (package-initialize))
 
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
 ;; Clean modeline
 (use-package diminish
-  :ensure t
   :config
-  (diminish 'visual-line-mode)
-  (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
-  (with-eval-after-load  'eldoc (diminish 'eldoc-mode))
-  (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
-
+  (diminish 'visual-line-mode))
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
-(use-package yasnippet
-  :ensure t
-  :diminish yas-minor-mode
-  :config
-  (yas-reload-all)
-  (add-hook 'prog-mode-hook 'yas-minor-mode))
+(require 'yasnippet)
+(yas-reload-all)
+(add-hook 'prog-mode-hook 'yas-minor-mode)
 
 ;; COMPANY MODE
 (use-package company
   :ensure t
-  :diminish company-mode
-  :init
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
-  :config
-  (global-company-mode)
-  (add-hook 'rust-mode-hook 'company-mode-set-explicitly 0)
-  :bind (:map company-active-map
-              ("TAB" . nil)
-              ("<tab>" . nil)))
+
+              ("TAB" . nil)))
+;; (global-company-mode)
+Q;; (setq company-idle-delay 0)
+;; (setq company-minimum-prefix-length 2)
+;; (with-eval-after-load 'company
+;;   (define-key company-active-map (kbd "<tab>") nil)
+;;   (define-key company-active-map (kbd "TAB") nil))
 
 ;; ;; PROJECTILE
-(use-package projectile
-  :ensure t
-  :diminish projectile-mode
-  :config
-  (projectile-global-mode))
+(projectile-global-mode)
 
 ;; ;; C/C++ STYLE SETTINGS
 (setq-default indent-tabs-mode nil)
@@ -51,6 +39,9 @@
 (setq-default c-basic-offset 4)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
+;; RUST SETTINGS
+(add-hook 'rust-mode-hook 'company-mode-set-explicitly 0)
+(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
 
 ;; AUTO DELETE-SELECTION
 (delete-selection-mode 1)
@@ -61,23 +52,15 @@ scroll-conservatively 9999
 scroll-step 1)
 
 ;; GGTAGS
-(use-package ggtags
-  :ensure t
-  :diminish ggtags-mode
-  :config
-  (add-hook 'prog-mode-hook 'ggtags-mode))
+(add-hook 'prog-mode-hook 'ggtags-mode)
+(add-hook 'ggtags-mode-hook (lambda() (diminish 'ggtags-mode)))
 
 ;; ;; FONTS (Source Code Pro)
 (global-font-lock-mode 1) 
 
 ;; EVIL MODE SETTINGS
-(use-package evil-leader
-  :ensure t
-  :diminish evil-leader-mode
-  :config
-  (global-evil-leader-mode)
-  (evil-leader/set-leader ",")
-  (evil-leader/set-key
+(global-evil-leader-mode) (evil-leader/set-leader ",")
+(evil-leader/set-key
   "f" 'find-file
   "b" 'switch-to-buffer
   "k" 'kill-buffer
@@ -97,14 +80,11 @@ scroll-step 1)
   "r" 'replace-string
   "x" 'ansi-term
   "jd" 'ggtags-find-definition
-  "dir" 'dired
-  "c" 'idomenu))
+  "dir" 'dired)
 
 ;; EVIL SURROUND
-(use-package evil-surround
-  :ensure t
-  :config
-  (global-evil-surround-mode 1))
+(require 'evil-surround)
+(global-evil-surround-mode 1)
 
 (with-eval-after-load "evil"
      (evil-set-initial-state 'dired-mode 'emacs)
@@ -153,7 +133,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; POWERLINE
 (use-package powerline-evil
   :ensure t
-  :diminish powerline-minor-modes
   :config
   (powerline-evil-vim-color-theme))
 
@@ -167,15 +146,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (ido-vertical-mode 1)
   (ido-ubiquitous-mode 1))
 
-(use-package idomenu
-  :ensure t)
-
 
 ;; SMEX
-(use-package smex
-  :ensure t
-  :init
-  (global-set-key (kbd "M-x") 'smex))
+(global-set-key (kbd "M-x") 'smex)
 
 ;; IRONY
 (add-hook 'c++-mode-hook 'irony-mode)
@@ -220,26 +193,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (electric-pair-mode 1)
 
 ;; LINUM MODE
-(use-package linum-relative-mode
-  :init 
-   (add-hook 'prog-mode-hook 'linum-relative-mode)
-   (add-hook 'text-mode-hook 'linum-relative-mode)
-   (add-hook 'conf-mode-hook 'linum-relative-mode))
+(add-hook 'prog-mode-hook 'linum-relative-mode)
+(add-hook 'text-mode-hook 'linum-relative-mode)
+(add-hook 'conf-mode-hook 'linum-relative-mode)
 
 ;; Always show matching parenthesis
 (show-smartparens-global-mode 1)
 
 
 ;;; Syntax-checking ;;;;;;;;
-(use-package flycheck
-  :ensure t
-  :diminish flycheck-mode
-  :init
-  (setq-default flycheck-disabled-checkers '(c/c++-clang))
-  :config
-  (global-flycheck-mode)
-  (flycheck-pos-tip-mode)
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+(global-flycheck-mode)
+(with-eval-after-load 'flycheck
+  (flycheck-pos-tip-mode))
+(setq-default flycheck-disabled-checkers '(c/c++-clang))
 
 
 (custom-set-faces
@@ -344,9 +310,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; EVIL MODE
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1))
+(require 'evil)
+(evil-mode 1)
 
 (provide 'init)
