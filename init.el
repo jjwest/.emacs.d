@@ -78,9 +78,7 @@ scroll-step 1)
   (use-package flycheck-pos-tip
     :ensure t
     :config
-    (flycheck-pos-tip-mode))
-;  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-)
+    (flycheck-pos-tip-mode)))
 
 ;; C/C++ STYLE SETTINGS
 (setq-default indent-tabs-mode nil)
@@ -101,6 +99,7 @@ scroll-step 1)
   :config
   (add-hook 'prog-mode-hook 'ggtags-mode))
 
+(use-package magit :ensure t)
 
 ;; EVIL MODE SETTINGS
 (use-package evil-leader
@@ -222,9 +221,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'eldoc-mode)
-  (add-hook 'irony-mode-hook 'irony-eldoc)
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (use-package irony-eldoc
+    :ensure t
+    :config
+    (add-hook 'irony-mode-hook 'irony-eldoc)))
+
+(use-package company-irony
+  :ensure t
+  :config (add-to-list 'company-backends '(company-irony)))
 
 (use-package flycheck-irony
   :ensure t
