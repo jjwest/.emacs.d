@@ -5,6 +5,11 @@
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
 ;; The essential settings!
 (delete-selection-mode 1)
 
@@ -16,7 +21,13 @@ scroll-step 1)
 (setq auto-save-default nil)
 (setq make-backup-files nil)
 (electric-pair-mode 1)
-(show-smartparens-global-mode 1)
+
+(use-package smartparens
+	     :ensure t
+	     :config
+	     (show-smartparens-global-mode 1))
+
+(use-package gruvbox-theme :ensure t)
 
 ;; Clean modeline
 (use-package diminish
@@ -64,8 +75,12 @@ scroll-step 1)
   :config
   (setq-default flycheck-disabled-checkers '(c/c++-clang))
   (global-flycheck-mode)
-  (flycheck-pos-tip-mode)
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  (use-package flycheck-pos-tip
+    :ensure t
+    :config
+    (flycheck-pos-tip-mode))
+;  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+)
 
 ;; C/C++ STYLE SETTINGS
 (setq-default indent-tabs-mode nil)
@@ -175,8 +190,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
   (ido-mode 1)
-  (ido-vertical-mode 1)
-  (ido-ubiquitous-mode 1))
+  (use-package ido-vertical-mode
+    :ensure t
+    :config
+    (ido-vertical-mode 1))
+  (use-package ido-ubiquitous
+    :ensure t
+    :config
+    (ido-ubiquitous-mode 1)))
 
 (use-package idomenu :ensure t)
 
