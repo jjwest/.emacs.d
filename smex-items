@@ -1,19 +1,19 @@
 
 ;; ----- smex-history -----
 (
- abbrev-mode
- list-packages
- imenu
- load-theme
- customize-group
- irony-cdb-menu
  irony-cdb-autosetup-compile-options
+ irony-cdb-menu
+ flycheck-verify-setup
+ flycheck-irony-setup
+ list-packages
+ flycheck-mode
+ company-mode
 )
 
 ;; ----- smex-data -----
 (
- (list-packages . 38)
- (menu-bar-mode . 6)
+ (list-packages . 41)
+ (menu-bar-mode . 10)
  (menu-bar-options-save . 7)
  (ido-find-file . 1)
  (term . 1)
@@ -22,35 +22,35 @@
  (ggtags-create-tags . 10)
  (load-theme . 93)
  (delete-selection-repeat-replace-region . 2)
- (linum-relative-mode . 12)
+ (linum-relative-mode . 14)
  (landmark . 1)
  (eshell . 1)
  (customize-variable . 3)
  (customize-face . 8)
  (tmm-menubar . 1)
- (company-mode . 4)
+ (company-mode . 8)
  (yas-global-mode . 13)
- (customize-group . 19)
+ (customize-group . 21)
  (butterfly . 2)
  (tetris . 1)
  (projectile-cleanup-known-projects . 5)
  (conf-mode . 1)
  (text-mode . 1)
  (version . 1)
- (flycheck-verify-setup . 11)
+ (flycheck-verify-setup . 15)
  (add-dir-local-variable . 6)
  (irony-version . 1)
  (irony-install-server . 10)
  (irony-mode . 5)
- (irony-cdb-menu . 27)
+ (irony-cdb-menu . 35)
  (yas-expand . 1)
- (irony-cdb-autosetup-compile-options . 13)
+ (irony-cdb-autosetup-compile-options . 17)
  (linum-mode . 9)
  (irony-server-kill . 6)
  (yas-reload-all . 2)
  (company-irony-c-headers-reload-compiler-output . 1)
  (kill-some-buffers . 1)
- (flycheck-irony-setup . 1)
+ (flycheck-irony-setup . 3)
  (package-install . 2)
  (flycheck-color-mode-line-mode . 3)
  (semantic-mode . 2)
@@ -60,4 +60,8 @@
  (shrink-window-horizontally . 1)
  (imenu . 3)
  (abbrev-mode . 1)
+ (jedi:setup . 3)
+ (jedi:install-server . 3)
+ (jedi-mode . 4)
+ (flycheck-mode . 4)
 )

@@ -5,6 +5,19 @@
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
+;; The essential settings!
+(delete-selection-mode 1)
+
+(setq scroll-margin 5
+scroll-conservatively 9999
+scroll-step 1)
+
+(global-font-lock-mode 1) 
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(electric-pair-mode 1)
+(show-smartparens-global-mode 1)
+
 ;; Clean modeline
 (use-package diminish
   :ensure t
@@ -21,22 +34,21 @@
   :ensure t
   :diminish yas-minor-mode
   :config
-  (yas-reload-all)
   (add-hook 'prog-mode-hook 'yas-minor-mode))
 
 ;; COMPANY MODE
 (use-package company
   :ensure t
+  :defer t
   :diminish company-mode
-  :init
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
-  :config
-  (global-company-mode)
-  (add-hook 'rust-mode-hook 'company-mode-set-explicitly 0)
   :bind (:map company-active-map
               ("TAB" . nil)
-              ("<tab>" . nil)))
+              ("<tab>" . nil))
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (add-hook 'rust-mode-hook 'company-mode-set-explicitly 0))
 
 ;; ;; PROJECTILE
 (use-package projectile
@@ -45,20 +57,27 @@
   :config
   (projectile-global-mode))
 
-;; ;; C/C++ STYLE SETTINGS
+;;; Syntax-checking ;;;;;;;;
+(use-package flycheck
+  :ensure t
+  :diminish flycheck-mode
+  :config
+  (setq-default flycheck-disabled-checkers '(c/c++-clang))
+  (global-flycheck-mode)
+  (flycheck-pos-tip-mode)
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+;; C/C++ STYLE SETTINGS
 (setq-default indent-tabs-mode nil)
 (setq c-default-style "bsd") 
 (setq-default c-basic-offset 4)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
-
-;; AUTO DELETE-SELECTION
-(delete-selection-mode 1)
-
-;; SMOOTH SCROLLING
-(setq scroll-margin 5
-scroll-conservatively 9999
-scroll-step 1)
+;; PYTHON SETTINGS
+(use-package company-jedi
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-jedi))
 
 ;; GGTAGS
 (use-package ggtags
@@ -67,8 +86,6 @@ scroll-step 1)
   :config
   (add-hook 'prog-mode-hook 'ggtags-mode))
 
-;; ;; FONTS (Source Code Pro)
-(global-font-lock-mode 1) 
 
 ;; EVIL MODE SETTINGS
 (use-package evil-leader
@@ -97,10 +114,9 @@ scroll-step 1)
   "r" 'replace-string
   "x" 'ansi-term
   "jd" 'ggtags-find-definition
-  "dir" 'dired
+  "D" 'dired
   "c" 'idomenu))
 
-;; EVIL SURROUND
 (use-package evil-surround
   :ensure t
   :config
@@ -147,42 +163,27 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 (global-set-key [escape] 'evil-exit-emacs-state)
 
-;; Level of contrast for dark variant of theme.
-(setq gruvbox-dark-contrast "hard")
-
 ;; POWERLINE
 (use-package powerline-evil
   :ensure t
   :diminish powerline-minor-modes
-  :config
-  (powerline-evil-vim-color-theme))
+  :config (powerline-evil-vim-color-theme))
 
 ;; IDO
 (use-package ido
   :ensure t
-  :init
-  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
   :config
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
   (ido-mode 1)
   (ido-vertical-mode 1)
   (ido-ubiquitous-mode 1))
 
-(use-package idomenu
-  :ensure t)
-
+(use-package idomenu :ensure t)
 
 ;; SMEX
 (use-package smex
   :ensure t
-  :init
-  (global-set-key (kbd "M-x") 'smex))
-
-;; IRONY
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-(add-hook 'irony-mode-hook 'eldoc-mode)
-(add-hook 'irony-mode-hook 'irony-eldoc)
+  :bind ("M-x" . smex))
 
 ;; replace the `completion-at-point' and `complete-symbol' bindings in
 ;; irony-mode's buffers by irony-mode's asynchronous function
@@ -191,56 +192,43 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     'irony-completion-at-point-async)
   (define-key irony-mode-map [remap complete-symbol]
     'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-(add-hook 'irony-mode-hook (lambda() (diminish 'irony-mode)))
 
-;; Flycheck-irony
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+(use-package irony
+  :ensure t
+  :diminish irony-mode
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'eldoc-mode)
+  (add-hook 'irony-mode-hook 'irony-eldoc)
+  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-(require 'company)
-(require 'company-irony-c-headers)
-   ;; Load with `irony-mode` as a grouped backend
+(use-package flycheck-irony
+  :ensure t
+  :config
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
+
+(use-package company-irony-c-headers
+  :ensure t
+  :config
    (eval-after-load 'company
      '(add-to-list
-       'company-backends '(company-irony-c-headers company-irony)))
-
-;; INF-RUBY
-(add-hook 'ruby-mode-hook 'inf-ruby-mode)
-(require 'company)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-inf-ruby))
-
-;;; Disable auto-save and backups
-(setq auto-save-default nil)
-(setq make-backup-files nil)
-
-;; Electric mode
-(electric-pair-mode 1)
+       'company-backends '(company-irony-c-headers company-irony))))
 
 ;; LINUM MODE
-(use-package linum-relative-mode
-  :init 
-   (add-hook 'prog-mode-hook 'linum-relative-mode)
-   (add-hook 'text-mode-hook 'linum-relative-mode)
-   (add-hook 'conf-mode-hook 'linum-relative-mode))
-
-;; Always show matching parenthesis
-(show-smartparens-global-mode 1)
-
-
-;;; Syntax-checking ;;;;;;;;
-(use-package flycheck
+(use-package linum-relative
   :ensure t
-  :diminish flycheck-mode
-  :init
-  (setq-default flycheck-disabled-checkers '(c/c++-clang))
+  :diminish
+  linum-mode
+  linum-relative
+  linum-relative-mode
   :config
-  (global-flycheck-mode)
-  (flycheck-pos-tip-mode)
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-
+  (add-hook 'prog-mode-hook 'linum-relative-mode)
+  (add-hook 'text-mode-hook 'linum-relative-mode)
+  (add-hook 'conf-mode-hook 'linum-relative-mode))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -289,6 +277,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      ("#3E3D31" . 100))))
  '(inhibit-startup-screen t)
  '(initial-buffer-choice t)
+ '(irony-additional-clang-options (quote ("-std=c++14")))
  '(linum-format " %1i ")
  '(magit-diff-use-overlays nil)
  '(menu-bar-mode nil)
