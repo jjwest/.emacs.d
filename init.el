@@ -24,8 +24,7 @@ scroll-step 1)
 
 (use-package smartparens
 	     :ensure t
-	     :config
-	     (show-smartparens-global-mode 1))
+	     :config (show-smartparens-global-mode 1))
 
 (use-package gruvbox-theme :ensure t)
 
@@ -44,8 +43,7 @@ scroll-step 1)
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :config
-  (add-hook 'prog-mode-hook 'yas-minor-mode))
+  :config (add-hook 'prog-mode-hook 'yas-minor-mode))
 
 ;; COMPANY MODE
 (use-package company
@@ -65,8 +63,7 @@ scroll-step 1)
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :config
-  (projectile-global-mode))
+  :config (projectile-global-mode))
 
 ;;; Syntax-checking ;;;;;;;;
 (use-package flycheck
@@ -77,8 +74,7 @@ scroll-step 1)
   (global-flycheck-mode)
   (use-package flycheck-pos-tip
     :ensure t
-    :config
-    (flycheck-pos-tip-mode)))
+    :config (flycheck-pos-tip-mode)))
 
 ;; C/C++ STYLE SETTINGS
 (setq-default indent-tabs-mode nil)
@@ -89,15 +85,13 @@ scroll-step 1)
 ;; PYTHON SETTINGS
 (use-package company-jedi
   :ensure t
-  :config
-  (add-to-list 'company-backends 'company-jedi))
+  :config (add-to-list 'company-backends 'company-jedi))
 
 ;; GGTAGS
 (use-package ggtags
   :ensure t
   :diminish ggtags-mode
-  :config
-  (add-hook 'prog-mode-hook 'ggtags-mode))
+  :config (add-hook 'prog-mode-hook 'ggtags-mode))
 
 (use-package magit :ensure t)
 
@@ -133,49 +127,8 @@ scroll-step 1)
 
 (use-package evil-surround
   :ensure t
-  :config
-  (global-evil-surround-mode 1))
+  :config (global-evil-surround-mode 1))
 
-(with-eval-after-load "evil"
-     (evil-set-initial-state 'dired-mode 'emacs)
-     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-     (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-     (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-
-     (define-key evil-normal-state-map "\C-e" 'evil-end-of-line)
-     (define-key evil-insert-state-map "\C-e" 'end-of-line)
-     (define-key evil-visual-state-map "\C-e" 'evil-end-of-line)
-     (define-key evil-motion-state-map "\C-e" 'evil-end-of-line)
-
-     (setq evil-move-cursor-back nil)
-     
-     (define-key evil-normal-state-map (kbd "M-k") (lambda ()
-                                                     (interactive)
-                                                     (evil-scroll-up nil)))
-     (define-key evil-normal-state-map (kbd "M-j") (lambda ()
-                        (interactive)
-                        (evil-scroll-down nil))))
-;; esc quits
-(defun minibuffer-keyboard-quit ()
-  "Abort recursive edit.
-In Delete Selection mode, if the mark is active, just deactivate it;
-then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  (interactive)
-  (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-(global-set-key [escape] 'evil-exit-emacs-state)
 
 ;; POWERLINE
 (use-package powerline-evil
@@ -191,12 +144,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (ido-mode 1)
   (use-package ido-vertical-mode
     :ensure t
-    :config
-    (ido-vertical-mode 1))
+    :config (ido-vertical-mode 1))
   (use-package ido-ubiquitous
     :ensure t
-    :config
-    (ido-ubiquitous-mode 1)))
+    :config (ido-ubiquitous-mode 1)))
 
 (use-package idomenu :ensure t)
 
@@ -225,8 +176,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (use-package irony-eldoc
     :ensure t
-    :config
-    (add-hook 'irony-mode-hook 'irony-eldoc)))
+    :config (add-hook 'irony-mode-hook 'irony-eldoc)))
 
 (use-package company-irony
   :ensure t
@@ -256,6 +206,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (add-hook 'prog-mode-hook 'linum-relative-mode)
   (add-hook 'text-mode-hook 'linum-relative-mode)
   (add-hook 'conf-mode-hook 'linum-relative-mode))
+
+;; esc quits
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(global-set-key [escape] 'evil-exit-emacs-state)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -362,7 +331,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; EVIL MODE
 (use-package evil
   :ensure t
+  :bind (:map evil-normal-state-map
+              ("C-h" . evil-window-left)
+              ("C-j" . evil-window-down)
+              ("C-k" . evil-window-up)
+              ("C-l" . evil-window-right)
+              ("M-k" . evil-scroll-up)
+              ("M-j" . evil-scroll-down))
   :config
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
 
 (provide 'init)
