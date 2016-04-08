@@ -43,7 +43,10 @@ scroll-step 1)
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :config (add-hook 'prog-mode-hook 'yas-minor-mode))
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook 'yas-minor-mode))
 
 ;; COMPANY MODE
 (use-package company
