@@ -36,15 +36,11 @@
   (with-eval-after-load  'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
-
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
 (use-package yasnippet
   :ensure t
-  :defer t
   :diminish yas-minor-mode
-  :init
-  (add-hook 'prog-mode-hook 'yas-minor-mode)
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all))
@@ -55,9 +51,8 @@
   :bind (:map company-active-map
               ("TAB" . nil)
               ("<tab>" . nil))
-  :init
-  (add-hook 'prog-mode-hook 'company-mode)
   :config
+  (add-hook 'prog-mode-hook 'company-mode)
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2))
 
@@ -79,7 +74,7 @@
 
 ;; C/C++ STYLE SETTINGS
 (setq-default indent-tabs-mode nil)
-(setq c-default-style "bsd") 
+(setq-default c-default-style "bsd") 
 (setq-default c-basic-offset 4)
 (setq-default gdb-many-windows t)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -95,7 +90,9 @@
   :diminish ggtags-mode
   :init (add-hook 'prog-mode-hook 'ggtags-mode))
 
-(use-package magit :ensure t)
+(use-package magit
+  :ensure t
+  :diminish auto-revert-mode)
 
 (use-package evil-leader
   :ensure t
@@ -106,8 +103,8 @@
   (evil-leader/set-key
   "f" 'find-file
   "b" 'switch-to-buffer
+  "B" 'buffer-menu
   "k" 'kill-buffer
-  "K" 'kill-some-buffers
   "pp" 'projectile-switch-project
   "pf" 'projectile-find-file
   "pk" 'projectile-kill-buffers
