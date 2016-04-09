@@ -10,16 +10,16 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; The essential settings!
+;; The essentials
 (delete-selection-mode 1)
-
-(setq scroll-margin 5
-scroll-conservatively 9999
-scroll-step 1)
-
+(setq initial-major-mode 'text-mode
+      auto-save-default nil
+      make-backup-files nil
+      custom-safe-themes t
+      scroll-margin 5
+      scroll-conservatively 9999
+      scroll-step 1)
 (global-font-lock-mode 1) 
-(setq auto-save-default nil)
-(setq make-backup-files nil)
 (electric-pair-mode 1)
 
 (use-package smartparens
@@ -41,24 +41,25 @@ scroll-step 1)
 ;;; should be loaded before auto complete so that they can work together
 (use-package yasnippet
   :ensure t
+  :defer t
   :diminish yas-minor-mode
+  :init
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-reload-all)
-  (add-hook 'prog-mode-hook 'yas-minor-mode))
+  (yas-reload-all))
 
 (use-package company
   :ensure t
-  :defer t
   :diminish company-mode
   :bind (:map company-active-map
               ("TAB" . nil)
               ("<tab>" . nil))
-  :config
+  :init
   (add-hook 'prog-mode-hook 'company-mode)
+  :config
   (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
-  (add-hook 'rust-mode-hook 'company-mode-set-explicitly 0))
+  (setq company-minimum-prefix-length 2))
 
 (use-package projectile
   :ensure t
@@ -67,10 +68,11 @@ scroll-step 1)
 
 (use-package flycheck
   :ensure t
+  :defer t
   :diminish flycheck-mode
+  :init
+  (add-hook 'prog-mode-hook 'flycheck-mode)
   :config
-  (setq-default flycheck-disabled-checkers '(c/c++-clang))
-  (global-flycheck-mode)
   (use-package flycheck-pos-tip
     :ensure t
     :config (flycheck-pos-tip-mode)))
@@ -89,8 +91,9 @@ scroll-step 1)
 
 (use-package ggtags
   :ensure t
+  :defer t
   :diminish ggtags-mode
-  :config (add-hook 'prog-mode-hook 'ggtags-mode))
+  :init (add-hook 'prog-mode-hook 'ggtags-mode))
 
 (use-package magit :ensure t)
 
@@ -160,34 +163,30 @@ scroll-step 1)
 
 (use-package irony
   :ensure t
+  :defer t
   :diminish irony-mode
-  :config
+  :init
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'eldoc-mode)
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  :config
+  (use-package company-irony
+    :ensure t
+    :config (add-to-list 'company-backends '(company-irony)))
+  (use-package flycheck-irony
+    :ensure t
+    :config
+    (flycheck-irony-setup))
+  (use-package company-irony-c-headers
+    :ensure t
+    :config
+    (add-to-list 'company-backends '(company-irony-c-headers)))
   (use-package irony-eldoc
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
-
-(use-package company-irony
-  :ensure t
-  :config (add-to-list 'company-backends '(company-irony)))
-
-(use-package flycheck-irony
-  :ensure t
-  :config
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
-
-(use-package company-irony-c-headers
-  :ensure t
-  :config
-   (eval-after-load 'company
-     '(add-to-list
-       'company-backends '(company-irony-c-headers company-irony))))
 
 (use-package linum-relative
   :ensure t
@@ -266,6 +265,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      ("#3E3D31" . 100))))
  '(inhibit-startup-screen t)
  '(initial-buffer-choice t)
+ '(initial-scratch-message "")
  '(irony-additional-clang-options (quote ("-std=c++14")))
  '(linum-format " %1i ")
  '(magit-diff-use-overlays nil)
