@@ -28,7 +28,6 @@ scroll-step 1)
 
 (use-package gruvbox-theme :ensure t)
 
-;; Clean modeline
 (use-package diminish
   :ensure t
   :config
@@ -48,7 +47,6 @@ scroll-step 1)
   (yas-reload-all)
   (add-hook 'prog-mode-hook 'yas-minor-mode))
 
-;; COMPANY MODE
 (use-package company
   :ensure t
   :defer t
@@ -62,13 +60,11 @@ scroll-step 1)
   (setq company-minimum-prefix-length 2)
   (add-hook 'rust-mode-hook 'company-mode-set-explicitly 0))
 
-;; ;; PROJECTILE
 (use-package projectile
   :ensure t
   :diminish projectile-mode
   :config (projectile-global-mode))
 
-;;; Syntax-checking ;;;;;;;;
 (use-package flycheck
   :ensure t
   :diminish flycheck-mode
@@ -83,6 +79,7 @@ scroll-step 1)
 (setq-default indent-tabs-mode nil)
 (setq c-default-style "bsd") 
 (setq-default c-basic-offset 4)
+(setq-default gdb-many-windows t)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; PYTHON SETTINGS
@@ -90,7 +87,6 @@ scroll-step 1)
   :ensure t
   :config (add-to-list 'company-backends 'company-jedi))
 
-;; GGTAGS
 (use-package ggtags
   :ensure t
   :diminish ggtags-mode
@@ -98,7 +94,6 @@ scroll-step 1)
 
 (use-package magit :ensure t)
 
-;; EVIL MODE SETTINGS
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
@@ -132,14 +127,11 @@ scroll-step 1)
   :ensure t
   :config (global-evil-surround-mode 1))
 
-
-;; POWERLINE
 (use-package powerline-evil
   :ensure t
   :diminish powerline-minor-modes
   :config (powerline-evil-vim-color-theme))
 
-;; IDO
 (use-package ido
   :ensure t
   :config
@@ -154,7 +146,6 @@ scroll-step 1)
 
 (use-package idomenu :ensure t)
 
-;; SMEX
 (use-package smex
   :ensure t
   :bind ("M-x" . smex))
@@ -198,7 +189,6 @@ scroll-step 1)
      '(add-to-list
        'company-backends '(company-irony-c-headers company-irony))))
 
-;; LINUM MODE
 (use-package linum-relative
   :ensure t
   :diminish
@@ -330,11 +320,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(weechat-color-list
    (unspecified "#272822" "#3E3D31" "#A20C41" "#F92672" "#67930F" "#A6E22E" "#968B26" "#E6DB74" "#21889B" "#66D9EF" "#A41F99" "#FD5FF0" "#349B8D" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 
-
-;; EVIL MODE
 (use-package evil
   :ensure t
   :bind (:map evil-normal-state-map
+              ("j" . evil-next-visual-line)
+              ("k" . evil-previous-visual-line)
               ("C-h" . evil-window-left)
               ("C-j" . evil-window-down)
               ("C-k" . evil-window-up)
@@ -344,6 +334,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
+  (setq evil-move-cursor-back nil)
   (evil-mode 1))
 
 (provide 'init)
