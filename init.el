@@ -178,12 +178,10 @@
     :config (add-to-list 'company-backends '(company-irony)))
   (use-package flycheck-irony
     :ensure t
-    :config
-    (flycheck-irony-setup))
+    :config (flycheck-irony-setup))
   (use-package company-irony-c-headers
     :ensure t
-    :config
-    (add-to-list 'company-backends '(company-irony-c-headers)))
+    :config (add-to-list 'company-backends '(company-irony-c-headers)))
   (use-package irony-eldoc
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
