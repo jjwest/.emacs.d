@@ -36,6 +36,9 @@
   (with-eval-after-load  'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
+(use-package term
+  :bind ("C-x C-d" . term-send-eof))
+
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
 (use-package yasnippet
@@ -83,6 +86,12 @@
 (use-package company-jedi
   :ensure t
   :config (add-to-list 'company-backends 'company-jedi))
+
+;; RUST SETTINGS
+(use-package rust-mode :ensure t)
+(use-package flycheck-rust
+  :ensure t
+  :config (add-hook 'rust-mode-hook 'flycheck-rust-setup))
 
 (use-package ggtags
   :ensure t
