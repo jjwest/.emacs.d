@@ -22,9 +22,59 @@
 (global-font-lock-mode 1) 
 (electric-pair-mode 1)
 
+(use-package evil
+  :ensure t
+  :bind (:map evil-normal-state-map
+              ("j" . evil-next-visual-line)
+              ("k" . evil-previous-visual-line)
+              ("C-h" . evil-window-left)
+              ("C-j" . evil-window-down)
+              ("C-k" . evil-window-up)
+              ("C-l" . evil-window-right)
+              ("M-k" . evil-scroll-up)
+              ("M-j" . evil-scroll-down))
+  :config
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (setq evil-move-cursor-back nil)
+  (evil-mode 1))
+
+(use-package evil-leader
+  :ensure t
+  :diminish evil-leader-mode
+  :config
+  (evil-leader/set-leader ",")
+  (evil-leader/set-key
+  "f" 'find-file
+  "b" 'switch-to-buffer
+  "B" 'buffer-menu
+  "k" 'kill-buffer
+  "pp" 'projectile-switch-project
+  "pf" 'projectile-find-file
+  "pk" 'projectile-kill-buffers
+  "pt" 'projectile-find-other-file
+  "ss" 'split-window-horizontally
+  "vv" 'split-window-vertically
+  "dw"  'delete-window
+  "do" 'delete-other-windows
+  "sf" 'save-buffer
+  "sa" 'save-some-buffers
+  "g" 'magit-status
+  "qr" 'ggtags-query-replace
+  "r" 'replace-string
+  "x" 'ansi-term
+  "jd" 'ggtags-find-definition
+  "D" 'dired
+  "c" 'idomenu)
+  (global-evil-leader-mode))
+
+(use-package evil-surround
+  :ensure t
+  :config (global-evil-surround-mode 1))
+
 (use-package smartparens
-	     :ensure t
-	     :config (show-smartparens-global-mode 1))
+  :ensure t
+  :config (show-smartparens-global-mode 1))
 
 (use-package gruvbox-theme :ensure t)
 
@@ -46,7 +96,8 @@
   :diminish yas-minor-mode
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-reload-all))
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 (use-package company
   :ensure t
@@ -68,8 +119,7 @@
   :ensure t
   :defer t
   :diminish flycheck-mode
-  :init
-  (add-hook 'prog-mode-hook 'flycheck-mode)
+  :init (add-hook 'prog-mode-hook 'flycheck-mode)
   :config
   (use-package flycheck-pos-tip
     :ensure t
@@ -103,39 +153,6 @@
   :ensure t
   :diminish auto-revert-mode)
 
-(use-package evil-leader
-  :ensure t
-  :diminish evil-leader-mode
-  :config
-  (global-evil-leader-mode)
-  (evil-leader/set-leader ",")
-  (evil-leader/set-key
-  "f" 'find-file
-  "b" 'switch-to-buffer
-  "B" 'buffer-menu
-  "k" 'kill-buffer
-  "pp" 'projectile-switch-project
-  "pf" 'projectile-find-file
-  "pk" 'projectile-kill-buffers
-  "ss" 'split-window-horizontally
-  "vv" 'split-window-vertically
-  "dw"  'delete-window
-  "do" 'delete-other-windows
-  "sf" 'save-buffer
-  "sa" 'save-some-buffers
-  "g" 'magit-status
-  "pt" 'projectile-find-other-file
-  "qr" 'ggtags-query-replace
-  "r" 'replace-string
-  "x" 'ansi-term
-  "jd" 'ggtags-find-definition
-  "D" 'dired
-  "c" 'idomenu))
-
-(use-package evil-surround
-  :ensure t
-  :config (global-evil-surround-mode 1))
-
 (use-package powerline-evil
   :ensure t
   :diminish powerline-minor-modes
@@ -151,27 +168,23 @@
     :config (ido-vertical-mode 1))
   (use-package ido-ubiquitous
     :ensure t
-    :config (ido-ubiquitous-mode 1)))
-
-(use-package idomenu :ensure t)
+    :config (ido-ubiquitous-mode 1))
+  (use-package idomenu :ensure t))
 
 (use-package smex
   :ensure t
   :bind ("M-x" . smex))
-
-;; replace the `completion-at-point' and `complete-symbol' bindings in
-;; irony-mode's buffers by irony-mode's asynchronous function
-(defun my-irony-mode-hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
 
 (use-package irony
   :ensure t
   :defer t
   :diminish irony-mode
   :init
+  (defun my-irony-mode-hook ()
+    (define-key irony-mode-map [remap completion-at-point]
+      'irony-completion-at-point-async)
+    (define-key irony-mode-map [remap complete-symbol]
+      'irony-completion-at-point-async))
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
@@ -220,7 +233,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-(global-set-key [escape] 'evil-exit-emacs-state)
+;(global-set-key [escape] 'evil-exit-emacs-state)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -324,21 +337,5 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(weechat-color-list
    (unspecified "#272822" "#3E3D31" "#A20C41" "#F92672" "#67930F" "#A6E22E" "#968B26" "#E6DB74" "#21889B" "#66D9EF" "#A41F99" "#FD5FF0" "#349B8D" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 
-(use-package evil
-  :ensure t
-  :bind (:map evil-normal-state-map
-              ("j" . evil-next-visual-line)
-              ("k" . evil-previous-visual-line)
-              ("C-h" . evil-window-left)
-              ("C-j" . evil-window-down)
-              ("C-k" . evil-window-up)
-              ("C-l" . evil-window-right)
-              ("M-k" . evil-scroll-up)
-              ("M-j" . evil-scroll-down))
-  :config
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (setq evil-move-cursor-back nil)
-  (evil-mode 1))
 
 (provide 'init)
