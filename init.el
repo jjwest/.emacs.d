@@ -5,6 +5,7 @@
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
+
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -97,7 +98,8 @@
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode))
+  (add-hook 'prog-mode-hook 'yas-minor-mode))
+
 
 (use-package company
   :ensure t
@@ -110,10 +112,12 @@
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2))
 
+
 (use-package projectile
   :ensure t
   :diminish projectile-mode
   :config (projectile-global-mode))
+
 
 (use-package flycheck
   :ensure t
@@ -151,6 +155,7 @@
 
 (use-package magit
   :ensure t
+  :defer t
   :diminish auto-revert-mode)
 
 (use-package powerline-evil
@@ -213,7 +218,6 @@
   linum-relative-mode
   :config
   (add-hook 'prog-mode-hook 'linum-relative-mode)
-  (add-hook 'text-mode-hook 'linum-relative-mode)
   (add-hook 'conf-mode-hook 'linum-relative-mode))
 
 ;; esc quits
