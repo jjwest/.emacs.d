@@ -5,8 +5,6 @@
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
-(benchmark-init/activate)
-
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -19,33 +17,16 @@
       custom-safe-themes t
       scroll-margin 5
       scroll-conservatively 9999
-      scroll-step 1)
-(global-font-lock-mode 1) 
+      scroll-step 1
+      inhibit-startup-screen t
+      initial-scratch-message ""
+      tramp-default-method "ssh")
 (electric-pair-mode 1)
 (show-paren-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-(setq inhibit-startup-screen t)
-(setq initial-scratch-message "")
-
-(use-package evil
-  :ensure t
-  :bind (:map evil-normal-state-map
-              ("j" . evil-next-visual-line)
-              ("k" . evil-previous-visual-line)
-              ("C-h" . evil-window-left)
-              ("C-j" . evil-window-down)
-              ("C-k" . evil-window-up)
-              ("C-l" . evil-window-right)
-              ("M-k" . evil-scroll-up)
-              ("M-j" . evil-scroll-down))
-  :config
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (setq evil-move-cursor-back nil)
-  (evil-mode 1))
 
 (use-package evil-leader
   :ensure t
@@ -63,12 +44,12 @@
   "pt" 'projectile-find-other-file
   "ss" 'split-window-horizontally
   "vv" 'split-window-vertically
-  "dw"  'delete-window
+  "dw"	'delete-window
   "do" 'delete-other-windows
   "sf" 'save-buffer
   "sa" 'save-some-buffers
   "g" 'magit-status
-  "r" 'replace-regexp
+  "r" 'replace-string
   "R" 'ggtags-query-replace
   "x" 'ansi-term
   "jd" 'ggtags-find-definition
@@ -76,27 +57,26 @@
   "c" 'idomenu)
   (global-evil-leader-mode))
 
+(use-package evil
+  :ensure t
+  :bind (:map evil-normal-state-map
+	      ("j" . evil-next-visual-line)
+	      ("k" . evil-previous-visual-line)
+	      ("C-h" . evil-window-left)
+	      ("C-j" . evil-window-down)
+	      ("C-k" . evil-window-up)
+	      ("C-l" . evil-window-right)
+	      ("M-k" . evil-scroll-up)
+	      ("M-j" . evil-scroll-down))
+  :config
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (setq evil-move-cursor-back nil)
+  (evil-mode 1))
+
 (use-package evil-surround
   :ensure t
   :config (global-evil-surround-mode 1))
-
-;; esc quits
-(defun minibuffer-keyboard-quit ()
-  "Abort recursive edit.
-In Delete Selection mode, if the mark is active, just deactivate it;
-then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  (interactive)
-  (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
 (use-package gruvbox-theme :ensure t)
 
@@ -105,7 +85,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (diminish 'visual-line-mode)
   (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
-  (with-eval-after-load  'eldoc (diminish 'eldoc-mode))
+  (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
 (use-package term
@@ -128,10 +108,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :defer t
   :diminish company-mode
   :bind (("C-RET" . company-manual-begin)
-         ("<C-return>" . company-manual-begin)
-         :map company-active-map
-         ("TAB" . nil)
-         ("<tab>" . nil))
+	 ("<C-return>" . company-manual-begin)
+	 :map company-active-map
+	 ("TAB" . nil)
+	 ("<tab>" . nil))
   :init (add-hook 'prog-mode-hook (lambda () (company-mode)))
   :config
   (setq company-idle-delay 0)
@@ -144,8 +124,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :diminish projectile-mode
   :config
   (setq projectile-other-file-alist '(("c" "h")
-                                      ("h" "c" "cc")
-                                      ("cc" "h")))
+				      ("h" "c" "cc" "cpp")
+				      ("cc" "h")
+				      ("cpp" "h")))
   (projectile-global-mode))
 
 
@@ -155,8 +136,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :diminish flycheck-mode
   :init (add-hook 'prog-mode-hook 'flycheck-mode)
   :config
- (setq flycheck-c/c++-gcc-executable "gcc-5")
- (setq flycheck-gcc-language-standard "c++14")
+  (setq flycheck-c/c++-gcc-executable "gcc-5")
+  (setq flycheck-gcc-language-standard "c++14")
   (use-package flycheck-pos-tip
     :ensure t
     :config (flycheck-pos-tip-mode)))
@@ -173,18 +154,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :ensure t
   :defer t
   :init
-  (add-hook 'python-mode-hook (lambda ()
-                                (add-to-list 'company-backends 'company-jedi))))
+  (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi))))
 
 ;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
-  :mode ("\\.rs\\'" . rust-mode))
-
-(use-package flycheck-rust
-  :ensure t
-  :defer t
-  :init (add-hook 'rust-mode-hook (lambda () (flycheck-rust-setup))))
+  :mode ("\\.rs\\'" . rust-mode)
+  :config
+  (use-package flycheck-rust
+    :ensure t
+    :config (flycheck-rust-setup)))
 
 (use-package ggtags
   :ensure t
@@ -259,6 +238,24 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (add-hook 'prog-mode-hook 'linum-relative-mode)
   (add-hook 'conf-mode-hook 'linum-relative-mode))
+
+;; esc quits
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
