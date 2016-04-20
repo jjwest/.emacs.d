@@ -2,9 +2,6 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/themes/")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -127,6 +124,11 @@
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
 				      ("cpp" "h")))
+  (setq projectile-globally-ignored-file-suffixes '(".fls"
+                                                    ".log"
+                                                    ".fdb_latexmk"
+                                                    ".aux"
+                                                    ".dvi"))
   (projectile-global-mode))
 
 
@@ -163,7 +165,8 @@
   :config
   (use-package flycheck-rust
     :ensure t
-    :config (flycheck-rust-setup)))
+    :config
+    (add-hook 'rust-mode-hook 'flycheck-rust-setup)))
 
 (use-package ggtags
   :ensure t
