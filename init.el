@@ -17,13 +17,18 @@
       scroll-step 1
       inhibit-startup-screen t
       initial-scratch-message ""
-      tramp-default-method "ssh")
+      tramp-default-method "ssh"
+      indent-tabs-mode nil
+      gdb-many-windows t
+      c-basic-offset 4
+      c-default-style "bsd")
 (electric-pair-mode 1)
 (show-paren-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
+
 
 (use-package evil-leader
   :ensure t
@@ -143,13 +148,6 @@
   (use-package flycheck-pos-tip
     :ensure t
     :config (flycheck-pos-tip-mode)))
-
-;; C/C++ STYLE SETTINGS
-(setq-default indent-tabs-mode nil)
-(setq-default c-default-style "bsd") 
-(setq-default c-basic-offset 4)
-(setq-default gdb-many-windows t)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; PYTHON SETTINGS
 (use-package company-jedi
