@@ -7,7 +7,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; The essentials
+;; General stuff
 (setq initial-major-mode 'text-mode
       auto-save-default nil
       make-backup-files nil
@@ -22,6 +22,8 @@
       gdb-many-windows t
       c-basic-offset 4
       c-default-style "bsd")
+(put 'dired-find-alternate-file 'disabled nil)
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (electric-pair-mode 1)
 (show-paren-mode 1)
 (scroll-bar-mode -1)
@@ -89,6 +91,19 @@
   (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
   (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
+
+(defun my-dired-parent-dir ()
+  (interactive)
+  (find-alternate-file ".."))
+(use-package dired
+  :bind (:map dired-mode-map
+	      ("RET" . dired-find-alternate-file)
+	      ("<return>" . dired-find-alternate-file)
+	      ("a" . dired-find-file)
+	      ("q" . kill-this-buffer)
+	      ("p" . my-dired-parent-dir)
+	      ("f" . isearch-forward)
+	      ("F" . isearch-backward)))
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof))
@@ -175,6 +190,8 @@
 (use-package magit
   :ensure t
   :defer t
+  :bind (:map magit-status-mode-map
+	      ("q" . kill-this-buffer))
   :diminish auto-revert-mode)
 
 (use-package powerline-evil
