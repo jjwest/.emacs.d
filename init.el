@@ -106,7 +106,8 @@
 	      ("F" . isearch-backward)))
 
 (use-package term
-  :bind ("C-x C-d" . term-send-eof))
+  :bind ("C-x C-d" . term-send-eof)
+  :config (setq term-buffer-maximum-size 0))
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
@@ -247,15 +248,6 @@
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
 
-(use-package linum-relative
-  :ensure t
-  :diminish
-  linum-mode
-  linum-relative
-  linum-relative-mode
-  :config
-  (add-hook 'prog-mode-hook 'linum-relative-mode)
-  (add-hook 'conf-mode-hook 'linum-relative-mode))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
