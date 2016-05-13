@@ -7,7 +7,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; General stuff
+;; General settings
 (setq initial-major-mode 'text-mode
       auto-save-default nil
       make-backup-files nil
@@ -92,6 +92,7 @@
   (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
+
 (defun my-dired-parent-dir ()
   (interactive)
   (find-alternate-file ".."))
@@ -101,7 +102,7 @@
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
 	      ("q" . kill-this-buffer)
-	      ("p" . my-dired-parent-dir)
+	      ("o" . my-dired-parent-dir)
 	      ("f" . isearch-forward)
 	      ("F" . isearch-backward)))
 
