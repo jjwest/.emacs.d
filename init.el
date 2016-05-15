@@ -178,10 +178,21 @@
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
+  (use-package racer
+    :ensure t
+    :config
+    (setq racer-cmd "~/.cargo/bin/racer")
+    (setq racer-rust-src-path "/home/jonve547/.rust/src")
+    (racer-mode)
+    (eldoc-mode))
   (use-package flycheck-rust
     :ensure t
     :config
     (add-hook 'rust-mode-hook 'flycheck-rust-setup)))
+
+;; Gentlemen
+(use-package gentlemen-mode
+  :mode ("\\.gt\\'" . gentlemen-mode))
 
 (use-package ggtags
   :ensure t
