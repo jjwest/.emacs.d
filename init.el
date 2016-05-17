@@ -58,7 +58,9 @@
   "x" 'ansi-term
   "jd" 'ggtags-find-definition
   "D" 'dired
-  "c" 'idomenu)
+  "c" 'idomenu
+  "n" 'narrow-to-region
+  "N" 'widen)
   (global-evil-leader-mode))
 
 (use-package evil
@@ -73,9 +75,10 @@
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down))
   :config
+  (setq evil-insert-state-cursor '(box "white")
+	evil-normal-state-cursor '(box "white"))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
-  (setq evil-move-cursor-back nil)
   (evil-mode 1))
 
 (use-package evil-surround
@@ -182,17 +185,13 @@
     :ensure t
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
-    (setq racer-rust-src-path "/home/jonve547/.rust/src")
-    (racer-mode)
+    (setq racer-rust-src-path "~/.rust/src")
+    (add-hook 'rust-mode-hook 'racer-mode)
     (eldoc-mode))
   (use-package flycheck-rust
     :ensure t
     :config
     (add-hook 'rust-mode-hook 'flycheck-rust-setup)))
-
-;; Gentlemen
-(use-package gentlemen-mode
-  :mode ("\\.gt\\'" . gentlemen-mode))
 
 (use-package ggtags
   :ensure t
@@ -291,3 +290,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00")))))
 
 (provide 'init)
+(put 'narrow-to-region 'disabled nil)
