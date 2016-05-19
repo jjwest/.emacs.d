@@ -17,12 +17,9 @@
       scroll-step 1
       inhibit-startup-screen t
       initial-scratch-message ""
-      tramp-default-method "ssh"
       indent-tabs-mode nil
-      gdb-many-windows t
       c-basic-offset 4
       c-default-style "bsd")
-(put 'dired-find-alternate-file 'disabled nil)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (electric-pair-mode 1)
 (show-paren-mode 1)
@@ -259,6 +256,21 @@
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
 
+(use-package neotree
+  :ensure t
+  :init
+  :config
+  (setq neo-smart-open t)
+  (setq projectile-switch-project-action 'neotree-projectile-action)
+  (add-hook 'neotree-mode-hook
+            (lambda ()
+              (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+              (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
+	      (define-key evil-normal-state-local-map (kbd "D") 'neotree-delete-node)
+	      (define-key evil-normal-state-local-map (kbd "R") 'neotree-rename-node)
+	      (define-key evil-normal-state-local-map (kbd "C") 'neotree-create-node))))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
