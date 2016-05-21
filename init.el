@@ -20,6 +20,7 @@
       indent-tabs-mode nil
       c-basic-offset 4
       c-default-style "bsd")
+(put 'narrow-to-region 'disabled nil)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (electric-pair-mode 1)
 (show-paren-mode 1)
@@ -27,6 +28,8 @@
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
+(org-babel-do-load-languages
+ 'org-babel-load-languages '((python . t)))
 
 
 (use-package evil-leader
@@ -92,7 +95,6 @@
   (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
-
 (defun my-dired-parent-dir ()
   (interactive)
   (find-alternate-file ".."))
@@ -109,6 +111,7 @@
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
   :config (setq term-buffer-maximum-size 0))
+
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
@@ -258,7 +261,7 @@
 
 (use-package neotree
   :ensure t
-  :init
+  :defer t
   :config
   (setq neo-smart-open t)
   (setq projectile-switch-project-action 'neotree-projectile-action)
@@ -271,6 +274,13 @@
 	      (define-key evil-normal-state-local-map (kbd "D") 'neotree-delete-node)
 	      (define-key evil-normal-state-local-map (kbd "R") 'neotree-rename-node)
 	      (define-key evil-normal-state-local-map (kbd "C") 'neotree-create-node))))
+
+(use-package nlinum-relative
+  :ensure t
+  :config
+  (setq nlinum-relative-redisplay-delay 0.200)
+  (nlinum-relative-setup-evil)
+  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
@@ -302,4 +312,3 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00")))))
 
 (provide 'init)
-(put 'narrow-to-region 'disabled nil)
