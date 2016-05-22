@@ -41,7 +41,7 @@
   "f" 'find-file
   "b" 'switch-to-buffer
   "B" 'buffer-menu
-  "k" 'kill-buffer
+  "k" 'kill-this-buffer
   "pp" 'projectile-switch-project
   "pf" 'projectile-find-file
   "pk" 'projectile-kill-buffers
@@ -261,7 +261,6 @@
 
 (use-package neotree
   :ensure t
-  :defer t
   :config
   (setq neo-smart-open t)
   (setq projectile-switch-project-action 'neotree-projectile-action)
@@ -278,7 +277,7 @@
 (use-package nlinum-relative
   :ensure t
   :config
-  (setq nlinum-relative-redisplay-delay 0.200)
+  (setq nlinum-relative-redisplay-delay 0.05)
   (nlinum-relative-setup-evil)
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
