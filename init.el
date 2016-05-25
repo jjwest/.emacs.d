@@ -7,6 +7,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+
 ;; General settings
 (setq initial-major-mode 'text-mode
       auto-save-default nil
@@ -30,6 +31,9 @@
 (menu-bar-mode -1)
 (org-babel-do-load-languages
  'org-babel-load-languages '((python . t)))
+(put 'dired-find-alternate-file 'disabled nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-auto-revert-mode t)
 
 
 (use-package evil-leader
@@ -38,7 +42,7 @@
   :config
   (evil-leader/set-leader ",")
   (evil-leader/set-key
-  "f" 'find-file
+  "f" 'counsel-find-file
   "b" 'switch-to-buffer
   "B" 'buffer-menu
   "k" 'kill-this-buffer
@@ -46,9 +50,10 @@
   "pf" 'projectile-find-file
   "pk" 'projectile-kill-buffers
   "pt" 'projectile-find-other-file
+  "pg" 'projectile-grep
   "ss" 'split-window-horizontally
   "vv" 'split-window-vertically
-  "dw"	'delete-window
+  "dw" 'delete-window
   "do" 'delete-other-windows
   "sf" 'save-buffer
   "sa" 'save-some-buffers
@@ -57,10 +62,7 @@
   "R" 'ggtags-query-replace
   "x" 'ansi-term
   "jd" 'ggtags-find-definition
-  "D" 'dired
-  "c" 'idomenu
-  "n" 'narrow-to-region
-  "N" 'widen)
+  "q" 'neotree-find)
   (global-evil-leader-mode))
 
 (use-package evil
@@ -73,7 +75,10 @@
 	      ("C-k" . evil-window-up)
 	      ("C-l" . evil-window-right)
 	      ("M-k" . evil-scroll-up)
-	      ("M-j" . evil-scroll-down))
+	      ("M-j" . evil-scroll-down)
+	      ("U" . redo)
+	      ("/" . swiper)
+	      ("Y" . "y$"))
   :config
   (setq evil-insert-state-cursor '(box "white")
 	evil-normal-state-cursor '(box "white"))
@@ -85,33 +90,9 @@
   :ensure t
   :config (global-evil-surround-mode 1))
 
-(use-package gruvbox-theme :ensure t)
-
-(use-package diminish
+(use-package evil-visualstar
   :ensure t
-  :config
-  (diminish 'visual-line-mode)
-  (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
-  (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
-  (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
-
-(defun my-dired-parent-dir ()
-  (interactive)
-  (find-alternate-file ".."))
-(use-package dired
-  :bind (:map dired-mode-map
-	      ("RET" . dired-find-alternate-file)
-	      ("<return>" . dired-find-alternate-file)
-	      ("a" . dired-find-file)
-	      ("q" . kill-this-buffer)
-	      ("o" . my-dired-parent-dir)
-	      ("f" . isearch-forward)
-	      ("F" . isearch-backward)))
-
-(use-package term
-  :bind ("C-x C-d" . term-send-eof)
-  :config (setq term-buffer-maximum-size 0))
-
+  :config (global-evil-visualstar-mode))
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
@@ -149,11 +130,6 @@
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
 				      ("cpp" "h")))
-  (setq projectile-globally-ignored-file-suffixes '(".fls"
-                                                    ".log"
-                                                    ".fdb_latexmk"
-                                                    ".aux"
-                                                    ".dvi"))
   (projectile-global-mode))
 
 
@@ -168,6 +144,37 @@
   (use-package flycheck-pos-tip
     :ensure t
     :config (flycheck-pos-tip-mode)))
+
+(use-package gruvbox-theme :ensure t)
+
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'visual-line-mode)
+  (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
+  (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
+  (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
+
+(defun my-dired-parent-dir ()
+  (interactive)
+  (find-alternate-file ".."))
+(use-package dired
+  :bind (:map dired-mode-map
+	      ("RET" . dired-find-alternate-file)
+	      ("<return>" . dired-find-alternate-file)
+	      ("a" . dired-find-file)
+	      ("j" . dired-next-line)
+	      ("k" . dired-previous-line)
+	      ("q" . kill-this-buffer)
+	      ("o" . my-dired-parent-dir)
+	      ("f" . isearch-forward)
+	      ("F" . isearch-backward)))
+
+(use-package term
+  :bind ("C-x C-d" . term-send-eof)
+  :config (setq term-buffer-maximum-size 0))
+
+
 
 ;; PYTHON SETTINGS
 (use-package company-jedi
@@ -211,22 +218,44 @@
   :diminish powerline-minor-modes
   :config (powerline-evil-vim-color-theme))
 
-(use-package ido
-  :ensure t
-  :config
-  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-  (ido-mode 1)
-  (use-package ido-vertical-mode
-    :ensure t
-    :config (ido-vertical-mode 1))
-  (use-package ido-ubiquitous
-    :ensure t
-    :config (ido-ubiquitous-mode 1))
-  (use-package idomenu :ensure t))
 
-(use-package smex
+(use-package swiper
   :ensure t
-  :bind ("M-x" . smex))
+  :ensure counsel
+  :diminish ivy-mode
+  :bind (("M-x" . counsel-M-x))
+  :init
+  (require 'ivy)
+  (require 'swiper)
+  :config
+  (defun my-swiper-recenter (&rest args)
+    "recenter display after swiper"
+    (recenter))
+  (advice-add 'swiper :after #'my-swiper-recenter)
+  (setq projectile-completion-system 'ivy)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-height 10)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-display-style 'fancy)
+  (define-key ivy-mode-map [escape] 'minibuffer-keyboard-quit)
+  (ivy-mode 1))
+
+;; (use-package ido
+;;   :ensure t
+;;   :config
+;;   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+;;   (ido-mode 1)
+;;   (use-package ido-vertical-mode
+;;     :ensure t
+;;     :config (ido-vertical-mode 1))
+;;   (use-package ido-ubiquitous
+;;     :ensure t
+;;     :config (ido-ubiquitous-mode 1))
+;;   (use-package idomenu :ensure t))
+
+;; (use-package smex
+;;   :ensure t
+;;   :bind ("M-x" . smex))
 
 (use-package irony
   :ensure t
@@ -261,6 +290,7 @@
 
 (use-package neotree
   :ensure t
+  :defer t
   :config
   (setq neo-smart-open t)
   (setq projectile-switch-project-action 'neotree-projectile-action)
@@ -279,7 +309,21 @@
   :config
   (setq nlinum-relative-redisplay-delay 0.05)
   (nlinum-relative-setup-evil)
+  (add-hook 'evil-visual-state-entry-hook 'nlinum-relative-on)
+  (add-hook 'evil-insert-state-entry-hook 'nlinum-relative-on)
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+
+(use-package ox-latex
+  :config
+  (add-to-list 'org-latex-classes
+          '("koma-article"
+             "\\documentclass{scrartcl}"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
