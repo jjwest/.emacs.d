@@ -43,7 +43,7 @@
   (evil-leader/set-leader ",")
   (evil-leader/set-key
   "f" 'counsel-find-file
-  "b" 'switch-to-buffer
+  "b" 'ido-switch-buffer
   "B" 'buffer-menu
   "k" 'kill-this-buffer
   "pp" 'projectile-switch-project
@@ -77,7 +77,7 @@
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down)
 	      ("U" . redo)
-	      ("/" . swiper)
+	      ("Q" . "@q")
 	      ("Y" . "y$"))
   :config
   (setq evil-insert-state-cursor '(box "white")
@@ -167,8 +167,8 @@
 	      ("k" . dired-previous-line)
 	      ("q" . kill-this-buffer)
 	      ("o" . my-dired-parent-dir)
-	      ("f" . isearch-forward)
-	      ("F" . isearch-backward)))
+	      ("/" . evil-search-forward)
+	      ("?" . evil-search-backward)))
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
@@ -190,11 +190,12 @@
   :config
   (use-package racer
     :ensure t
+    :diminish racer-mode
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
     (add-hook 'rust-mode-hook 'racer-mode)
-    (eldoc-mode))
+    (add-hook 'rust-mode-hook 'eldoc-mode))
   (use-package flycheck-rust
     :ensure t
     :config
@@ -210,7 +211,10 @@
   :ensure t
   :defer t
   :bind (:map magit-status-mode-map
-	      ("q" . kill-this-buffer))
+	      ("q" . kill-this-buffer)
+	      ("j" . next-line)
+	      ("k" . previous-line)
+	      ("K" . magit-discard))
   :diminish auto-revert-mode)
 
 (use-package powerline-evil
@@ -219,19 +223,12 @@
   :config (powerline-evil-vim-color-theme))
 
 
-(use-package swiper
+(use-package ivy
   :ensure t
   :ensure counsel
   :diminish ivy-mode
   :bind (("M-x" . counsel-M-x))
-  :init
-  (require 'ivy)
-  (require 'swiper)
   :config
-  (defun my-swiper-recenter (&rest args)
-    "recenter display after swiper"
-    (recenter))
-  (advice-add 'swiper :after #'my-swiper-recenter)
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-height 10)
@@ -239,15 +236,16 @@
   (setq ivy-display-style 'fancy)
   (define-key ivy-mode-map [escape] 'minibuffer-keyboard-quit)
   (ivy-mode 1))
+  
 
-;; (use-package ido
-;;   :ensure t
-;;   :config
-;;   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-;;   (ido-mode 1)
-;;   (use-package ido-vertical-mode
-;;     :ensure t
-;;     :config (ido-vertical-mode 1))
+(use-package ido
+  :ensure t
+  :config
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+  (ido-mode 1)
+  (use-package ido-vertical-mode
+    :ensure t
+    :config (ido-vertical-mode 1)))
 ;;   (use-package ido-ubiquitous
 ;;     :ensure t
 ;;     :config (ido-ubiquitous-mode 1))
@@ -308,9 +306,6 @@
   :ensure t
   :config
   (setq nlinum-relative-redisplay-delay 0.05)
-  (nlinum-relative-setup-evil)
-  (add-hook 'evil-visual-state-entry-hook 'nlinum-relative-on)
-  (add-hook 'evil-insert-state-entry-hook 'nlinum-relative-on)
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
 (use-package ox-latex
