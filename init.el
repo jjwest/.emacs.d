@@ -34,6 +34,7 @@
 (put 'dired-find-alternate-file 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
+(setq auto-revert-check-vc-info t)
 
 
 (use-package evil-leader
@@ -237,7 +238,6 @@
   (define-key ivy-mode-map [escape] 'minibuffer-keyboard-quit)
   (ivy-mode 1))
   
-
 (use-package ido
   :ensure t
   :config
