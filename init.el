@@ -226,9 +226,11 @@
 
 (use-package ivy
   :ensure t
+  :ensure swiper
   :ensure counsel
   :diminish ivy-mode
   :bind (("M-x" . counsel-M-x))
+  :init (require 'ivy)
   :config
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
@@ -318,7 +320,6 @@
              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
              ("\\paragraph{%s}" . "\\paragraph*{%s}")
              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
