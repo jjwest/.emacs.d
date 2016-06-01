@@ -66,15 +66,35 @@
   "q" 'neotree-find)
   (global-evil-leader-mode))
 
+(defun my-window-left ()
+  (interactive)
+  (evil-window-left 1)
+  (golden-ratio))
+
+(defun my-window-right ()
+  (interactive)
+  (evil-window-right 1)
+  (golden-ratio))
+
+(defun my-window-down ()
+  (interactive)
+  (evil-window-down 1)
+  (golden-ratio))
+
+(defun my-window-up ()
+  (interactive)
+  (evil-window-up 1)
+  (golden-ratio))
+
 (use-package evil
   :ensure t
   :bind (:map evil-normal-state-map
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line)
-	      ("C-h" . evil-window-left)
-	      ("C-j" . evil-window-down)
-	      ("C-k" . evil-window-up)
-	      ("C-l" . evil-window-right)
+	      ("C-h" . my-window-left)
+	      ("C-j" . my-window-down)
+	      ("C-k" . my-window-up)
+	      ("C-l" . my-window-right)
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down)
 	      ("U" . redo)
@@ -94,6 +114,11 @@
 (use-package evil-visualstar
   :ensure t
   :config (global-evil-visualstar-mode))
+
+(use-package powerline-evil
+  :ensure t
+  :diminish powerline-minor-modes
+  :config (powerline-evil-vim-color-theme))
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
@@ -218,10 +243,6 @@
 	      ("K" . magit-discard))
   :diminish auto-revert-mode)
 
-(use-package powerline-evil
-  :ensure t
-  :diminish powerline-minor-modes
-  :config (powerline-evil-vim-color-theme))
 
 
 (use-package ivy
@@ -229,15 +250,18 @@
   :ensure swiper
   :ensure counsel
   :diminish ivy-mode
-  :bind (("M-x" . counsel-M-x))
+  :bind (:map ivy-mode-map
+	 ("<escape>" . minibuffer-keyboard-quit))
   :init (require 'ivy)
   :config
+  (use-package counsel
+    :ensure t
+    :bind (("M-x" . counsel-M-x)))
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-height 10)
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-display-style 'fancy)
-  (define-key ivy-mode-map [escape] 'minibuffer-keyboard-quit)
   (ivy-mode 1))
   
 (use-package ido
@@ -248,14 +272,6 @@
   (use-package ido-vertical-mode
     :ensure t
     :config (ido-vertical-mode 1)))
-;;   (use-package ido-ubiquitous
-;;     :ensure t
-;;     :config (ido-ubiquitous-mode 1))
-;;   (use-package idomenu :ensure t))
-
-;; (use-package smex
-;;   :ensure t
-;;   :bind ("M-x" . smex))
 
 (use-package irony
   :ensure t
@@ -308,6 +324,7 @@
   :ensure t
   :config
   (setq nlinum-relative-redisplay-delay 0.05)
+  (add-hook 'html-mode-hook 'nlinum-relative-mode)
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
 (use-package ox-latex
@@ -320,6 +337,18 @@
              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
              ("\\paragraph{%s}" . "\\paragraph*{%s}")
              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(use-package emmet-mode
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'html-mode-hook (lambda () (emmet-mode))))
+
+(use-package golden-ratio
+  :ensure t
+  :config
+  (setq golden-ratio-auto-scale t)
+  (golden-ratio-mode))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
