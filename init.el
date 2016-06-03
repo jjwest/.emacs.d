@@ -193,7 +193,11 @@
 	      ("q" . kill-this-buffer)
 	      ("o" . my-dired-parent-dir)
 	      ("/" . evil-search-forward)
-	      ("?" . evil-search-backward)))
+	      ("?" . evil-search-backward)
+	      ("C-h" . my-window-left)
+	      ("C-j" . my-window-down)
+	      ("C-k" . my-window-up)
+	      ("C-l" . my-window-right)))
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
