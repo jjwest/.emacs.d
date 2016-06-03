@@ -62,8 +62,7 @@
   "r" 'replace-string
   "R" 'ggtags-query-replace
   "x" 'ansi-term
-  "jd" 'ggtags-find-definition
-  "q" 'neotree-find)
+  "jd" 'ggtags-find-definition)
   (global-evil-leader-mode))
 
 (defun my-window-left ()
@@ -304,21 +303,6 @@
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
 
-(use-package neotree
-  :ensure t
-  :defer t
-  :config
-  (setq neo-smart-open t)
-  (setq projectile-switch-project-action 'neotree-projectile-action)
-  (add-hook 'neotree-mode-hook
-            (lambda ()
-              (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-              (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-              (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-              (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
-	      (define-key evil-normal-state-local-map (kbd "D") 'neotree-delete-node)
-	      (define-key evil-normal-state-local-map (kbd "R") 'neotree-rename-node)
-	      (define-key evil-normal-state-local-map (kbd "C") 'neotree-create-node))))
 
 (use-package nlinum-relative
   :ensure t
@@ -346,6 +330,7 @@
 
 (use-package golden-ratio
   :ensure t
+  :diminish golden-ratio-mode
   :config
   (setq golden-ratio-auto-scale t)
   (golden-ratio-mode))
