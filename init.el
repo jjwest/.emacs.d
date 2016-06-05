@@ -2,13 +2,15 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+(benchmark-init/activate)
+
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
 
-;; General settings
+;; General settings and better defaults
 (setq initial-major-mode 'text-mode
       auto-save-default nil
       make-backup-files nil
@@ -19,23 +21,26 @@
       inhibit-startup-screen t
       initial-scratch-message ""
       indent-tabs-mode nil
-      c-basic-offset 4
-      c-default-style "bsd")
+      indicate-empty-lines t
+      ad-redefinition-action 'accept
+      uniquify-buffer-name-style 'forward)
+(setq-default cursor-in-non-selected-windows nil)
+(set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(electric-pair-mode 1)
-(show-paren-mode 1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(menu-bar-mode -1)
 (org-babel-do-load-languages
  'org-babel-load-languages '((python . t)))
-(put 'dired-find-alternate-file 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
 (setq auto-revert-check-vc-info t)
 
+(electric-pair-mode 1)
+(show-paren-mode 1)
+
+;; Strip UI
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(menu-bar-mode -1)
 
 (use-package evil-leader
   :ensure t
@@ -51,7 +56,7 @@
   "pf" 'projectile-find-file
   "pk" 'projectile-kill-buffers
   "pt" 'projectile-find-other-file
-  "pg" 'projectile-grep
+  "pg" 'counsel-git-grep
   "ss" 'split-window-horizontally
   "vv" 'split-window-vertically
   "dw" 'delete-window
@@ -65,35 +70,15 @@
   "jd" 'ggtags-find-definition)
   (global-evil-leader-mode))
 
-(defun my-window-left ()
-  (interactive)
-  (evil-window-left 1)
-  (golden-ratio))
-
-(defun my-window-right ()
-  (interactive)
-  (evil-window-right 1)
-  (golden-ratio))
-
-(defun my-window-down ()
-  (interactive)
-  (evil-window-down 1)
-  (golden-ratio))
-
-(defun my-window-up ()
-  (interactive)
-  (evil-window-up 1)
-  (golden-ratio))
-
 (use-package evil
   :ensure t
   :bind (:map evil-normal-state-map
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line)
-	      ("C-h" . my-window-left)
-	      ("C-j" . my-window-down)
-	      ("C-k" . my-window-up)
-	      ("C-l" . my-window-right)
+	      ("C-h" . evil-window-left)
+	      ("C-j" . evil-window-down)
+	      ("C-k" . evil-window-up)
+	      ("C-l" . evil-window-right)
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down)
 	      ("U" . redo)
@@ -101,7 +86,7 @@
 	      ("Y" . "y$"))
   :config
   (setq evil-insert-state-cursor '(box "white")
-	evil-normal-state-cursor '(box "white"))
+  	evil-normal-state-cursor '(box "white"))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
@@ -119,8 +104,6 @@
   :diminish powerline-minor-modes
   :config (powerline-evil-vim-color-theme))
 
-;;; yasnippet
-;;; should be loaded before auto complete so that they can work together
 (use-package yasnippet
   :ensure t
   :defer t
@@ -149,6 +132,7 @@
 
 (use-package projectile
   :ensure t
+  :defer t
   :diminish projectile-mode
   :config
   (setq projectile-other-file-alist '(("c" "h")
@@ -170,7 +154,15 @@
     :ensure t
     :config (flycheck-pos-tip-mode)))
 
-(use-package gruvbox-theme :ensure t)
+(use-package gruvbox-theme
+  :ensure t
+  :config
+  (custom-theme-set-faces
+   'gruvbox
+   `(mode-line
+     ((t (:box nil :background "#076678",  :foreground "#d5c4a1"))))))
+
+
 
 (use-package diminish
   :ensure t
@@ -197,13 +189,20 @@
 	      ("C-h" . my-window-left)
 	      ("C-j" . my-window-down)
 	      ("C-k" . my-window-up)
-	      ("C-l" . my-window-right)))
+	      ("C-l" . my-window-right))
+  :config
+  (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
   :config (setq term-buffer-maximum-size 0))
 
 
+
+;; C++ SETTINGS
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(setq c-basic-offset 4
+      c-default-style "bsd")
 
 ;; PYTHON SETTINGS
 (use-package company-jedi
@@ -245,7 +244,6 @@
 	      ("k" . previous-line)
 	      ("K" . magit-discard))
   :diminish auto-revert-mode)
-
 
 
 (use-package ivy
@@ -316,6 +314,7 @@
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
 (use-package ox-latex
+  :defer t
   :config
   (add-to-list 'org-latex-classes
           '("koma-article"
@@ -332,12 +331,13 @@
   :init
   (add-hook 'html-mode-hook (lambda () (emmet-mode))))
 
-(use-package golden-ratio
+(use-package buffer-move
   :ensure t
-  :diminish golden-ratio-mode
-  :config
-  (setq golden-ratio-auto-scale t)
-  (golden-ratio-mode))
+  :bind (:map evil-normal-state-map
+	      ("C-S-h" . buf-move-left)
+	      ("C-S-j" . buf-move-down)
+	      ("C-S-k" . buf-move-up)
+	      ("C-S-l" . buf-move-right))) 
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
@@ -369,3 +369,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00")))))
 
 (provide 'init)
+
