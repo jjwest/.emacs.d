@@ -337,7 +337,12 @@
 	      ("C-S-h" . buf-move-left)
 	      ("C-S-j" . buf-move-down)
 	      ("C-S-k" . buf-move-up)
-	      ("C-S-l" . buf-move-right))) 
+	      ("C-S-l" . buf-move-right)
+	      ("C-M-S-h" . shrink-window-horizontally)
+	      ("C-M-S-j" . shrink-window)
+	      ("C-M-S-k" . enlarge-window)
+	      ("C-M-S-l" . enlarge-window-horizontally))) 
+
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
