@@ -186,10 +186,10 @@
 	      ("o" . my-dired-parent-dir)
 	      ("/" . evil-search-forward)
 	      ("?" . evil-search-backward)
-	      ("C-h" . my-window-left)
-	      ("C-j" . my-window-down)
-	      ("C-k" . my-window-up)
-	      ("C-l" . my-window-right))
+	      ("C-h" . evil-window-left)
+	      ("C-j" . evil-window-down)
+	      ("C-k" . evil-window-up)
+	      ("C-l" . evil-window-right))
   :config
   (put 'dired-find-alternate-file 'disabled nil))
 
@@ -343,6 +343,11 @@
 	      ("C-M-S-k" . enlarge-window)
 	      ("C-M-S-l" . enlarge-window-horizontally))) 
 
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
