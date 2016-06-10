@@ -2,8 +2,6 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
-(benchmark-init/activate)
-
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -208,7 +206,10 @@
   :bind ("C-x C-d" . term-send-eof)
   :config (setq term-buffer-maximum-size 0))
 
-
+(use-package ibuffer
+  :bind (:map ibuffer-mode-map
+	      ("j" . ibuffer-forward-line)
+	      ("k" . ibuffer-backward-line)))
 
 (use-package ggtags
   :ensure t
