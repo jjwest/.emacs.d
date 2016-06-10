@@ -159,15 +159,21 @@
     :ensure t
     :config (flycheck-pos-tip-mode)))
 
-(use-package gruvbox-theme
+;; (use-package gruvbox-theme
+;;   :ensure t
+;;   :config
+;;   (custom-theme-set-faces
+;;    'gruvbox
+;;    `(mode-line
+;;      ((t (:box nil :background "#076678",  :foreground "#d5c4a1"))))))
+
+(use-package zenburn-theme
   :ensure t
   :config
   (custom-theme-set-faces
-   'gruvbox
-   `(mode-line
-     ((t (:box nil :background "#076678",  :foreground "#d5c4a1"))))))
-
-
+   'zenburn
+   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  
 
 (use-package diminish
   :ensure t
@@ -258,6 +264,10 @@
   (add-hook 'html-mode-hook 'nlinum-relative-mode)
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
+(use-package hl-line
+  :config
+  (add-hook 'prog-mode-hook 'hl-line-mode))
+
 (use-package ox-latex
   :defer t
   :config
@@ -281,7 +291,6 @@
 	      ("C-M-S-j" . shrink-window)
 	      ("C-M-S-k" . enlarge-window)
 	      ("C-M-S-l" . enlarge-window-horizontally))) 
-
 
 (use-package rainbow-delimiters
   :ensure t
