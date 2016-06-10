@@ -33,8 +33,10 @@
 (global-auto-revert-mode t)
 (setq auto-revert-check-vc-info t)
 
+(blink-cursor-mode 0)
 (electric-pair-mode 1)
 (show-paren-mode 1)
+(winner-mode 1)
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -50,7 +52,7 @@
   (evil-leader/set-key
   "f" 'counsel-find-file
   "b" 'ido-switch-buffer
-  "B" 'buffer-menu
+  "B" 'ibuffer
   "k" 'kill-this-buffer
   "pp" 'projectile-switch-project
   "pf" 'projectile-find-file
@@ -67,6 +69,7 @@
   "r" 'replace-string
   "R" 'ggtags-query-replace
   "x" 'ansi-term
+  "W" 'winner-undo
   "jd" 'ggtags-find-definition)
   (global-evil-leader-mode))
 
@@ -81,6 +84,8 @@
 	      ("C-l" . evil-window-right)
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down)
+	      ("C-a" . beginning-of-line)
+	      ("C-e" . end-of-line)
 	      ("U" . redo)
 	      ("Q" . "@q")
 	      ("Y" . "y$"))
@@ -199,36 +204,6 @@
 
 
 
-;; C++ SETTINGS
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(setq c-basic-offset 4
-      c-default-style "bsd")
-
-;; PYTHON SETTINGS
-(use-package company-jedi
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi))))
-
-;; RUST SETTINGS
-(use-package rust-mode
-  :ensure t
-  :mode ("\\.rs\\'" . rust-mode)
-  :config
-  (use-package racer
-    :ensure t
-    :diminish racer-mode
-    :config
-    (setq racer-cmd "~/.cargo/bin/racer")
-    (setq racer-rust-src-path "~/.rust/src")
-    (add-hook 'rust-mode-hook 'racer-mode)
-    (add-hook 'rust-mode-hook 'eldoc-mode))
-  (use-package flycheck-rust
-    :ensure t
-    :config
-    (add-hook 'rust-mode-hook 'flycheck-rust-setup)))
-
 (use-package ggtags
   :ensure t
   :defer t
@@ -274,6 +249,49 @@
     :ensure t
     :config (ido-vertical-mode 1)))
 
+
+
+(use-package nlinum-relative
+  :ensure t
+  :config
+  (setq nlinum-relative-redisplay-delay 0.05)
+  (add-hook 'html-mode-hook 'nlinum-relative-mode)
+  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+
+(use-package ox-latex
+  :defer t
+  :config
+  (add-to-list 'org-latex-classes
+          '("koma-article"
+             "\\documentclass{scrartcl}"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(use-package buffer-move
+  :ensure t
+  :bind (:map evil-normal-state-map
+	      ("C-S-h" . buf-move-left)
+	      ("C-S-j" . buf-move-down)
+	      ("C-S-k" . buf-move-up)
+	      ("C-S-l" . buf-move-right)
+	      ("C-M-S-h" . shrink-window-horizontally)
+	      ("C-M-S-j" . shrink-window)
+	      ("C-M-S-k" . enlarge-window)
+	      ("C-M-S-l" . enlarge-window-horizontally))) 
+
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+
+;; C++ SETTINGS
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(setq c-basic-offset 4
+      c-default-style "bsd")
+
 (use-package irony
   :ensure t
   :defer t
@@ -305,49 +323,36 @@
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
 
-
-(use-package nlinum-relative
+;; PYTHON SETTINGS
+(use-package company-jedi
   :ensure t
-  :config
-  (setq nlinum-relative-redisplay-delay 0.05)
-  (add-hook 'html-mode-hook 'nlinum-relative-mode)
-  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
-
-(use-package ox-latex
   :defer t
+  :init
+  (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi))))
+
+;; RUST SETTINGS
+(use-package rust-mode
+  :ensure t
+  :mode ("\\.rs\\'" . rust-mode)
   :config
-  (add-to-list 'org-latex-classes
-          '("koma-article"
-             "\\documentclass{scrartcl}"
-             ("\\section{%s}" . "\\section*{%s}")
-             ("\\subsection{%s}" . "\\subsection*{%s}")
-             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-             ("\\paragraph{%s}" . "\\paragraph*{%s}")
-             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+  (use-package racer
+    :ensure t
+    :diminish racer-mode
+    :config
+    (setq racer-cmd "~/.cargo/bin/racer")
+    (setq racer-rust-src-path "~/.rust/src")
+    (add-hook 'rust-mode-hook 'racer-mode)
+    (add-hook 'rust-mode-hook 'eldoc-mode))
+  (use-package flycheck-rust
+    :ensure t
+    :config
+    (add-hook 'rust-mode-hook 'flycheck-rust-setup)))
 
 (use-package emmet-mode
   :ensure t
   :defer t
   :init
   (add-hook 'html-mode-hook (lambda () (emmet-mode))))
-
-(use-package buffer-move
-  :ensure t
-  :bind (:map evil-normal-state-map
-	      ("C-S-h" . buf-move-left)
-	      ("C-S-j" . buf-move-down)
-	      ("C-S-k" . buf-move-up)
-	      ("C-S-l" . buf-move-right)
-	      ("C-M-S-h" . shrink-window-horizontally)
-	      ("C-M-S-j" . shrink-window)
-	      ("C-M-S-k" . enlarge-window)
-	      ("C-M-S-l" . enlarge-window-horizontally))) 
-
-
-(use-package rainbow-delimiters
-  :ensure t
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
