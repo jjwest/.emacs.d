@@ -23,7 +23,6 @@
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward)
 (setq-default cursor-in-non-selected-windows nil)
-(set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (org-babel-do-load-languages
  'org-babel-load-languages '((python . t)))
@@ -157,14 +156,6 @@
     :ensure t
     :config (flycheck-pos-tip-mode)))
 
-;; (use-package gruvbox-theme
-;;   :ensure t
-;;   :config
-;;   (custom-theme-set-faces
-;;    'gruvbox
-;;    `(mode-line
-;;      ((t (:box nil :background "#076678",  :foreground "#d5c4a1"))))))
-
 (use-package zenburn-theme
  :ensure t
  :config
@@ -233,11 +224,7 @@
 	  (display-buffer
 	   buffer (if (and (derived-mode-p 'magit-mode)
 			   (memq (with-current-buffer buffer major-mode)
-				 '(magit-process-mode
-				   magit-revision-mode
-				   magit-diff-mode
-				   magit-stash-mode
-				   magit-status-mode)))
+				 '(magit-status-mode)))
 		      nil
 		    '(display-buffer-same-window))))) )
 
