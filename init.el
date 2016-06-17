@@ -166,12 +166,12 @@
 ;;      ((t (:box nil :background "#076678",  :foreground "#d5c4a1"))))))
 
 (use-package zenburn-theme
-  :ensure t
-  :config
-  (custom-theme-set-faces
-   'zenburn
-   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
-  
+ :ensure t
+ :config
+ (custom-theme-set-faces
+  'zenburn
+  `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+
 
 (use-package diminish
   :ensure t
@@ -225,7 +225,21 @@
 	      ("j" . next-line)
 	      ("k" . previous-line)
 	      ("K" . magit-discard))
-  :diminish auto-revert-mode)
+  :diminish auto-revert-mode
+  :config
+  ;; Make Magit-status always open in current window
+  (setq magit-display-buffer-function
+	(lambda (buffer)
+	  (display-buffer
+	   buffer (if (and (derived-mode-p 'magit-mode)
+			   (memq (with-current-buffer buffer major-mode)
+				 '(magit-process-mode
+				   magit-revision-mode
+				   magit-diff-mode
+				   magit-stash-mode
+				   magit-status-mode)))
+		      nil
+		    '(display-buffer-same-window))))) )
 
 
 (use-package ivy
