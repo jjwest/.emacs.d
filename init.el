@@ -21,7 +21,8 @@
       indent-tabs-mode nil
       indicate-empty-lines t
       ad-redefinition-action 'accept
-      uniquify-buffer-name-style 'forward)
+      uniquify-buffer-name-style 'forward
+      x-select-enable-clipboard t)
 (setq-default cursor-in-non-selected-windows nil)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
