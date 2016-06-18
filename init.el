@@ -23,6 +23,7 @@
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward)
 (setq-default cursor-in-non-selected-windows nil)
+(set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (org-babel-do-load-languages
  'org-babel-load-languages '((python . t)))
@@ -232,7 +233,6 @@
 (use-package ivy
   :ensure t
   :ensure swiper
-  :ensure counsel
   :diminish ivy-mode
   :bind (:map ivy-mode-map
 	 ("<escape>" . minibuffer-keyboard-quit))
@@ -280,7 +280,8 @@
              ("\\subsection{%s}" . "\\subsection*{%s}")
              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
              ("\\paragraph{%s}" . "\\paragraph*{%s}")
-             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (setq org-export-with-sub-superscripts nil))
 
 (use-package buffer-move
   :ensure t
