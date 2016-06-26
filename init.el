@@ -2,11 +2,12 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+(benchmark-init/activate)
+
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
 
 ;; General settings and better defaults
 (setq initial-major-mode 'text-mode
@@ -22,7 +23,8 @@
       indicate-empty-lines t
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
-      x-select-enable-clipboard t)
+      x-select-enable-clipboard t
+      delete-by-moving-to-trash t)
 (setq-default cursor-in-non-selected-windows nil)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
@@ -63,10 +65,10 @@
   "dw" 'delete-window
   "do" 'delete-other-windows
   "sf" 'save-buffer
-  "sa" 'save-some-buffers
+  "sa" '(lambda () (interactive) (save-some-buffers t))
   "g" 'magit-status
-  "r" 'replace-string
-  "R" 'ggtags-query-replace
+  "r" 'query-replace
+  "R" 'projectile-replace-regexp
   "x" 'ansi-term
   "W" 'winner-undo
   "jd" 'ggtags-find-definition)
@@ -298,7 +300,8 @@
 
 (use-package rainbow-delimiters
   :ensure t
-  :init (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+  :config
+  (add-hook 'emacs-lisp-mode #'rainbow-delimiters-mode))
 
 ;; C++ SETTINGS
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -366,6 +369,10 @@
   :defer t
   :init
   (add-hook 'html-mode-hook (lambda () (emmet-mode))))
+
+(use-package ibuffer
+  :config
+  (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
