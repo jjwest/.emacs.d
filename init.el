@@ -10,7 +10,7 @@
   (package-install 'use-package))
 
 ;; General settings and better defaults
-(setq initial-major-mode 'text-mode
+(setq initial-major-mode 'fundamental-mode
       auto-save-default nil
       make-backup-files nil
       custom-safe-themes t
@@ -68,7 +68,7 @@
   "sa" '(lambda () (interactive) (save-some-buffers t))
   "g" 'magit-status
   "r" 'query-replace
-  "R" 'projectile-replace-regexp
+  "R" 'projectile-replace
   "x" 'ansi-term
   "W" 'winner-undo
   "jd" 'ggtags-find-definition)
@@ -161,11 +161,11 @@
     :config (flycheck-pos-tip-mode)))
 
 (use-package zenburn-theme
- :ensure t
- :config
- (custom-theme-set-faces
-  'zenburn
-  `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  :ensure t
+  :config
+  (custom-theme-set-faces
+   'zenburn
+   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 
 (use-package diminish
@@ -301,7 +301,7 @@
 (use-package rainbow-delimiters
   :ensure t
   :config
-  (add-hook 'emacs-lisp-mode #'rainbow-delimiters-mode))
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 ;; C++ SETTINGS
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -354,11 +354,15 @@
   (use-package racer
     :ensure t
     :diminish racer-mode
+    :bind (:map evil-normal-state-map
+	   ("M-." . racer-find-definition))
+    :init (require 'racer)
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
-    (add-hook 'rust-mode-hook 'racer-mode)
-    (add-hook 'rust-mode-hook 'eldoc-mode))
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'rust-mode-hook #'eldoc-mode)
+    (setq company-tooltip-align-annotations t))
   (use-package flycheck-rust
     :ensure t
     :config
