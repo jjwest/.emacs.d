@@ -70,8 +70,7 @@
   "r" 'query-replace
   "R" 'projectile-replace
   "x" 'ansi-term
-  "W" 'winner-undo
-  "jd" 'ggtags-find-definition)
+  "W" 'winner-undo)
   (global-evil-leader-mode))
 
 (use-package evil
