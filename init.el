@@ -133,6 +133,7 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
+  (setq company-tooltip-align-annotations t)
   (setq company-clang-executable "/usr/bin/clang-3.7"))
 
 
@@ -354,15 +355,14 @@
   (use-package racer
     :ensure t
     :diminish racer-mode
+    :demand
     :bind (:map evil-normal-state-map
 	   ("M-." . racer-find-definition))
-    :init (require 'racer)
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
     (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'rust-mode-hook #'eldoc-mode)
-    (setq company-tooltip-align-annotations t))
+    (add-hook 'rust-mode-hook #'eldoc-mode))
   (use-package flycheck-rust
     :ensure t
     :config
