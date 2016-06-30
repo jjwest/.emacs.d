@@ -10,7 +10,10 @@
   (package-install 'use-package))
 
 ;; General settings and better defaults
-(setq initial-major-mode 'fundamental-mode
+(setq gc-cons-threshold (* 100 1024 1024))  ;; Increase default GC threshold to 100mb
+(add-hook 'focus-out-hook 'garbage-collect) ;; Garbage collect when emacs is unfocused
+
+(setq initial-major-mode 'fundamental-mode 
       auto-save-default nil
       make-backup-files nil
       custom-safe-themes t
@@ -45,32 +48,33 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
   :config
   (evil-leader/set-leader ",")
   (evil-leader/set-key
-  "f" 'counsel-find-file
-  "b" 'ido-switch-buffer
-  "B" 'ibuffer
-  "k" 'kill-this-buffer
-  "pp" 'projectile-switch-project
-  "pf" 'projectile-find-file
-  "pk" 'projectile-kill-buffers
-  "pt" 'projectile-find-other-file
-  "pg" 'counsel-git-grep
-  "ss" 'split-window-horizontally
-  "vv" 'split-window-vertically
-  "dw" 'delete-window
-  "do" 'delete-other-windows
-  "sf" 'save-buffer
-  "sa" '(lambda () (interactive) (save-some-buffers t))
-  "g" 'magit-status
-  "r" 'query-replace
-  "R" 'projectile-replace
-  "x" 'ansi-term
-  "W" 'winner-undo)
+    "f" 'counsel-find-file
+    "b" 'ido-switch-buffer
+    "B" 'ibuffer
+    "k" 'kill-this-buffer
+    "pp" 'projectile-switch-project
+    "pf" 'projectile-find-file
+    "pk" 'projectile-kill-buffers
+    "pt" 'projectile-find-other-file
+    "pg" 'counsel-git-grep
+    "ss" 'split-window-horizontally
+    "vv" 'split-window-vertically
+    "dw" 'delete-window
+    "do" 'delete-other-windows
+    "sf" 'save-buffer
+    "sa" '(lambda () (interactive) (save-some-buffers t))
+    "g" 'magit-status
+    "r" 'query-replace
+    "R" 'projectile-replace
+    "x" 'ansi-term
+    "W" 'winner-undo)
   (global-evil-leader-mode))
 
 (use-package evil
@@ -91,7 +95,7 @@
 	      ("Y" . "y$"))
   :config
   (setq evil-insert-state-cursor '(box "white")
-  	evil-normal-state-cursor '(box "white"))
+	evil-normal-state-cursor '(box "white"))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
@@ -210,7 +214,7 @@
   :ensure t
   :defer t
   :diminish ggtags-mode
-  :init (add-hook 'prog-mode-hook 'ggtags-mode))
+  :init (add-hook 'c++-mode-hook 'ggtags-mode))
 
 (use-package magit
   :ensure t
@@ -238,7 +242,7 @@
   :ensure swiper
   :diminish ivy-mode
   :bind (:map ivy-mode-map
-	 ("<escape>" . minibuffer-keyboard-quit))
+	      ("<escape>" . minibuffer-keyboard-quit))
   :init (require 'ivy)
   :config
   (use-package counsel
@@ -250,7 +254,7 @@
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-display-style 'fancy)
   (ivy-mode 1))
-  
+
 (use-package ido
   :ensure t
   :config
@@ -277,13 +281,13 @@
   :defer t
   :config
   (add-to-list 'org-latex-classes
-          '("koma-article"
-             "\\documentclass{scrartcl}"
-             ("\\section{%s}" . "\\section*{%s}")
-             ("\\subsection{%s}" . "\\subsection*{%s}")
-             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-             ("\\paragraph{%s}" . "\\paragraph*{%s}")
-             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+	       '("koma-article"
+		 "\\documentclass{scrartcl}"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (setq org-export-with-sub-superscripts nil))
 
 (use-package buffer-move
@@ -356,7 +360,7 @@
     :diminish racer-mode
     :demand
     :bind (:map evil-normal-state-map
-	   ("M-." . racer-find-definition))
+		("M-." . racer-find-definition))
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
@@ -404,7 +408,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(linum ((t (:foreground "#666462"))))
  '(linum-relative-current-face ((t (:foreground "#a89984"))))
  '(term-color-blue ((t (:background "deep sky bluei" :foreground "cornflower blue"))))
- '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00")))))
+ '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00"))))) 
 
 (provide 'init)
-
