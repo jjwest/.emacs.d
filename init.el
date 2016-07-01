@@ -42,6 +42,7 @@
 (show-paren-mode 1)
 (winner-mode 1)
 
+
 ;; Strip UI
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -136,8 +137,7 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
-  (setq company-tooltip-align-annotations t)
-  (setq company-clang-executable "/usr/bin/clang-3.7"))
+  (setq company-tooltip-align-annotations t))
 
 
 (use-package projectile
@@ -225,18 +225,7 @@
 	      ("j" . next-line)
 	      ("k" . previous-line)
 	      ("K" . magit-discard))
-  :diminish auto-revert-mode
-  :config
-  ;; Make Magit-status always open in current window
-  (setq magit-display-buffer-function
-	(lambda (buffer)
-	  (display-buffer
-	   buffer (if (and (derived-mode-p 'magit-mode)
-			   (memq (with-current-buffer buffer major-mode)
-				 '(magit-status-mode)))
-		      nil
-		    '(display-buffer-same-window))))) )
-
+  :diminish auto-revert-mode)
 
 (use-package ivy
   :ensure t
