@@ -225,18 +225,7 @@
 	      ("j" . next-line)
 	      ("k" . previous-line)
 	      ("K" . magit-discard))
-  :diminish auto-revert-mode
-  :config
-  ;; Make Magit-status always open in current window
-  (setq magit-display-buffer-function
-	(lambda (buffer)
-	  (display-buffer
-	   buffer (if (and (derived-mode-p 'magit-mode)
-			   (memq (with-current-buffer buffer major-mode)
-				 '(magit-status-mode)))
-		      nil
-		    '(display-buffer-same-window))))) )
-
+  :diminish auto-revert-mode)
 
 (use-package ivy
   :ensure t
