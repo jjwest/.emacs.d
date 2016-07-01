@@ -212,7 +212,8 @@
 
 (use-package ggtags
   :ensure t
-  :defer t
+  :bind (:map evil-normal-state-map
+	 ("M-." . ggtags-find-definition))
   :diminish ggtags-mode
   :init (add-hook 'c++-mode-hook 'ggtags-mode))
 
@@ -365,11 +366,11 @@
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
     (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'rust-mode-hook #'eldoc-mode))
+    (add-hook 'rust-mode-hook #'eldoc-mode)
   (use-package flycheck-rust
     :ensure t
     :config
-    (add-hook 'rust-mode-hook 'flycheck-rust-setup)))
+    (add-hook 'rust-mode-hook 'flycheck-rust-setup))))
 
 (use-package emmet-mode
   :ensure t
