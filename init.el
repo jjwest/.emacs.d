@@ -8,11 +8,12 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+ 
+;; Better garbage collection settings
+(setq gc-cons-threshold (* 100 1024 1024))  
+(add-hook 'focus-out-hook #'garbage-collect) 
 
 ;; General settings and better defaults
-(setq gc-cons-threshold (* 100 1024 1024))  ;; Increase default GC threshold to 100mb
-(add-hook 'focus-out-hook 'garbage-collect) ;; Garbage collect when emacs is unfocused
-
 (setq initial-major-mode 'fundamental-mode 
       auto-save-default nil
       make-backup-files nil
@@ -26,8 +27,7 @@
       indicate-empty-lines t
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
-      x-select-enable-clipboard t
-      delete-by-moving-to-trash t)
+      x-select-enable-clipboard t)
 (setq-default cursor-in-non-selected-windows nil)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
@@ -60,6 +60,7 @@
     "b" 'ido-switch-buffer
     "B" 'ibuffer
     "k" 'kill-this-buffer
+    "c" 'counsel-imenu
     "pp" 'projectile-switch-project
     "pf" 'projectile-find-file
     "pk" 'projectile-kill-buffers
@@ -212,10 +213,10 @@
 
 (use-package ggtags
   :ensure t
-  :bind (:map evil-normal-state-map
-	 ("M-." . ggtags-find-definition))
   :diminish ggtags-mode
-  :init (add-hook 'c++-mode-hook 'ggtags-mode))
+  :init (add-hook 'c++-mode-hook 'ggtags-mode)
+  :config
+  (evil-define-key 'normal c++-mode-map (kbd "M-.") 'ggtags-find-definition))
 
 (use-package magit
   :ensure t
@@ -233,14 +234,14 @@
   :diminish ivy-mode
   :bind (:map ivy-mode-map
 	      ("<escape>" . minibuffer-keyboard-quit))
-  :init (require 'ivy)
+  :demand
   :config
   (use-package counsel
     :ensure t
     :bind (("M-x" . counsel-M-x)))
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-height 10)
+  (setq ivy-height 15)
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-display-style 'fancy)
   (ivy-mode 1))
@@ -253,8 +254,6 @@
   (use-package ido-vertical-mode
     :ensure t
     :config (ido-vertical-mode 1)))
-
-
 
 (use-package nlinum-relative
   :ensure t
@@ -349,11 +348,10 @@
     :ensure t
     :diminish racer-mode
     :demand
-    :bind (:map evil-normal-state-map
-		("M-." . racer-find-definition))
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
+    (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode)
     (add-hook 'rust-mode-hook #'eldoc-mode)
   (use-package flycheck-rust
