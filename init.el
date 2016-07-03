@@ -73,7 +73,6 @@
   (split-window-vertically)
   (evil-window-down 1))
 
-
 ;; Packages
 (use-package evil-leader
   :ensure t
@@ -103,6 +102,12 @@
     "x" 'ansi-term
     "W" 'winner-undo)
   (global-evil-leader-mode))
+
+(defun my-split-line ()
+  (interactive)
+  (newline-and-indent)
+  (forward-line -1)
+  (move-end-of-line 1))
 
 (use-package evil
   :ensure t
