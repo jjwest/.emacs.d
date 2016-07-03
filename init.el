@@ -1,3 +1,9 @@
+;;; init.el --- Summary
+;;; My Emacs config
+;;; Commentary:
+;;; Nothing here
+;;; Code:
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
@@ -8,13 +14,13 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
- 
+
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 100 1024 1024))  
-(add-hook 'focus-out-hook #'garbage-collect) 
+(setq gc-cons-threshold (* 100 1024 1024))
+(add-hook 'focus-out-hook #'garbage-collect)
 
 ;; General settings and better defaults
-(setq initial-major-mode 'fundamental-mode 
+(setq initial-major-mode 'fundamental-mode
       auto-save-default nil
       make-backup-files nil
       custom-safe-themes t
@@ -37,18 +43,17 @@
 (global-auto-revert-mode t)
 (setq auto-revert-check-vc-info t)
 
-(blink-cursor-mode 0)
-(electric-pair-mode 1)
-(show-paren-mode 1)
-(winner-mode 1)
-
-
 ;; Strip UI
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+(blink-cursor-mode 0)
+(electric-pair-mode 1)
+(show-paren-mode 1)
+(winner-mode 1)
+(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 (use-package evil-leader
   :ensure t
@@ -79,6 +84,12 @@
     "W" 'winner-undo)
   (global-evil-leader-mode))
 
+(defun my-split-line ()
+  (interactive)
+  (newline-and-indent)
+  (forward-line -1)
+  (move-end-of-line 1))
+
 (use-package evil
   :ensure t
   :bind (:map evil-normal-state-map
@@ -92,6 +103,7 @@
 	      ("M-j" . evil-scroll-down)
 	      ("C-a" . beginning-of-line)
 	      ("C-e" . end-of-line)
+	      ("S" . my-split-line)
 	      ("U" . redo)
 	      ("Q" . "@q")
 	      ("Y" . "y$"))
@@ -200,7 +212,11 @@
 	      ("C-k" . evil-window-up)
 	      ("C-l" . evil-window-right))
   :config
-  (put 'dired-find-alternate-file 'disabled nil))
+  (put 'dired-find-alternate-file 'disabled nil)
+  (setq dired-recursive-deletes 'always)
+  (setq dired-recursive-copies 'always)
+  (setq delete-by-moving-to-trash t
+	  trash-directory "~/.emacs.d/trash") )
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
@@ -241,7 +257,7 @@
     :bind (("M-x" . counsel-M-x)))
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-height 15)
+  (setq ivy-height 10)
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-display-style 'fancy)
   (ivy-mode 1))
@@ -289,7 +305,7 @@
 	      ("C-M-S-h" . shrink-window-horizontally)
 	      ("C-M-S-j" . shrink-window)
 	      ("C-M-S-k" . enlarge-window)
-	      ("C-M-S-l" . enlarge-window-horizontally))) 
+	      ("C-M-S-l" . enlarge-window-horizontally)))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -396,6 +412,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(linum ((t (:foreground "#666462"))))
  '(linum-relative-current-face ((t (:foreground "#a89984"))))
  '(term-color-blue ((t (:background "deep sky bluei" :foreground "cornflower blue"))))
- '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00"))))) 
+ '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00")))))
 
 (provide 'init)
