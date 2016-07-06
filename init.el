@@ -1,5 +1,4 @@
-;;; init.el --- Summary
-;;; My Emacs config
+;;; init.el --- My Emacs config
 ;;; Commentary:
 ;;; Nothing here
 ;;; Code:
@@ -53,8 +52,9 @@
 (blink-cursor-mode 0)
 (electric-pair-mode 1)
 (show-paren-mode 1)
+(custom-set-variables '(show-paren-delay 0))
 (winner-mode 1)
-(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
+(add-hook 'prog-mode-hook '(lambda () (setq show-trailing-whitespace t)))
 
 ;; My own utility functions
 (defun my-split-line ()
@@ -169,7 +169,10 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
-  (setq company-tooltip-align-annotations t))
+  (setq company-tooltip-align-annotations t)
+  (use-package company-flx
+    :ensure t
+    :config (company-flx-mode)))
 
 
 (use-package projectile
@@ -251,7 +254,8 @@
   :diminish ggtags-mode
   :init (add-hook 'c++-mode-hook 'ggtags-mode)
   :config
-  (evil-define-key 'normal c++-mode-map (kbd "M-.") 'ggtags-find-definition))
+  (evil-define-key 'normal c++-mode-map (kbd "M-.") 'ggtags-find-definition)
+  (evil-define-key 'normal c++-mode-map (kbd "M-,") 'ggtags-find-reference))
 
 (use-package magit
   :ensure t
@@ -367,12 +371,14 @@
     :ensure t
     :config (add-hook 'irony-mode-hook 'irony-eldoc)))
 
-;; PYTHON SETTINGS
+
 (use-package company-jedi
   :ensure t
   :defer t
   :init
-  (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi))))
+  (add-hook 'python-mode-hook '(lambda () (add-to-list 'company-backends 'company-jedi)))
+  :config
+  (evil-define-key 'normal python-mode-map (kbd "M-.") 'jedi:goto-definition))
 
 ;; RUST SETTINGS
 (use-package rust-mode
