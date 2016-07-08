@@ -50,8 +50,8 @@
 ;; Noice utility modes
 (blink-cursor-mode 0)
 (electric-pair-mode 1)
+(setq show-paren-delay 0)
 (show-paren-mode 1)
-(custom-set-variables '(show-paren-delay 0))
 (winner-mode 1)
 (add-hook 'prog-mode-hook '(lambda () (setq show-trailing-whitespace t)))
 
@@ -392,9 +392,13 @@
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
+    (setq racer-cargo-home "~/.cargo")
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
-    (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'rust-mode-hook #'eldoc-mode)))
+    (add-hook 'rust-mode-hook 'racer-mode)
+  (use-package flycheck-rust
+    :ensure t
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))))
 
 (use-package emmet-mode
   :ensure t
