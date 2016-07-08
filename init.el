@@ -7,7 +7,6 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
-(benchmark-init/activate)
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
@@ -59,6 +58,7 @@
 ;; My own utility functions
 (defun my-split-line ()
   (interactive)
+  (forward-char 1)
   (newline-and-indent)
   (forward-line -1)
   (move-end-of-line 1))
@@ -394,11 +394,7 @@
     (setq racer-rust-src-path "~/.rust/src")
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'rust-mode-hook #'eldoc-mode)
-  (use-package flycheck-rust
-    :ensure t
-    :config
-    (add-hook 'rust-mode-hook 'flycheck-rust-setup))))
+    (add-hook 'rust-mode-hook #'eldoc-mode)))
 
 (use-package emmet-mode
   :ensure t
