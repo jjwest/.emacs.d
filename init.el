@@ -264,6 +264,7 @@
 (use-package ivy
   :ensure t
   :ensure swiper
+  :ensure smex
   :diminish ivy-mode
   :bind (:map ivy-mode-map
 	      ("<escape>" . minibuffer-keyboard-quit))
@@ -393,7 +394,7 @@
   (use-package flycheck-rust
     :ensure t
     :config
-    (add-hook 'rust-mode #'flycheck-rust-setup))))
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup))))
 
 (use-package emmet-mode
   :ensure t
