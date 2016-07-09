@@ -103,12 +103,6 @@
     "W" 'winner-undo)
   (global-evil-leader-mode))
 
-(defun my-split-line ()
-  (interactive)
-  (newline-and-indent)
-  (forward-line -1)
-  (move-end-of-line 1))
-
 (use-package evil
   :ensure t
   :bind (:map evil-normal-state-map
@@ -191,7 +185,7 @@
   :ensure t
   :defer t
   :diminish flycheck-mode
-  :init (add-hook 'prog-mode-hook 'flycheck-mode)
+  :init (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq flycheck-gcc-language-standard "c++14")
@@ -226,7 +220,7 @@
 	      ("j" . dired-next-line)
 	      ("k" . dired-previous-line)
 	      ("q" . kill-this-buffer)
-	      ("o" . my-dired-parent-dir)
+	      ("<backspace>" . my-dired-parent-dir)
 	      ("/" . evil-search-forward)
 	      ("?" . evil-search-backward)
 	      ("C-h" . evil-window-left)
@@ -357,13 +351,14 @@
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   :config
-  (setq irony-additional-clang-options '("-std=c++14"))
+  ;; (setq irony-additional-clang-options '("-std=c++14"))
   (use-package company-irony
     :ensure t
     :config (add-to-list 'company-backends '(company-irony)))
   (use-package flycheck-irony
     :ensure t
-    :config (flycheck-irony-setup))
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
   (use-package company-irony-c-headers
     :ensure t
     :config (add-to-list 'company-backends '(company-irony-c-headers)))
@@ -398,7 +393,7 @@
   (use-package flycheck-rust
     :ensure t
     :config
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))))
+    (add-hook 'rust-mode #'flycheck-rust-setup))))
 
 (use-package emmet-mode
   :ensure t
