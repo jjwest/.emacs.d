@@ -351,14 +351,14 @@
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   :config
-  ;; (setq irony-additional-clang-options '("-std=c++14"))
+  (setq irony-additional-clang-options '("-std=c++14"))
   (use-package company-irony
     :ensure t
     :config (add-to-list 'company-backends '(company-irony)))
   (use-package flycheck-irony
     :ensure t
     :config
-    (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+    (flycheck-irony-setup))
   (use-package company-irony-c-headers
     :ensure t
     :config (add-to-list 'company-backends '(company-irony-c-headers)))
