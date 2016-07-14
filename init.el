@@ -208,12 +208,8 @@
   (load-theme 'darktooth)
   (custom-theme-set-faces
    'darktooth
-<<<<<<< HEAD
    `(font-lock-function-name-face ((t (:foreground ,"#D79921"))))
    `(company-tooltip-annotation-selection ((t (:foreground ,"#83A598" :background ,"#076678"))))))
-=======
-   `(font-lock-function-name-face ((t (:foreground ,"#D79921"))))))
->>>>>>> a0be405773397cd57757403be2091de70b67257d
 
 (use-package diminish
   :ensure t
