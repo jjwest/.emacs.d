@@ -122,8 +122,7 @@
 	      ("Q" . "@q")
 	      ("Y" . "y$"))
   :config
-  (setq evil-insert-state-cursor '(box "white")
-	evil-normal-state-cursor '(box "white"))
+  (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
@@ -196,13 +195,20 @@
     :ensure t
     :config (flycheck-pos-tip-mode)))
 
-(use-package zenburn-theme
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (custom-theme-set-faces
+;;    'zenburn
+;;    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+
+(use-package darktooth-theme
   :ensure t
   :config
+  (load-theme 'darktooth)
   (custom-theme-set-faces
-   'zenburn
-   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
-
+   'darktooth
+   `(font-lock-function-name-face ((t (:foreground ,"#FABD2F"))))))
 
 (use-package diminish
   :ensure t
