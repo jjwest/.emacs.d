@@ -1,4 +1,4 @@
-;;; init.el --- My Emacs config
+;; init.el --- My Emacs config
 ;;; Commentary:
 ;;; Nothing here
 ;;; Code:
@@ -31,7 +31,9 @@
       indicate-empty-lines t
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
-      x-select-enable-clipboard t)
+      x-select-enable-clipboard t
+      show-paren-delay 0)
+(add-hook 'org-mode-hook 'org-indent-mode)
 (setq-default cursor-in-non-selected-windows nil)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
@@ -50,7 +52,6 @@
 ;; Noice utility modes
 (blink-cursor-mode 0)
 (electric-pair-mode 1)
-(setq show-paren-delay 0)
 (show-paren-mode 1)
 (winner-mode 1)
 (add-hook 'prog-mode-hook '(lambda () (setq show-trailing-whitespace t)))
@@ -144,7 +145,9 @@
   :ensure t
   :defer t
   :diminish yas-minor-mode
-  :init (add-hook 'prog-mode-hook (lambda () (yas-minor-mode)))
+  :init
+  (add-hook 'prog-mode-hook (lambda () (yas-minor-mode)))
+  (add-hook 'org-mode-hook (lambda () (yas-minor-mode)))
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all))
@@ -406,6 +409,7 @@
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
+
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -429,10 +433,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal))))
- '(linum ((t (:foreground "#666462"))))
- '(linum-relative-current-face ((t (:foreground "#a89984"))))
- '(term-color-blue ((t (:background "deep sky bluei" :foreground "cornflower blue"))))
- '(term-color-green ((t (:background "#aeee00" :foreground "#aeee00")))))
+ '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
 
 (provide 'init)

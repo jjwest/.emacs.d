@@ -1,7 +1,12 @@
 # -*- mode: snippet -*-
 # name: latex
-# key: latex_
+# key: <latex
 # --
-#+BEGIN_LaTeX
+#+TITLE: $1
+#+AUTHOR: $2
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS: [a4paper, 11pt]
+#+LANGUAGE: sv
+#+LATEX_HEADER: \usepackage[AUTO]{babel}
+
 $0
-#+END_LaTeX
