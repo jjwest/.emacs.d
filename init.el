@@ -208,7 +208,7 @@
   (load-theme 'darktooth)
   (custom-theme-set-faces
    'darktooth
-   `(font-lock-function-name-face ((t (:foreground ,"#FABD2F"))))))
+   `(font-lock-function-name-face ((t (:foreground ,"#D79921"))))))
 
 (use-package diminish
   :ensure t
