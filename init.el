@@ -6,7 +6,7 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
-
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
@@ -49,12 +49,20 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+(load-theme 'darktooth)
+
 ;; Noice utility modes
 (blink-cursor-mode 0)
 (electric-pair-mode 1)
 (show-paren-mode 1)
 (winner-mode 1)
 (add-hook 'prog-mode-hook '(lambda () (setq show-trailing-whitespace t)))
+
+;; Changing active window
+(global-set-key (kbd "C-h") 'windmove-left)
+(global-set-key (kbd "C-j") 'windmove-down)
+(global-set-key (kbd "C-k") 'windmove-up)
+(global-set-key (kbd "C-l") 'windmove-right)
 
 ;; My own utility functions
 (defun my-split-line ()
@@ -202,15 +210,6 @@
 ;;    'zenburn
 ;;    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
-(use-package darktooth-theme
-  :ensure t
-  :config
-  (load-theme 'darktooth)
-  (custom-theme-set-faces
-   'darktooth
-   `(font-lock-function-name-face ((t (:foreground ,"#D79921"))))
-   `(company-tooltip-annotation-selection ((t (:foreground ,"#83A598" :background ,"#076678"))))))
-
 (use-package diminish
   :ensure t
   :config
@@ -306,9 +305,9 @@
   (add-hook 'html-mode-hook 'nlinum-relative-mode)
   (add-hook 'prog-mode-hook 'nlinum-relative-mode))
 
-(use-package hl-line
-  :config
-  (add-hook 'prog-mode-hook 'hl-line-mode))
+;; (use-package hl-line
+;;   :config
+;;   (add-hook 'prog-mode-hook 'hl-line-mode))
 
 (use-package ox-latex
   :defer t
@@ -416,6 +415,14 @@
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
+(use-package pdf-tools
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :bind (:map pdf-view-mode-map
+	 ("j" . pdf-view-next-line-or-next-page)
+	 ("k" . pdf-view-previous-line-or-previous-page)
+	 ("M-j" . pdf-view-next-page)
+	 ("M-k" . pdf-view-previous-page)))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
