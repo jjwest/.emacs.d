@@ -142,7 +142,7 @@
    `(font-lock-builtin-face                    ((t (:foreground ,darktooth-bright_orange))))
    `(font-lock-constant-face                   ((t (:foreground ,darktooth-burlywood4))))
    `(font-lock-comment-face                    ((t (:foreground ,darktooth-dark4))))
-   `(font-lock-function-name-face              ((t (:foreground ,darktooth-light4))))
+   `(font-lock-function-name-face              ((t (:foreground ,darktooth-neutral_yellow))))
    `(font-lock-keyword-face                    ((t (:foreground ,darktooth-sienna))))
    `(font-lock-string-face                     ((t (:foreground ,darktooth-darkslategray4))))
    `(font-lock-variable-name-face              ((t (:foreground ,darktooth-aquamarine4))))
