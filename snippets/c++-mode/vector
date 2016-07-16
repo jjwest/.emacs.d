@@ -4,4 +4,4 @@
 # --
 `(progn (save-excursion) (goto-char (point-min)) (unless (re-search-forward
 "^using\\s-+namespace std;" nil 'no-errer) "std::"))
-`vector<${1:Class}> ${2:var}; $0
+`vector<${1:Class}> ${2:var};$0

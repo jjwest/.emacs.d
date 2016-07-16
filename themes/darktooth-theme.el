@@ -144,9 +144,9 @@
    `(font-lock-comment-face                    ((t (:foreground ,darktooth-dark4))))
    `(font-lock-function-name-face              ((t (:foreground ,darktooth-neutral_yellow))))
    `(font-lock-keyword-face                    ((t (:foreground ,darktooth-sienna))))
-   `(font-lock-string-face                     ((t (:foreground ,darktooth-darkslategray4))))
-   `(font-lock-variable-name-face              ((t (:foreground ,darktooth-aquamarine4))))
-   `(font-lock-type-face                       ((t (:foreground ,darktooth-lightblue4))))
+   `(font-lock-string-face                     ((t (:foreground ,darktooth-bright_green))))
+   `(font-lock-variable-name-face              ((t (:foreground ,darktooth-light0))))
+   `(font-lock-type-face                       ((t (:foreground ,darktooth-bright_blue))))
    `(font-lock-warning-face                    ((t (:foreground ,darktooth-neutral_red :bold t))))
 
    ;; whitespace-mode
@@ -194,7 +194,7 @@
    `(rainbow-identifiers-identifier-15         ((t (:foreground ,darktooth-identifiers-15))))
 
    ;; ido
-   `(ido-first-match                           ((t (:foreground ,darktooth-turquoise4 :background ,darktooth-dark0_hard))))
+   `(ido-first-match                           ((t (:foreground ,darktooth-light0 :background ,darktooth-faded_blue))))
    `(ido-only-match                            ((t (:foreground ,darktooth-darkslategray4))))
 
    ;; linum-relative

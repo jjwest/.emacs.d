@@ -343,6 +343,7 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (setq c-basic-offset 4
       c-default-style "bsd")
+(setq gdb-many-windows t)
 
 (use-package irony
   :ensure t
