@@ -33,12 +33,10 @@
       uniquify-buffer-name-style 'forward
       x-select-enable-clipboard t
       show-paren-delay 0)
-(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook #'org-indent-mode)
 (setq-default cursor-in-non-selected-windows nil)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
-(org-babel-do-load-languages
- 'org-babel-load-languages '((python . t)))
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
 (setq auto-revert-check-vc-info t)
@@ -49,14 +47,12 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
-(load-theme 'darktooth)
-
 ;; Noice utility modes
 (blink-cursor-mode 0)
 (electric-pair-mode 1)
 (show-paren-mode 1)
 (winner-mode 1)
-(add-hook 'prog-mode-hook '(lambda () (setq show-trailing-whitespace t)))
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 ;; Changing active window
 (global-set-key (kbd "C-h") 'windmove-left)
@@ -64,7 +60,7 @@
 (global-set-key (kbd "C-k") 'windmove-up)
 (global-set-key (kbd "C-l") 'windmove-right)
 
-;; My own utility functions
+;; Utility functions
 (defun my-split-line ()
   (interactive)
   (forward-char 1)
@@ -203,12 +199,13 @@
     :ensure t
     :config (flycheck-pos-tip-mode)))
 
-;; (use-package zenburn-theme
-;;   :ensure t
-;;   :config
-;;   (custom-theme-set-faces
-;;    'zenburn
-;;    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn)
+  (custom-theme-set-faces
+   'zenburn
+   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package diminish
   :ensure t
@@ -252,14 +249,6 @@
 	      ("j" . ibuffer-forward-line)
 	      ("k" . ibuffer-backward-line)))
 
-(use-package ggtags
-  :ensure t
-  :diminish ggtags-mode
-  :init (add-hook 'c++-mode-hook 'ggtags-mode)
-  :config
-  (evil-define-key 'normal c++-mode-map (kbd "M-.") 'ggtags-find-definition)
-  (evil-define-key 'normal c++-mode-map (kbd "M-,") 'ggtags-find-reference))
-
 (use-package magit
   :ensure t
   :defer t
@@ -302,12 +291,12 @@
   :ensure t
   :config
   (setq nlinum-relative-redisplay-delay 0.05)
-  (add-hook 'html-mode-hook 'nlinum-relative-mode)
-  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+  (add-hook 'html-mode-hook #'nlinum-relative-mode)
+  (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
-;; (use-package hl-line
-;;   :config
-;;   (add-hook 'prog-mode-hook 'hl-line-mode))
+(use-package hl-line
+  :config
+  (add-hook 'prog-mode-hook #'hl-line-mode))
 
 (use-package ox-latex
   :defer t
@@ -345,16 +334,35 @@
       c-default-style "bsd")
 (setq gdb-many-windows t)
 
+(defun my-rtags-new-project ()
+  (interactive)
+  (if (file-exists-p (concat (projectile-project-root) "./compile_commands.json"))
+      (shell-command (concat "rc -J " (projectile-project-root)))
+    (message "No compilation database found!")))
+
+;; RTAGS must be placed before irony for them to work together
+(use-package rtags
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'c++-mode-hook (lambda () (rtags-start-process-unless-running)))
+  :config
+  (evil-leader/set-key-for-mode 'c++-mode
+    "R" 'rtags-rename-symbol)
+  (evil-define-key 'normal c++-mode-map (kbd "M-.") 'rtags-find-symbol-at-point)
+  (evil-define-key 'normal c++-mode-map (kbd "M-,") 'rtags-find-references-at-point))
+
+(defun my-irony-mode-hook ()
+  (define-key irony-mode-map [remap completion-at-point]
+    'irony-completion-at-point-async)
+  (define-key irony-mode-map [remap complete-symbol]
+    'irony-completion-at-point-async))
+
 (use-package irony
   :ensure t
   :defer t
   :diminish irony-mode
   :init
-  (defun my-irony-mode-hook ()
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
@@ -375,8 +383,7 @@
     :config (add-to-list 'company-backends '(company-irony-c-headers)))
   (use-package irony-eldoc
     :ensure t
-    :config (add-hook 'irony-mode-hook 'irony-eldoc)))
-
+    :config (add-hook 'irony-mode-hook #'irony-eldoc)))
 
 (use-package company-jedi
   :ensure t
@@ -384,7 +391,7 @@
   :init
   (add-hook 'python-mode-hook '(lambda () (add-to-list 'company-backends 'company-jedi)))
   :config
-  (evil-define-key 'normal python-mode-map (kbd "M-.") 'jedi:goto-definition))
+  (evil-define-key 'normal python-mode-map (kbd "M-.") #'jedi:goto-definition))
 
 ;; RUST SETTINGS
 (use-package rust-mode
@@ -416,6 +423,13 @@
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
+(use-package org
+  :defer t
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((python . t)))
+  (evil-define-key 'normal org-mode-map (kbd "M-l") 'org-latex-export-to-pdf))
+
 (use-package pdf-tools
   :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode)
@@ -425,7 +439,7 @@
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
 
-;; esc quits
+;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
 In Delete Selection mode, if the mark is active, just deactivate it;
