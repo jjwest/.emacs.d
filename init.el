@@ -6,7 +6,6 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
@@ -59,6 +58,15 @@
 (global-set-key (kbd "C-j") 'windmove-down)
 (global-set-key (kbd "C-k") 'windmove-up)
 (global-set-key (kbd "C-l") 'windmove-right)
+
+;; never shrink windows
+(defvar allow-window-shrinking nil
+  "If non-nil, effectively disable shrinking windows by making `shrink-window-if-larger-than-buffer' a no-op.")
+(advice-add 'shrink-window-if-larger-than-buffer
+            :before-while
+            (lambda (&rest args)
+              "Do nothing if `allow-window-shrinking' is nil."
+              allow-window-shrinking))
 
 ;; Utility functions
 (defun my-split-line ()
@@ -349,6 +357,8 @@
   :config
   (evil-leader/set-key-for-mode 'c++-mode
     "R" 'rtags-rename-symbol)
+  (evil-define-key 'normal rtags-mode-map (kbd "<return>") 'rtags-select-other-window)
+  (evil-define-key 'normal rtags-mode-map (kbd "q") 'kill-this-buffer)
   (evil-define-key 'normal c++-mode-map (kbd "M-.") 'rtags-find-symbol-at-point)
   (evil-define-key 'normal c++-mode-map (kbd "M-,") 'rtags-find-references-at-point))
 
