@@ -245,8 +245,7 @@
   (put 'dired-find-alternate-file 'disabled nil)
   (setq dired-recursive-deletes 'always)
   (setq dired-recursive-copies 'always)
-  (setq delete-by-moving-to-trash t
-	  trash-directory "~/.emacs.d/trash") )
+  (setq delete-by-moving-to-trash t) )
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
@@ -344,7 +343,7 @@
 
 (defun my-rtags-new-project ()
   (interactive)
-  (if (file-exists-p (concat (projectile-project-root) "./compile_commands.json"))
+  (if (file-exists-p (concat (projectile-project-root) "compile_commands.json"))
       (shell-command (concat "rc -J " (projectile-project-root)))
     (message "No compilation database found!")))
 
@@ -353,14 +352,18 @@
   :ensure t
   :defer t
   :init
-  (add-hook 'c++-mode-hook (lambda () (rtags-start-process-unless-running)))
-  :config
+  (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
+  (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
+  (evil-leader/set-key-for-mode 'c-mode
+    "R" 'rtags-rename-symbol)
   (evil-leader/set-key-for-mode 'c++-mode
     "R" 'rtags-rename-symbol)
-  (evil-define-key 'normal rtags-mode-map (kbd "<return>") 'rtags-select-other-window)
-  (evil-define-key 'normal rtags-mode-map (kbd "q") 'kill-this-buffer)
-  (evil-define-key 'normal c++-mode-map (kbd "M-.") 'rtags-find-symbol-at-point)
-  (evil-define-key 'normal c++-mode-map (kbd "M-,") 'rtags-find-references-at-point))
+  (evil-define-key 'normal rtags-mode-map (kbd "<return>") #'rtags-select-other-window)
+  (evil-define-key 'normal rtags-mode-map (kbd "q") #'kill-this-buffer)
+  (evil-define-key 'normal c-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
+  (evil-define-key 'normal c-mode-map (kbd "M-,") #'rtags-find-references-at-point)
+  (evil-define-key 'normal c++-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
+  (evil-define-key 'normal c++-mode-map (kbd "M-,") #'rtags-find-references-at-point))
 
 (defun my-irony-mode-hook ()
   (define-key irony-mode-map [remap completion-at-point]
