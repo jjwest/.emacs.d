@@ -32,7 +32,6 @@
       uniquify-buffer-name-style 'forward
       x-select-enable-clipboard t
       show-paren-delay 0)
-(add-hook 'org-mode-hook #'org-indent-mode)
 (setq-default cursor-in-non-selected-windows nil)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
@@ -86,6 +85,21 @@
   (split-window-vertically)
   (evil-window-down 1))
 
+(defvar zenburn-theme-active t)
+(defun my-toggle-theme ()
+  (interactive)
+  (if zenburn-theme-active
+      (progn
+	(disable-theme 'zenburn)
+	(load-theme 'leuven)
+	(setq zenburn-theme-active nil))
+    (disable-theme 'leuven)
+    (load-theme 'zenburn)
+    (custom-theme-set-faces
+     'zenburn
+     `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
+    (setq zenburn-theme-active t)))
+
 ;; Packages
 (use-package evil-leader
   :ensure t
@@ -110,7 +124,7 @@
     "sf" 'save-buffer
     "sa" '(lambda () (interactive) (save-some-buffers t))
     "g" 'magit-status
-    "r" 'query-replace
+    "r" 'anzu-query-replace
     "R" 'projectile-replace
     "x" 'ansi-term
     "W" 'winner-undo)
@@ -206,6 +220,11 @@
   (use-package flycheck-pos-tip
     :ensure t
     :config (flycheck-pos-tip-mode)))
+
+(use-package evil-anzu
+  :ensure t
+  :config
+  (global-anzu-mode))
 
 (use-package zenburn-theme
   :ensure t
@@ -436,8 +455,17 @@
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
+(defun my-org-startup ()
+  (interactive)
+  (disable-theme 'zenburn)
+  (load-theme 'leuven)
+  (org-indent-mode)
+  (setq zenburn-theme-active nil))
+
 (use-package org
   :defer t
+  :init
+  (add-hook 'org-mode-hook #'my-org-startup)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
@@ -475,6 +503,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
+ '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal))))
+ '(org-hide ((t (:foreground "white"))))
+ '(org-indent ((t (:background "#FFFFFF" :foreground "#FFFFFF"))) t))
 
 (provide 'init)
