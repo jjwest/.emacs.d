@@ -32,7 +32,8 @@
       uniquify-buffer-name-style 'forward
       x-select-enable-clipboard t
       show-paren-delay 0)
-(setq-default cursor-in-non-selected-windows nil)
+(setq-default cursor-in-non-selected-windows nil
+	      fill-column 80)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -68,25 +69,25 @@
               allow-window-shrinking))
 
 ;; Utility functions
-(defun my-split-line ()
+(defun my/split-line ()
   (interactive)
   (forward-char 1)
   (newline-and-indent)
   (forward-line -1)
   (move-end-of-line 1))
 
-(defun my-split-window-horizontal ()
+(defun my/split-window-horizontal ()
   (interactive)
   (split-window-horizontally)
   (evil-window-right 1))
 
-(defun my-split-window-vertical ()
+(defun my/split-window-vertical ()
   (interactive)
   (split-window-vertically)
   (evil-window-down 1))
 
 (defvar zenburn-theme-active t)
-(defun my-toggle-theme ()
+(defun my/toggle-theme ()
   (interactive)
   (if zenburn-theme-active
       (progn
@@ -117,8 +118,8 @@
     "pk" 'projectile-kill-buffers
     "pt" 'projectile-find-other-file
     "pg" 'counsel-git-grep
-    "ss" 'my-split-window-horizontal
-    "vv" 'my-split-window-vertical
+    "ss" 'my/split-window-horizontal
+    "vv" 'my/split-window-vertical
     "dw" 'delete-window
     "do" 'delete-other-windows
     "sf" 'save-buffer
@@ -143,7 +144,7 @@
 	      ("M-j" . evil-scroll-down)
 	      ("C-a" . beginning-of-line)
 	      ("C-e" . end-of-line)
-	      ("S" . my-split-line)
+	      ("S" . my/split-line)
 	      ("U" . redo)
 	      ("Q" . "@q")
 	      ("Y" . "y$"))
@@ -191,10 +192,7 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
-  (setq company-tooltip-align-annotations t)
-  (use-package company-flx
-    :ensure t
-    :config (company-flx-mode)))
+  (setq company-tooltip-align-annotations t))
 
 
 (use-package projectile
@@ -218,11 +216,11 @@
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq flycheck-gcc-language-standard "c++14")
   (use-package flycheck-pos-tip
-    :ensure t
     :config (flycheck-pos-tip-mode)))
 
 (use-package evil-anzu
   :ensure t
+  :diminish anzu-mode
   :config
   (global-anzu-mode))
 
@@ -242,7 +240,7 @@
   (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
-(defun my-dired-parent-dir ()
+(defun my/dired-parent-dir ()
   (interactive)
   (find-alternate-file ".."))
 (use-package dired
@@ -253,7 +251,7 @@
 	      ("j" . dired-next-line)
 	      ("k" . dired-previous-line)
 	      ("q" . kill-this-buffer)
-	      ("<backspace>" . my-dired-parent-dir)
+	      ("<backspace>" . my/dired-parent-dir)
 	      ("/" . evil-search-forward)
 	      ("?" . evil-search-backward)
 	      ("C-h" . evil-window-left)
@@ -267,10 +265,12 @@
   (setq delete-by-moving-to-trash t) )
 
 (use-package term
+  :ensure t
   :bind ("C-x C-d" . term-send-eof)
   :config (setq term-buffer-maximum-size 0))
 
 (use-package ibuffer
+  :ensure t
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
 	      ("k" . ibuffer-backward-line)))
@@ -287,8 +287,6 @@
 
 (use-package ivy
   :ensure t
-  :ensure swiper
-  :ensure smex
   :diminish ivy-mode
   :bind (:map ivy-mode-map
 	      ("<escape>" . minibuffer-keyboard-quit))
@@ -321,6 +319,7 @@
   (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
 (use-package hl-line
+  :ensure t
   :config
   (add-hook 'prog-mode-hook #'hl-line-mode))
 
@@ -360,11 +359,11 @@
       c-default-style "bsd")
 (setq gdb-many-windows t)
 
-(defun my-rtags-new-project ()
+(defun my/rtags-new-project ()
   (interactive)
-  (if (file-exists-p (concat (projectile-project-root) "compile_commands.json"))
-      (shell-command (concat "rc -J " (projectile-project-root)))
-    (message "No compilation database found!")))
+  (shell-command "make clean")
+  (shell-command "bear make")
+  (shell-command "rc -J"))
 
 ;; RTAGS must be placed before irony for them to work together
 (use-package rtags
@@ -384,7 +383,7 @@
   (evil-define-key 'normal c++-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
   (evil-define-key 'normal c++-mode-map (kbd "M-,") #'rtags-find-references-at-point))
 
-(defun my-irony-mode-hook ()
+(defun my/irony-mode-hook ()
   (define-key irony-mode-map [remap completion-at-point]
     'irony-completion-at-point-async)
   (define-key irony-mode-map [remap complete-symbol]
@@ -399,7 +398,7 @@
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'eldoc-mode)
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'my/irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   :config
   (setq irony-additional-clang-options '("-std=c++14"))
@@ -452,10 +451,11 @@
   (add-hook 'html-mode-hook (lambda () (emmet-mode))))
 
 (use-package ibuffer
+  :ensure t
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
-(defun my-org-startup ()
+(defun my/org-startup ()
   (interactive)
   (disable-theme 'zenburn)
   (load-theme 'leuven)
@@ -463,9 +463,10 @@
   (setq zenburn-theme-active nil))
 
 (use-package org
+  :ensure t
   :defer t
   :init
-  (add-hook 'org-mode-hook #'my-org-startup)
+  (add-hook 'org-mode-hook #'my/org-startup)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
