@@ -68,7 +68,7 @@
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
 
-;; Utility functions
+;; My utility functions
 (defun my/split-line ()
   (interactive)
   (forward-char 1)
@@ -79,12 +79,12 @@
 (defun my/split-window-horizontal ()
   (interactive)
   (split-window-horizontally)
-  (evil-window-right 1))
+  (windmove-right))
 
 (defun my/split-window-vertical ()
   (interactive)
   (split-window-vertically)
-  (evil-window-down 1))
+  (windmove-left))
 
 (defvar zenburn-theme-active t)
 (defun my/toggle-theme ()
@@ -109,7 +109,7 @@
   (evil-leader/set-leader ",")
   (evil-leader/set-key
     "f" 'counsel-find-file
-    "b" 'ido-switch-buffer
+    "b" 'ivy-switch-buffer
     "B" 'ibuffer
     "k" 'kill-this-buffer
     "c" 'counsel-imenu
@@ -149,23 +149,22 @@
 	      ("Q" . "@q")
 	      ("Y" . "y$"))
   :config
+  (use-package evil-surround
+    :ensure t
+    :config (global-evil-surround-mode 1))
+
+  (use-package evil-visualstar
+    :ensure t
+    :config (global-evil-visualstar-mode))
+
+  (use-package powerline-evil
+    :ensure t
+    :diminish powerline-minor-modes
+    :config (powerline-evil-vim-color-theme))
   (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
-
-(use-package evil-surround
-  :ensure t
-  :config (global-evil-surround-mode 1))
-
-(use-package evil-visualstar
-  :ensure t
-  :config (global-evil-visualstar-mode))
-
-(use-package powerline-evil
-  :ensure t
-  :diminish powerline-minor-modes
-  :config (powerline-evil-vim-color-theme))
 
 (use-package yasnippet
   :ensure t
@@ -219,7 +218,6 @@
     :config (flycheck-pos-tip-mode)))
 
 (use-package evil-anzu
-  :ensure t
   :diminish anzu-mode
   :config
   (global-anzu-mode))
@@ -240,9 +238,6 @@
   (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
-(defun my/dired-parent-dir ()
-  (interactive)
-  (find-alternate-file ".."))
 (use-package dired
   :bind (:map dired-mode-map
 	      ("RET" . dired-find-alternate-file)
@@ -259,13 +254,15 @@
 	      ("C-k" . evil-window-up)
 	      ("C-l" . evil-window-right))
   :config
+  (defun my/dired-parent-dir ()
+    (interactive)
+    (find-alternate-file ".."))
   (put 'dired-find-alternate-file 'disabled nil)
   (setq dired-recursive-deletes 'always)
   (setq dired-recursive-copies 'always)
   (setq delete-by-moving-to-trash t) )
 
 (use-package term
-  :ensure t
   :bind ("C-x C-d" . term-send-eof)
   :config (setq term-buffer-maximum-size 0))
 
@@ -290,26 +287,17 @@
   :diminish ivy-mode
   :bind (:map ivy-mode-map
 	      ("<escape>" . minibuffer-keyboard-quit))
-  :demand
   :config
-  (use-package counsel
-    :ensure t
-    :bind (("M-x" . counsel-M-x)))
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-height 10)
+  (setq ivy-height 15)
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-display-style 'fancy)
   (ivy-mode 1))
 
-(use-package ido
+(use-package counsel
   :ensure t
-  :config
-  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-  (ido-mode 1)
-  (use-package ido-vertical-mode
-    :ensure t
-    :config (ido-vertical-mode 1)))
+  :bind (("M-x" . counsel-M-x)))
 
 (use-package nlinum-relative
   :ensure t
@@ -455,17 +443,16 @@
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
-(defun my/org-startup ()
-  (interactive)
-  (disable-theme 'zenburn)
-  (load-theme 'leuven)
-  (org-indent-mode)
-  (setq zenburn-theme-active nil))
-
 (use-package org
   :ensure t
   :defer t
   :init
+  (defun my/org-startup ()
+    (interactive)
+    (disable-theme 'zenburn)
+    (load-theme 'leuven)
+    (org-indent-mode)
+    (setq zenburn-theme-active nil))
   (add-hook 'org-mode-hook #'my/org-startup)
   :config
   (org-babel-do-load-languages
