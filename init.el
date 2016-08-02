@@ -84,7 +84,7 @@
 (defun my/split-window-vertical ()
   (interactive)
   (split-window-vertically)
-  (windmove-left))
+  (windmove-down))
 
 (defvar zenburn-theme-active t)
 (defun my/toggle-theme ()
