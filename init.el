@@ -215,7 +215,9 @@
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq flycheck-gcc-language-standard "c++14")
   (use-package flycheck-pos-tip
-    :config (flycheck-pos-tip-mode)))
+    :config
+    (setq flycheck-pos-tip-timeout 30)
+    (flycheck-pos-tip-mode)))
 
 (use-package evil-anzu
   :diminish anzu-mode
@@ -258,9 +260,11 @@
     (interactive)
     (find-alternate-file ".."))
   (put 'dired-find-alternate-file 'disabled nil)
-  (setq dired-recursive-deletes 'always)
-  (setq dired-recursive-copies 'always)
-  (setq delete-by-moving-to-trash t) )
+  (setq dired-dwim-target t
+        dired-listing-switches "-alh"
+	dired-recursive-deletes 'always
+	dired-recursive-copies 'always
+	delete-by-moving-to-trash t))
 
 (use-package term
   :bind ("C-x C-d" . term-send-eof)
@@ -287,6 +291,7 @@
   :diminish ivy-mode
   :bind (:map ivy-mode-map
 	      ("<escape>" . minibuffer-keyboard-quit))
+  :demand
   :config
   (setq projectile-completion-system 'ivy)
   (setq ivy-use-virtual-buffers t)
@@ -467,6 +472,20 @@
 	 ("k" . pdf-view-previous-line-or-previous-page)
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
+
+;; xwidget configurations
+(use-package xwidget
+  :defer t
+  :init
+  (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
+  :config
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
+  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
+  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up))
+
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
