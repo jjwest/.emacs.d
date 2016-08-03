@@ -232,6 +232,11 @@
    'zenburn
    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
+(use-package eldoc
+  :ensure t
+  :defer t
+  :init (add-hook 'prog-mode-hook #'eldoc-mode))
+
 (use-package diminish
   :ensure t
   :config
@@ -390,7 +395,6 @@
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'eldoc-mode)
   (add-hook 'irony-mode-hook 'my/irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   :config
