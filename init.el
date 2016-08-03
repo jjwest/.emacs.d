@@ -319,7 +319,8 @@
 (use-package hl-line
   :ensure t
   :config
-  (add-hook 'prog-mode-hook #'hl-line-mode))
+  (add-hook 'prog-mode-hook #'hl-line-mode)
+  (add-hook 'html-mode-hook #'hl-line-mode))
 
 (use-package ox-latex
   :defer t
