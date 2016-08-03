@@ -473,18 +473,19 @@
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
 
-;; xwidget configurations
-(use-package xwidget
-  :defer t
-  :init
-  (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
-  :config
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
-  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
-  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up))
+;; xwidget configurations -- Only for Emacs 25+
+(when (>= emacs-major-version 25)
+  (use-package xwidget
+    :defer t
+    :init
+    (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
+    :config
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
+    (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
+    (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)))
 
 
 ;; Escape quits everything
