@@ -3,6 +3,7 @@
 ;;; Nothing here
 ;;; Code:
 
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
@@ -11,6 +12,8 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+(benchmark-init/activate)
 
 ;; Better garbage collection settings
 (setq gc-cons-threshold (* 100 1024 1024))
@@ -31,14 +34,13 @@
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
       x-select-enable-clipboard t
+      auto-revert-check-vc-info t
       show-paren-delay 0)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
-(global-auto-revert-mode t)
-(setq auto-revert-check-vc-info t)
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -50,6 +52,7 @@
 (blink-cursor-mode 0)
 (electric-pair-mode 1)
 (show-paren-mode 1)
+(global-auto-revert-mode t)
 (winner-mode 1)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
@@ -88,6 +91,7 @@
 
 (defvar zenburn-theme-active t)
 (defun my/toggle-theme ()
+  "Toggle between the Zenburn and Leuven theme."
   (interactive)
   (if zenburn-theme-active
       (progn
@@ -147,7 +151,10 @@
 	      ("S" . my/split-line)
 	      ("U" . redo)
 	      ("Q" . "@q")
-	      ("Y" . "y$"))
+	      ("Y" . "y$")
+	      :map package-menu-mode-map
+	      ("j" . evil-next-visual-line)
+	      ("k" . evil-previous-visual-line))
   :config
   (use-package evil-surround
     :ensure t
@@ -256,10 +263,8 @@
 	      ("<backspace>" . my/dired-parent-dir)
 	      ("/" . evil-search-forward)
 	      ("?" . evil-search-backward)
-	      ("C-h" . evil-window-left)
-	      ("C-j" . evil-window-down)
-	      ("C-k" . evil-window-up)
-	      ("C-l" . evil-window-right))
+	      ("n" . evil-search-next)
+	      ("N" . evil-search-previous))
   :config
   (defun my/dired-parent-dir ()
     (interactive)
@@ -321,19 +326,6 @@
   :config
   (add-hook 'prog-mode-hook #'hl-line-mode)
   (add-hook 'html-mode-hook #'hl-line-mode))
-
-(use-package ox-latex
-  :defer t
-  :config
-  (add-to-list 'org-latex-classes
-	       '("koma-article"
-		 "\\documentclass{scrartcl}"
-		 ("\\section{%s}" . "\\section*{%s}")
-		 ("\\subsection{%s}" . "\\subsection*{%s}")
-		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-  (setq org-export-with-sub-superscripts nil))
 
 (use-package buffer-move
   :ensure t
@@ -453,21 +445,32 @@
   :config
   (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
+
 (use-package org
   :ensure t
   :defer t
   :init
-  (defun my/org-startup ()
+  (defun my/org-latex-export ()
     (interactive)
-    (disable-theme 'zenburn)
-    (load-theme 'leuven)
-    (org-indent-mode)
-    (setq zenburn-theme-active nil))
-  (add-hook 'org-mode-hook #'my/org-startup)
+    (org-latex-export-to-pdf)
+    (save-buffer))
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
-  (evil-define-key 'normal org-mode-map (kbd "M-l") 'org-latex-export-to-pdf))
+  (evil-define-key 'normal org-mode-map (kbd "M-l") 'my/org-latex-export))
+
+(use-package ox-latex
+  :defer t
+  :config
+  (add-to-list 'org-latex-classes
+	       '("koma-article"
+		 "\\documentclass{scrartcl}"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (setq org-export-with-sub-superscripts nil))
 
 (use-package pdf-tools
   :ensure t
@@ -485,13 +488,15 @@
     :init
     (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
     :config
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<return>") 'xwidget-webkit-insert-string)
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "u") 'xwidget-adjust-size-to-content)
+    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "a") 'xwidget-webkit-adjust-size-dispatch)
     (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
     (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
     (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
     (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
     (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
     (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)))
-
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
