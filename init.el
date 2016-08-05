@@ -137,8 +137,6 @@
     "sf" 'save-buffer
     "sa" '(lambda () (interactive) (save-some-buffers t))
     "g" 'magit-status
-    "r" 'anzu-query-replace
-    "R" 'projectile-replace
     "x" 'ansi-term
     "W" 'winner-undo)
   (global-evil-leader-mode))
@@ -236,8 +234,16 @@
     (flycheck-pos-tip-mode)))
 
 (use-package evil-anzu
+  :ensure t
   :diminish anzu-mode
   :config
+  (defun my/anzu-query-replace ()
+    (interactive)
+    (if (symbol-at-point)
+	(anzu-query-replace-at-cursor)
+      (call-interactively 'anzu-query-replace)))
+  (evil-leader/set-key
+    "r" 'my/anzu-query-replace)
   (global-anzu-mode))
 
 (use-package zenburn-theme
