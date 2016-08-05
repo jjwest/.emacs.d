@@ -8,5 +8,6 @@
 #+LATEX_CLASS_OPTIONS: [a4paper, 11pt]
 #+LANGUAGE: sv
 #+LATEX_HEADER: \usepackage[AUTO]{babel}
+#+LATEX_HEADER: \usepackage{libertine}
 
 $0

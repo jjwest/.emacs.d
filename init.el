@@ -38,7 +38,9 @@
       x-select-enable-clipboard t
       auto-revert-check-vc-info t
       show-paren-delay 0
-      display-time-24hr-format t)
+      display-time-24hr-format t
+      locale-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
 (set-frame-parameter nil 'fullscreen 'fullboth)
@@ -228,6 +230,7 @@
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq flycheck-gcc-language-standard "c++14")
   (use-package flycheck-pos-tip
+    :ensure t
     :config
     (setq flycheck-pos-tip-timeout 30)
     (flycheck-pos-tip-mode)))
@@ -485,8 +488,15 @@
 		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-  (setq org-export-with-sub-superscripts nil))
+  (setq org-latex-pdf-process
+  	'("xelatex -interaction nonstopmode %f"
+  	  "xelatex -interaction nonstopmode %f"))
+  (setq org-latex-listings 'listings)
+  (setq org-export-with-sub-superscripts nil)
+  (add-to-list 'org-latex-packages-alist '("" "listings"))
+  (add-to-list 'org-latex-packages-alist '("" "color")))
 
+;; PDF-tools requires installation with (pdf-tools-install) first time it is used
 (use-package pdf-tools
   :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode)
@@ -541,11 +551,3 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(org-indent ((t (:background "#FFFFFF" :foreground "#FFFFFF"))) t))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (smex zenburn-theme yasnippet use-package rtags rainbow-delimiters racer projectile powerline-evil pdf-tools nlinum-relative magit irony-eldoc flycheck-rust flycheck-irony evil-visualstar evil-surround evil-leader emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init))))
