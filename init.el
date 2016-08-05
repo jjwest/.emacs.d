@@ -13,8 +13,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(benchmark-init/activate)
-
 ;; Better garbage collection settings
 (setq gc-cons-threshold (* 100 1024 1024))
 (add-hook 'focus-out-hook #'garbage-collect)
@@ -35,7 +33,8 @@
       uniquify-buffer-name-style 'forward
       x-select-enable-clipboard t
       auto-revert-check-vc-info t
-      show-paren-delay 0)
+      show-paren-delay 0
+      display-time-24hr-format t)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
 (set-frame-parameter nil 'fullscreen 'fullboth)
@@ -54,7 +53,10 @@
 (show-paren-mode 1)
 (global-auto-revert-mode t)
 (winner-mode 1)
+(display-time-mode)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
+(add-hook 'prog-mode-hook #'subword-mode)
+
 
 ;; Changing active window
 (global-set-key (kbd "C-h") 'windmove-left)
@@ -452,8 +454,18 @@
   :init
   (defun my/org-latex-export ()
     (interactive)
+    (save-buffer)
     (org-latex-export-to-pdf)
-    (save-buffer))
+    (let ((org-buffer (buffer-name))
+	  (pdf-buffer (replace-regexp-in-string "\.org" ".pdf" (buffer-name))))
+      (if (get-buffer pdf-buffer)
+	  (progn
+	    (switch-to-buffer pdf-buffer)
+	    (revert-buffer t t)
+	    (switch-to-buffer org-buffer))
+	(find-file-other-window (replace-regexp-in-string "\.org" ".pdf" (buffer-file-name))))))
+
+  (add-hook 'org-mode-hook #'org-indent-mode)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
@@ -526,3 +538,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(org-indent ((t (:background "#FFFFFF" :foreground "#FFFFFF"))) t))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (zenburn-theme yasnippet use-package solarized-theme smex rtags refine rainbow-delimiters racer projectile powerline-evil popup pdf-tools nlinum-relative magit levenshtein irony-eldoc idea-darkula-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init))))
