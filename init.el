@@ -8,6 +8,10 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+;; Benchmark startup time
+(when (package-installed-p 'benchmark-init)
+  (benchmark-init/activate))
+
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -300,9 +304,12 @@
 
 (use-package ivy
   :ensure t
+  :ensure smex
+  :ensure counsel
   :diminish ivy-mode
-  :bind (:map ivy-mode-map
-	      ("<escape>" . minibuffer-keyboard-quit))
+  :bind (("M-x" . counsel-M-x)
+	 :map ivy-mode-map
+	 ("<escape>" . minibuffer-keyboard-quit))
   :demand
   :config
   (setq projectile-completion-system 'ivy)
@@ -311,10 +318,6 @@
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-display-style 'fancy)
   (ivy-mode 1))
-
-(use-package counsel
-  :ensure t
-  :bind (("M-x" . counsel-M-x)))
 
 (use-package nlinum-relative
   :ensure t
@@ -545,4 +548,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (zenburn-theme yasnippet use-package solarized-theme smex rtags refine rainbow-delimiters racer projectile powerline-evil popup pdf-tools nlinum-relative magit levenshtein irony-eldoc idea-darkula-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init))))
+    (smex zenburn-theme yasnippet use-package rtags rainbow-delimiters racer projectile powerline-evil pdf-tools nlinum-relative magit irony-eldoc flycheck-rust flycheck-irony evil-visualstar evil-surround evil-leader emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init))))
