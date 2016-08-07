@@ -105,7 +105,8 @@
       (progn
 	(disable-theme 'zenburn)
 	(load-theme 'leuven)
-	(setq zenburn-theme-active nil))
+	(setq zenburn-theme-active nil)
+	(custom-set-face 'org-hide ((t (:foreground "white")))))
     (disable-theme 'leuven)
     (load-theme 'zenburn)
     (custom-theme-set-faces
@@ -242,8 +243,7 @@
     (if (symbol-at-point)
 	(anzu-query-replace-at-cursor)
       (call-interactively 'anzu-query-replace)))
-  (evil-leader/set-key
-    "r" 'my/anzu-query-replace)
+  (evil-leader/set-key "r" 'my/anzu-query-replace)
   (global-anzu-mode))
 
 (use-package zenburn-theme
@@ -296,7 +296,6 @@
   :config (setq term-buffer-maximum-size 0))
 
 (use-package ibuffer
-  :ensure t
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
 	      ("k" . ibuffer-backward-line)))
@@ -552,8 +551,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal))))
- '(org-hide ((t (:foreground "white"))))
- '(org-indent ((t (:background "#FFFFFF" :foreground "#FFFFFF"))) t))
+ '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
 
 (provide 'init)
