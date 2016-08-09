@@ -82,7 +82,6 @@
 ;; My utility functions
 (defun my/split-line ()
   (interactive)
-  (forward-char 1)
   (newline-and-indent)
   (forward-line -1)
   (move-end-of-line 1))
@@ -105,13 +104,14 @@
       (progn
 	(disable-theme 'zenburn)
 	(load-theme 'leuven)
+	(set-face-foreground 'org-hide (quote "#FFFFFF")))
 	(setq zenburn-theme-active nil)
-	(custom-set-face 'org-hide ((t (:foreground "white")))))
     (disable-theme 'leuven)
     (load-theme 'zenburn)
     (custom-theme-set-faces
      'zenburn
      `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
+    (set-face-foreground 'org-hide (quote "#3F3F3F"))
     (setq zenburn-theme-active t)))
 
 ;; Packages
