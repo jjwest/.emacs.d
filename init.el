@@ -104,8 +104,8 @@
       (progn
 	(disable-theme 'zenburn)
 	(load-theme 'leuven)
-	(set-face-foreground 'org-hide (quote "#FFFFFF")))
-	(setq zenburn-theme-active nil)
+	(set-face-foreground 'org-hide (quote "#FFFFFF"))
+	(setq zenburn-theme-active nil))
     (disable-theme 'leuven)
     (load-theme 'zenburn)
     (custom-theme-set-faces
@@ -243,7 +243,9 @@
     (if (symbol-at-point)
 	(anzu-query-replace-at-cursor)
       (call-interactively 'anzu-query-replace)))
-  (evil-leader/set-key "r" 'my/anzu-query-replace)
+  (evil-leader/set-key
+    "r" 'my/anzu-query-replace
+    "R" 'anzu-query-replace)
   (global-anzu-mode))
 
 (use-package zenburn-theme
