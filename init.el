@@ -3,7 +3,6 @@
 ;;; Nothing here
 ;;; Code:
 
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
@@ -32,7 +31,6 @@
       inhibit-startup-screen t
       initial-scratch-message ""
       indent-tabs-mode nil
-      indicate-empty-lines t
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
       x-select-enable-clipboard t
@@ -40,6 +38,7 @@
       show-paren-delay 0
       display-time-24hr-format t
       locale-coding-system 'utf-8)
+(setq load-prefer-newer t)
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
@@ -81,6 +80,7 @@
 
 ;; My utility functions
 (defun my/split-line ()
+  "Split line at point."
   (interactive)
   (newline-and-indent)
   (forward-line -1)
@@ -104,14 +104,16 @@
       (progn
 	(disable-theme 'zenburn)
 	(load-theme 'leuven)
-	(set-face-foreground 'org-hide (quote "#FFFFFF"))
+	(if (featurep 'org)
+	    (set-face-foreground 'org-hide (quote "#FFFFFF")))
 	(setq zenburn-theme-active nil))
     (disable-theme 'leuven)
     (load-theme 'zenburn)
     (custom-theme-set-faces
      'zenburn
      `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
-    (set-face-foreground 'org-hide (quote "#3F3F3F"))
+	(if (featurep 'org)
+	    (set-face-foreground 'org-hide (quote "#3F3F3F")))
     (setq zenburn-theme-active t)))
 
 ;; Packages
@@ -126,6 +128,7 @@
     "B" 'ibuffer
     "k" 'kill-this-buffer
     "c" 'counsel-imenu
+    "P" 'proced
     "pp" 'projectile-switch-project
     "pf" 'projectile-find-file
     "pk" 'projectile-kill-buffers
@@ -175,6 +178,7 @@
     :ensure t
     :diminish powerline-minor-modes
     :config (powerline-evil-vim-color-theme))
+
   (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
@@ -194,14 +198,14 @@
 
 (use-package company
   :ensure t
-  :defer t
   :diminish company-mode
   :bind (("C-RET" . company-manual-begin)
 	 ("<C-return>" . company-manual-begin)
 	 :map company-active-map
 	 ("TAB" . nil)
 	 ("<tab>" . nil))
-  :init (add-hook 'prog-mode-hook (lambda () (company-mode)))
+  :init
+  (add-hook 'prog-mode-hook (lambda () (company-mode)))
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
@@ -238,13 +242,8 @@
   :ensure t
   :diminish anzu-mode
   :config
-  (defun my/anzu-query-replace ()
-    (interactive)
-    (if (symbol-at-point)
-	(anzu-query-replace-at-cursor)
-      (call-interactively 'anzu-query-replace)))
   (evil-leader/set-key
-    "r" 'my/anzu-query-replace
+    "r" 'anzu-query-replace-at-cursor
     "R" 'anzu-query-replace)
   (global-anzu-mode))
 
@@ -257,7 +256,6 @@
    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package eldoc
-  :ensure t
   :defer t
   :init (add-hook 'prog-mode-hook #'eldoc-mode))
 
@@ -287,9 +285,7 @@
     (interactive)
     (find-alternate-file ".."))
   (put 'dired-find-alternate-file 'disabled nil)
-  (setq dired-dwim-target t
-        dired-listing-switches "-alh"
-	dired-recursive-deletes 'always
+  (setq dired-recursive-deletes 'always
 	dired-recursive-copies 'always
 	delete-by-moving-to-trash t))
 
@@ -301,6 +297,11 @@
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
 	      ("k" . ibuffer-backward-line)))
+
+(use-package proced
+  :bind (:map proced-mode-map
+	      ("j" . next-line)
+	      ("k" . previous-line)))
 
 (use-package magit
   :ensure t
@@ -338,7 +339,8 @@
 
 (use-package hl-line
   :ensure t
-  :config
+  :defer t
+  :init
   (add-hook 'prog-mode-hook #'hl-line-mode)
   (add-hook 'html-mode-hook #'hl-line-mode))
 
@@ -366,8 +368,8 @@
 (setq gdb-many-windows t)
 
 (defun my/rtags-new-project ()
+  "Generate a compile_commands.json and add project to the RTags daemon."
   (interactive)
-  (shell-command "make clean")
   (shell-command "bear make")
   (shell-command "rc -J"))
 
