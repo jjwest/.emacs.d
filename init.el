@@ -4,14 +4,14 @@
 ;;; Code:
 
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
 ;; Benchmark startup time
 (when (package-installed-p 'benchmark-init)
   (benchmark-init/activate))
 
-;; Bootstrap `use-package'
+;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -30,15 +30,19 @@
       scroll-step 1
       inhibit-startup-screen t
       initial-scratch-message ""
+      load-prefer-newer t
       indent-tabs-mode nil
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
-      x-select-enable-clipboard t
       auto-revert-check-vc-info t
       show-paren-delay 0
       display-time-24hr-format t
       locale-coding-system 'utf-8)
-(setq load-prefer-newer t)
+
+(if (>= emacs-major-version 25)
+    (setq select-enable-clipboard t)
+  (setq x-select-enable-clipboard t))
+
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
@@ -104,19 +108,27 @@
       (progn
 	(disable-theme 'zenburn)
 	(load-theme 'leuven)
-	(if (featurep 'org)
-	    (set-face-foreground 'org-hide (quote "#FFFFFF")))
+	(when (featurep 'org)
+	  (set-face-foreground 'org-hide (quote "#FFFFFF")))
 	(setq zenburn-theme-active nil))
     (disable-theme 'leuven)
     (load-theme 'zenburn)
     (custom-theme-set-faces
      'zenburn
      `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
-	(if (featurep 'org)
-	    (set-face-foreground 'org-hide (quote "#3F3F3F")))
+	(when (featurep 'org)
+	  (set-face-foreground 'org-hide (quote "#3F3F3F")))
     (setq zenburn-theme-active t)))
 
 ;; Packages
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn)
+  (custom-theme-set-faces
+   'zenburn
+   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
@@ -246,14 +258,6 @@
     "r" 'anzu-query-replace-at-cursor
     "R" 'anzu-query-replace)
   (global-anzu-mode))
-
-(use-package zenburn-theme
-  :ensure t
-  :config
-  (load-theme 'zenburn)
-  (custom-theme-set-faces
-   'zenburn
-   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package eldoc
   :defer t
@@ -482,6 +486,10 @@
 
   (add-hook 'org-mode-hook #'org-indent-mode)
   :config
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook #'org-bullets-mode))
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
   (evil-define-key 'normal org-mode-map (kbd "M-l") 'my/org-latex-export))
@@ -558,3 +566,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (org-bullets zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile powerline-evil pdf-tools nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow buffer-move benchmark-init))))
