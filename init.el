@@ -17,7 +17,7 @@
   (package-install 'use-package))
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 100 1024 1024))
+(setq gc-cons-threshold (* 50 1024 1024))
 (add-hook 'focus-out-hook #'garbage-collect)
 
 ;; General settings and better defaults
@@ -34,6 +34,8 @@
       indent-tabs-mode nil
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
+      message-log-max 200
+      require-final-newline t
       auto-revert-check-vc-info t
       show-paren-delay 0
       display-time-24hr-format t
@@ -45,7 +47,8 @@
 
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
-	      fill-column 80)
+	      fill-column 80
+              truncate-lines t)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -62,9 +65,11 @@
 (show-paren-mode 1)
 (global-auto-revert-mode t)
 (winner-mode 1)
+(save-place-mode)
 (display-time-mode)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
+(server-start)
 
 
 ;; Changing active window
@@ -189,7 +194,8 @@
   (use-package powerline-evil
     :ensure t
     :diminish powerline-minor-modes
-    :config (powerline-evil-vim-color-theme))
+    :config
+    (powerline-evil-vim-color-theme))
 
   (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'dired-mode 'emacs)
@@ -571,6 +577,37 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   (vector "#cccccc" "#f2777a" "#99cc99" "#ffcc66" "#6699cc" "#cc99cc" "#66cccc" "#515151"))
+ '(fci-rule-color "#515151")
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (org-bullets zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile powerline-evil pdf-tools nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow buffer-move benchmark-init))))
+    (airline-themes solarized-theme org-bullets zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile powerline-evil pdf-tools nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow buffer-move benchmark-init)))
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#f2777a")
+     (40 . "#f99157")
+     (60 . "#ffcc66")
+     (80 . "#99cc99")
+     (100 . "#66cccc")
+     (120 . "#6699cc")
+     (140 . "#cc99cc")
+     (160 . "#f2777a")
+     (180 . "#f99157")
+     (200 . "#ffcc66")
+     (220 . "#99cc99")
+     (240 . "#66cccc")
+     (260 . "#6699cc")
+     (280 . "#cc99cc")
+     (300 . "#f2777a")
+     (320 . "#f99157")
+     (340 . "#ffcc66")
+     (360 . "#99cc99"))))
+ '(vc-annotate-very-old-color nil))

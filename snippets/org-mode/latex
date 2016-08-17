@@ -9,5 +9,7 @@
 #+LANGUAGE: sv
 #+LATEX_HEADER: \usepackage[AUTO]{babel}
 #+LATEX_HEADER: \usepackage{libertine}
+#+LATEX_HEADER: \usepackage{unicode-math}
+#+LATEX_HEADER: \setmathfont{TeX Gyre Pagella Math}
 
 $0
