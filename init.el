@@ -7,14 +7,16 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
-;; Benchmark startup time
-(when (package-installed-p 'benchmark-init)
-  (benchmark-init/activate))
 
 ;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+;; Benchmark startup time
+(when (package-installed-p 'benchmark-init)
+  (benchmark-init/activate))
+
 
 ;; Better garbage collection settings
 (setq gc-cons-threshold (* 50 1024 1024))
@@ -69,7 +71,9 @@
 (display-time-mode)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
-(server-start)
+;; (unless (server-running-p)
+;;   (server-start))
+
 
 
 ;; Changing active window
@@ -87,24 +91,6 @@
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
 
-;; My utility functions
-(defun my/split-line ()
-  "Split line at point."
-  (interactive)
-  (newline-and-indent)
-  (forward-line -1)
-  (move-end-of-line 1))
-
-(defun my/split-window-horizontal ()
-  (interactive)
-  (split-window-horizontally)
-  (windmove-right))
-
-(defun my/split-window-vertical ()
-  (interactive)
-  (split-window-vertically)
-  (windmove-down))
-
 (defvar zenburn-theme-active t)
 (defun my/toggle-theme ()
   "Toggle between the Zenburn and Leuven theme."
@@ -121,8 +107,8 @@
     (custom-theme-set-faces
      'zenburn
      `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
-	(when (featurep 'org)
-	  (set-face-foreground 'org-hide (quote "#3F3F3F")))
+    (when (featurep 'org)
+      (set-face-foreground 'org-hide (quote "#3F3F3F")))
     (setq zenburn-theme-active t)))
 
 ;; Packages
@@ -137,6 +123,23 @@
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
+  :init
+  (defun my/split-line ()
+    "Split line at point."
+    (interactive)
+    (newline-and-indent)
+    (forward-line -1)
+    (move-end-of-line 1))
+
+  (defun my/split-window-horizontal ()
+    (interactive)
+    (split-window-horizontally)
+    (windmove-right))
+
+  (defun my/split-window-vertical ()
+    (interactive)
+    (split-window-vertically)
+    (windmove-down))
   :config
   (evil-leader/set-leader ",")
   (evil-leader/set-key
@@ -191,16 +194,16 @@
     :ensure t
     :config (global-evil-visualstar-mode))
 
-  (use-package powerline-evil
-    :ensure t
-    :diminish powerline-minor-modes
-    :config
-    (powerline-evil-vim-color-theme))
-
   (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
+
+(use-package powerline-evil
+    :ensure t
+    :diminish powerline-minor-modes
+    :config
+    (powerline-evil-vim-color-theme))
 
 (use-package yasnippet
   :ensure t
@@ -290,10 +293,11 @@
 	      ("?" . evil-search-backward)
 	      ("n" . evil-search-next)
 	      ("N" . evil-search-previous))
-  :config
+  :init
   (defun my/dired-parent-dir ()
     (interactive)
     (find-alternate-file ".."))
+  :config
   (put 'dired-find-alternate-file 'disabled nil)
   (setq dired-recursive-deletes 'always
 	dired-recursive-copies 'always
@@ -315,7 +319,6 @@
 
 (use-package magit
   :ensure t
-  :defer t
   :bind (:map magit-status-mode-map
 	      ("q" . kill-this-buffer)
 	      ("j" . next-line)
@@ -372,24 +375,27 @@
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 ;; C++ SETTINGS
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(setq c-basic-offset 4
-      c-default-style "bsd")
-(setq gdb-many-windows t)
+(use-package c++-mode
+  :mode (("\\.h\\'" . c++-mode))
+  :init
+  (setq c-basic-offset 4
+	gdb-many-windows t
+	c-default-style "bsd"))
 
-(defun my/rtags-new-project ()
-  "Generate a compile_commands.json and add project to the RTags daemon."
-  (interactive)
-  (shell-command "bear make")
-  (shell-command "rc -J"))
 
 ;; RTAGS must be placed before irony for them to work together
 (use-package rtags
   :ensure t
   :defer t
   :init
+  (defun my/rtags-new-project ()
+    "Generate a compile_commands.json and add project to the RTags daemon."
+    (interactive)
+    (shell-command "bear make")
+    (shell-command "rc -J"))
   (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
   (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
+  :config
   (evil-leader/set-key-for-mode 'c-mode
     "R" 'rtags-rename-symbol)
   (evil-leader/set-key-for-mode 'c++-mode
@@ -401,17 +407,17 @@
   (evil-define-key 'normal c++-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
   (evil-define-key 'normal c++-mode-map (kbd "M-,") #'rtags-find-references-at-point))
 
-(defun my/irony-mode-hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-
 (use-package irony
   :ensure t
   :defer t
   :diminish irony-mode
   :init
+  (defun my/irony-mode-hook ()
+    (define-key irony-mode-map [remap completion-at-point]
+      'irony-completion-at-point-async)
+    (define-key irony-mode-map [remap complete-symbol]
+      'irony-completion-at-point-async))
+
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
@@ -489,7 +495,6 @@
 	    (revert-buffer t t)
 	    (switch-to-buffer org-buffer))
 	(find-file-other-window (replace-regexp-in-string "\.org" ".pdf" (buffer-file-name))))))
-
   (add-hook 'org-mode-hook #'org-indent-mode)
   :config
   (use-package org-bullets
@@ -529,22 +534,21 @@
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
 
-;; xwidget configurations -- Only for Emacs 25+
-(when (>= emacs-major-version 25)
-  (use-package xwidget
-    :defer t
-    :init
-    (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
-    :config
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<return>") 'xwidget-webkit-insert-string)
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "u") 'xwidget-adjust-size-to-content)
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "a") 'xwidget-webkit-adjust-size-dispatch)
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
-    (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
-    (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
-    (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)))
+(use-package xwidget
+  :if (>= emacs-major-version 25)
+  :defer t
+  :init
+  (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
+  :config
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<return>") 'xwidget-webkit-insert-string)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "u") 'xwidget-adjust-size-to-content)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "a") 'xwidget-webkit-adjust-size-dispatch)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
+  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
+  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
+  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
@@ -556,6 +560,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (setq deactivate-mark  t)
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
+
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -578,36 +583,76 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
+   [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   (vector "#cccccc" "#f2777a" "#99cc99" "#ffcc66" "#6699cc" "#cc99cc" "#66cccc" "#515151"))
- '(fci-rule-color "#515151")
+   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+ '(compilation-message-face (quote default))
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#839496")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
+ '(fci-rule-color "#383838")
+ '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
+ '(highlight-symbol-colors
+   (--map
+    (solarized-color-blend it "#002b36" 0.25)
+    (quote
+     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+ '(highlight-symbol-foreground-color "#93a1a1")
+ '(highlight-tail-colors
+   (quote
+    (("#20240E" . 0)
+     ("#679A01" . 20)
+     ("#4BBEAE" . 30)
+     ("#1DB4D0" . 50)
+     ("#9A8F21" . 60)
+     ("#A75B00" . 70)
+     ("#F309DF" . 85)
+     ("#20240E" . 100))))
+ '(hl-bg-colors
+   (quote
+    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+ '(hl-fg-colors
+   (quote
+    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+ '(magit-diff-use-overlays nil)
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (airline-themes solarized-theme org-bullets zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile powerline-evil pdf-tools nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow buffer-move benchmark-init)))
+    (gruvbox-theme monokai-theme airline-themes powerline-evil zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow buffer-move benchmark-init)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
- '(vc-annotate-background nil)
+ '(pos-tip-background-color "#A6E22E")
+ '(pos-tip-foreground-color "#272822")
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+ '(term-default-bg-color "#002b36")
+ '(term-default-fg-color "#839496")
+ '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
-    ((20 . "#f2777a")
-     (40 . "#f99157")
-     (60 . "#ffcc66")
-     (80 . "#99cc99")
-     (100 . "#66cccc")
-     (120 . "#6699cc")
-     (140 . "#cc99cc")
-     (160 . "#f2777a")
-     (180 . "#f99157")
-     (200 . "#ffcc66")
-     (220 . "#99cc99")
-     (240 . "#66cccc")
-     (260 . "#6699cc")
-     (280 . "#cc99cc")
-     (300 . "#f2777a")
-     (320 . "#f99157")
-     (340 . "#ffcc66")
-     (360 . "#99cc99"))))
- '(vc-annotate-very-old-color nil))
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(weechat-color-list
+   (unspecified "#272822" "#20240E" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0"))
+ '(xterm-color-names
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
+ '(xterm-color-names-bright
+   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
