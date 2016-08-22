@@ -161,7 +161,7 @@
     "sf" 'save-buffer
     "sa" '(lambda () (interactive) (save-some-buffers t))
     "g" 'magit-status
-    "x" 'ansi-term
+    "x" '(lambda () (interactive (ansi-term "/bin/zsh")))
     "W" 'winner-undo)
   (global-evil-leader-mode))
 
@@ -577,3 +577,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move))))
