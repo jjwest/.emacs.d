@@ -19,7 +19,7 @@
 
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 50 1024 1024))
+(setq gc-cons-threshold (* 100 1024 1024))
 (add-hook 'focus-out-hook #'garbage-collect)
 
 ;; General settings and better defaults
@@ -40,12 +40,9 @@
       require-final-newline t
       auto-revert-check-vc-info t
       show-paren-delay 0
+      select-enable-clipboard t
       display-time-24hr-format t
       locale-coding-system 'utf-8)
-
-(if (>= emacs-major-version 25)
-    (setq select-enable-clipboard t)
-  (setq x-select-enable-clipboard t))
 
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
@@ -71,10 +68,6 @@
 (display-time-mode)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
-;; (unless (server-running-p)
-;;   (server-start))
-
-
 
 ;; Changing active window
 (global-set-key (kbd "C-h") 'windmove-left)
@@ -82,14 +75,6 @@
 (global-set-key (kbd "C-k") 'windmove-up)
 (global-set-key (kbd "C-l") 'windmove-right)
 
-;; never shrink windows
-(defvar allow-window-shrinking nil
-  "If non-nil, effectively disable shrinking windows by making `shrink-window-if-larger-than-buffer' a no-op.")
-(advice-add 'shrink-window-if-larger-than-buffer
-            :before-while
-            (lambda (&rest args)
-              "Do nothing if `allow-window-shrinking' is nil."
-              allow-window-shrinking))
 
 (defvar zenburn-theme-active t)
 (defun my/toggle-theme ()
@@ -228,9 +213,9 @@
   :init
   (add-hook 'prog-mode-hook (lambda () (company-mode)))
   :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
-  (setq company-tooltip-align-annotations t))
+  (setq company-idle-delay 0
+	company-minimum-prefix-length 2
+	company-tooltip-align-annotations t))
 
 
 (use-package projectile
@@ -270,6 +255,7 @@
 
 (use-package eldoc
   :defer t
+  :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook #'eldoc-mode))
 
 (use-package diminish
@@ -277,7 +263,6 @@
   :config
   (diminish 'visual-line-mode)
   (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
-  (with-eval-after-load	 'eldoc (diminish 'eldoc-mode))
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
 (use-package dired
@@ -336,11 +321,11 @@
 	 ("<escape>" . minibuffer-keyboard-quit))
   :demand
   :config
-  (setq projectile-completion-system 'ivy)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-height 15)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-display-style 'fancy)
+  (setq projectile-completion-system 'ivy
+	ivy-use-virtual-buffers t
+	ivy-height 15
+	ivy-count-format "(%d/%d) "
+	ivy-display-style 'fancy)
   (ivy-mode 1))
 
 (use-package nlinum-relative
@@ -461,11 +446,11 @@
     (setq racer-rust-src-path "~/.rust/src")
     (setq racer-cargo-home "~/.cargo")
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
-    (add-hook 'rust-mode-hook 'racer-mode)
+    (add-hook 'rust-mode-hook 'racer-mode))
   (use-package flycheck-rust
     :ensure t
     :config
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup))))
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
 
 (use-package emmet-mode
   :ensure t
@@ -569,6 +554,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+;; never shrink windows
+(defvar allow-window-shrinking nil
+  "If non-nil, effectively disable shrinking windows by making `shrink-window-if-larger-than-buffer' a no-op.")
+(advice-add 'shrink-window-if-larger-than-buffer
+            :before-while
+            (lambda (&rest args)
+              "Do nothing if `allow-window-shrinking' is nil."
+              allow-window-shrinking))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -577,11 +571,3 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (zenburn-theme yasnippet use-package smex rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move))))
