@@ -3,24 +3,25 @@
 ;;; Nothing here
 ;;; Code:
 
+;; Better garbage collection settings
+(setq gc-cons-threshold (* 100 1024 1024))
+(add-hook 'focus-out-hook #'garbage-collect)
+
+
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
-
-;; Bootstrap use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
 
 ;; Benchmark startup time
 (when (package-installed-p 'benchmark-init)
   (benchmark-init/activate))
 
 
-;; Better garbage collection settings
-(setq gc-cons-threshold (* 100 1024 1024))
-(add-hook 'focus-out-hook #'garbage-collect)
+;; Bootstrap use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
@@ -46,8 +47,7 @@
 
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
-	      fill-column 80
-              truncate-lines t)
+	      fill-column 80)
 (set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -415,8 +415,7 @@
     :config (add-to-list 'company-backends '(company-irony)))
   (use-package flycheck-irony
     :ensure t
-    :config
-    (flycheck-irony-setup))
+    :config (flycheck-irony-setup))
   (use-package company-irony-c-headers
     :ensure t
     :config (add-to-list 'company-backends '(company-irony-c-headers)))
@@ -504,8 +503,9 @@
   (setq org-latex-pdf-process
   	'("xelatex -interaction nonstopmode %f"
   	  "xelatex -interaction nonstopmode %f"))
-  (setq org-latex-listings 'listings)
-  (setq org-export-with-sub-superscripts nil)
+  (setq org-latex-listings 'listings
+	org-export-with-sub-superscripts nil
+	org-export-with-smart-quotes t)
   (add-to-list 'org-latex-packages-alist '("" "listings"))
   (add-to-list 'org-latex-packages-alist '("" "color")))
 
