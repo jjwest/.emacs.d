@@ -1,4 +1,4 @@
-;; init.el --- My Emacs config
+; init.el --- My Emacs config
 ;;; Commentary:
 ;;; Nothing here
 ;;; Code:
@@ -376,8 +376,7 @@
   (defun my/rtags-new-project ()
     "Generate a compile_commands.json and add project to the RTags daemon."
     (interactive)
-    (shell-command "bear make")
-    (shell-command "rc -J"))
+    (shell-command (concat "rc -J " (projectile-project-root))))
   (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
   (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
   :config
@@ -568,6 +567,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight semi-bold :height 98 :width normal)))))
+ '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (gruvbox-theme flycheck-rust racer org-bullets pdf-tools emmet-mode rust-mode company-jedi irony-eldoc company-irony-c-headers flycheck-irony company-irony irony rtags rainbow-delimiters buffer-move nlinum-relative counsel smex ivy magit evil-anzu flycheck-pos-tip flycheck projectile company yasnippet powerline-evil evil-visualstar evil-surround evil-leader zenburn-theme use-package))))
