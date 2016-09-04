@@ -146,7 +146,7 @@
     "sf" 'save-buffer
     "sa" '(lambda () (interactive) (save-some-buffers t))
     "g" 'magit-status
-    "x" '(lambda () (interactive (ansi-term "/bin/zsh")))
+    "x" '(lambda () (interactive) (ansi-term "/bin/zsh"))
     "W" 'winner-undo)
   (global-evil-leader-mode))
 
@@ -433,9 +433,9 @@
 ;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
-  :mode ("\\.rs\\'" . rust-mode)
-  :config
-  (use-package racer
+  :mode ("\\.rs\\'" . rust-mode))
+
+(use-package racer
     :ensure t
     :diminish racer-mode
     :demand
@@ -445,10 +445,11 @@
     (setq racer-cargo-home "~/.cargo")
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
     (add-hook 'rust-mode-hook 'racer-mode))
-  (use-package flycheck-rust
+
+(use-package flycheck-rust
     :ensure t
     :config
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
 (use-package emmet-mode
   :ensure t
@@ -570,11 +571,3 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (gruvbox-theme flycheck-rust racer org-bullets pdf-tools emmet-mode rust-mode company-jedi irony-eldoc company-irony-c-headers flycheck-irony company-irony irony rtags rainbow-delimiters buffer-move nlinum-relative counsel smex ivy magit evil-anzu flycheck-pos-tip flycheck projectile company yasnippet powerline-evil evil-visualstar evil-surround evil-leader zenburn-theme use-package))))
