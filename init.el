@@ -373,8 +373,8 @@
   :ensure t
   :defer t
   :init
-  (defun my/rtags-new-project ()
-    "Generate a compile_commands.json and add project to the RTags daemon."
+  (defun my/rtags-add-project ()
+    "Add project to the RTags daemon."
     (interactive)
     (shell-command (concat "rc -J " (projectile-project-root))))
   (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
