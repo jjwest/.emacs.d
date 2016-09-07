@@ -44,7 +44,6 @@
       select-enable-clipboard t
       display-time-24hr-format t
       locale-coding-system 'utf-8)
-
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
@@ -195,12 +194,6 @@
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1))
 
-(use-package powerline-evil
-    :ensure t
-    :diminish powerline-minor-modes
-    :config
-    (powerline-evil-vim-color-theme))
-
 (use-package yasnippet
   :ensure t
   :defer t
@@ -232,7 +225,6 @@
 
 (use-package projectile
   :ensure t
-  :defer t
   :diminish projectile-mode
   :config
   (setq projectile-other-file-alist '(("c" "h")
@@ -578,6 +570,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
 
+
+(use-package all-the-icons
+  :preface (add-to-list 'load-path (expand-file-name "~/.emacs.d/all-the-icons")))
+
+(use-package powerline-evil
+    :ensure t
+    :diminish powerline-minor-modes
+    :config
+    (load-file (expand-file-name "~/.emacs.d/powerline.el")))
+
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -603,7 +606,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init)))
+    (f zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
