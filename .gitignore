@@ -1,4 +1,7 @@
 *
-!init.el
+!all-the-icons
+!powerline.el
 !snippets
 !themes
+!init.el
+!.gitignore
