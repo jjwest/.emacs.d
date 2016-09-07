@@ -96,42 +96,22 @@
   (split-window-vertically)
   (windmove-down))
 
-(defvar zenburn-theme-active t)
-(defun my/toggle-theme ()
-  "Toggle between the Zenburn and Leuven theme."
-  (interactive)
-  (if zenburn-theme-active
-      (progn
-	(disable-theme 'zenburn)
-	(load-theme 'leuven)
-	(when (featurep 'org)
-	  (set-face-foreground 'org-hide (quote "#FFFFFF")))
-	(setq zenburn-theme-active nil))
-    (disable-theme 'leuven)
-    (load-theme 'zenburn)
-    (custom-theme-set-faces
-     'zenburn
+(use-package doom
+  :load-path "themes"
+  :init (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes"))
+  :config (load-theme 'doom-one))
 
-     `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
-    (when (featurep 'org)
-      (set-face-foreground 'org-hide (quote "#3F3F3F")))
-    (setq zenburn-theme-active t)))
+(use-package all-the-icons
+  :load-path "all-the-icons")
+
+(use-package powerline-evil
+    :ensure t
+    :after projectile
+    :diminish powerline-minor-modes
+    :config
+    (load-file (expand-file-name "~/.emacs.d/powerline.el")))
 
 ;; Packages
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/themes"))
-(add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes"))
-
-(use-package doom
-  :config
-  (load-theme 'doom-one))
-;; (use-package zenburn-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'zenburn)
-;;   (custom-theme-set-faces
-;;    'zenburn
-;;    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
-
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
@@ -569,16 +549,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
             (lambda (&rest args)
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
-
-
-(use-package all-the-icons
-  :preface (add-to-list 'load-path (expand-file-name "~/.emacs.d/all-the-icons")))
-
-(use-package powerline-evil
-    :ensure t
-    :diminish powerline-minor-modes
-    :config
-    (load-file (expand-file-name "~/.emacs.d/powerline.el")))
 
 
 (custom-set-faces
