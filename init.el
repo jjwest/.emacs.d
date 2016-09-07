@@ -7,21 +7,21 @@
 (setq gc-cons-threshold (* 100 1024 1024))
 (add-hook 'focus-out-hook #'garbage-collect)
 
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
-
-
-;; Benchmark startup time
-(when (package-installed-p 'benchmark-init)
-  (benchmark-init/activate))
-
 
 ;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+;; Benchmark startup time
+(use-package benchmark-init
+  :ensure t
+  :config
+  (benchmark-init/activate))
+
 
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
@@ -76,6 +76,27 @@
 (global-set-key (kbd "C-l") 'windmove-right)
 
 
+;; My own convenience functions
+
+(defun my/split-line ()
+  "Split line at point."
+  (interactive)
+  (newline-and-indent)
+  (forward-line -1)
+  (move-end-of-line 1))
+
+(defun my/split-window-horizontal ()
+  "Split window horizontally and change to new window."
+  (interactive)
+  (split-window-horizontally)
+  (windmove-right))
+
+(defun my/split-window-vertical ()
+  "Split window vertically and change to new window."
+  (interactive)
+  (split-window-vertically)
+  (windmove-down))
+
 (defvar zenburn-theme-active t)
 (defun my/toggle-theme ()
   "Toggle between the Zenburn and Leuven theme."
@@ -91,40 +112,30 @@
     (load-theme 'zenburn)
     (custom-theme-set-faces
      'zenburn
+
      `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F")))))
     (when (featurep 'org)
       (set-face-foreground 'org-hide (quote "#3F3F3F")))
     (setq zenburn-theme-active t)))
 
 ;; Packages
-(use-package zenburn-theme
-  :ensure t
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/themes"))
+(add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes"))
+
+(use-package doom
   :config
-  (load-theme 'zenburn)
-  (custom-theme-set-faces
-   'zenburn
-   `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  (load-theme 'doom-one))
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'zenburn)
+;;   (custom-theme-set-faces
+;;    'zenburn
+;;    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
-  :init
-  (defun my/split-line ()
-    "Split line at point."
-    (interactive)
-    (newline-and-indent)
-    (forward-line -1)
-    (move-end-of-line 1))
-
-  (defun my/split-window-horizontal ()
-    (interactive)
-    (split-window-horizontally)
-    (windmove-right))
-
-  (defun my/split-window-vertical ()
-    (interactive)
-    (split-window-vertically)
-    (windmove-down))
   :config
   (evil-leader/set-leader ",")
   (evil-leader/set-key
@@ -195,8 +206,8 @@
   :defer t
   :diminish yas-minor-mode
   :init
-  (add-hook 'prog-mode-hook (lambda () (yas-minor-mode)))
-  (add-hook 'org-mode-hook (lambda () (yas-minor-mode)))
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  (add-hook 'org-mode-hook #'yas-minor-mode)
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all))
@@ -205,13 +216,14 @@
 (use-package company
   :ensure t
   :diminish company-mode
+  :commands (company-mode)
   :bind (("C-RET" . company-manual-begin)
 	 ("<C-return>" . company-manual-begin)
 	 :map company-active-map
 	 ("TAB" . nil)
 	 ("<tab>" . nil))
   :init
-  (add-hook 'prog-mode-hook (lambda () (company-mode)))
+  (add-hook 'prog-mode-hook #'company-mode)
   :config
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
@@ -315,6 +327,7 @@
   :ensure t
   :ensure smex
   :ensure counsel
+  :functions minibuffer-keyboard-quit
   :diminish ivy-mode
   :bind (("M-x" . counsel-M-x)
 	 :map ivy-mode-map
@@ -337,7 +350,7 @@
 
 (use-package hl-line
   :ensure t
-  :defer t
+  :commands hl-line-mode
   :init
   (add-hook 'prog-mode-hook #'hl-line-mode)
   (add-hook 'html-mode-hook #'hl-line-mode))
@@ -433,29 +446,31 @@
 ;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
-  :mode ("\\.rs\\'" . rust-mode))
-
-(use-package racer
+  :mode ("\\.rs\\'" . rust-mode)
+  :config
+  (use-package racer
     :ensure t
     :diminish racer-mode
-    :demand
+    :init
+    (add-hook 'rust-mode-hook #'racer-mode)
     :config
     (setq racer-cmd "~/.cargo/bin/racer")
     (setq racer-rust-src-path "~/.rust/src")
     (setq racer-cargo-home "~/.cargo")
-    (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
-    (add-hook 'rust-mode-hook 'racer-mode))
+    (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition))
 
-(use-package flycheck-rust
+  (use-package flycheck-rust
     :ensure t
     :config
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup))
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
+
 
 (use-package emmet-mode
   :ensure t
   :defer t
+
   :init
-  (add-hook 'html-mode-hook (lambda () (emmet-mode))))
+  (add-hook 'html-mode-hook #'emmet-mode))
 
 (use-package ibuffer
   :ensure t
@@ -568,6 +583,49 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
+ '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal))))
+ '(term-color-blue ((t (:background "#00B3EF" :foreground "#00B3EF"))))
+ '(term-color-green ((t (:background "#7bc275" :foreground "#7bc275"))))
+ '(term-color-magenta ((t (:background "#DC79DC" :foreground "#DC79DC"))))
+ '(term-color-red ((t (:background "#ff665c" :foreground "#ff665c"))))
+ '(term-color-yellow ((t (:background "#ECBE7B" :foreground "#ECBE7B")))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+ '(fci-rule-color "#383838")
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(package-selected-packages
+   (quote
+    (zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init)))
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 
 (provide 'init)
