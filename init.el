@@ -96,20 +96,34 @@
   (split-window-vertically)
   (windmove-down))
 
-(use-package doom
-  :load-path "themes"
-  :init (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes"))
-  :config (load-theme 'doom-one))
-
-(use-package all-the-icons
-  :load-path "all-the-icons")
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn)
+  (custom-theme-set-faces
+    'zenburn
+    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package powerline-evil
     :ensure t
-    :after projectile
     :diminish powerline-minor-modes
-    :config
-    (load-file (expand-file-name "~/.emacs.d/powerline.el")))
+    ;; :config
+    ;; (powerline-evil-vim-color-theme)
+    )
+
+(use-package airline-themes
+  :ensure t
+  :config
+  (setq powerline-utf-8-separator-left        #xe0b0
+	powerline-utf-8-separator-right       #xe0b2
+	airline-utf-glyph-separator-left      #xe0b0
+	airline-utf-glyph-separator-right     #xe0b2
+	airline-utf-glyph-subseparator-left   #xe0b1
+	airline-utf-glyph-subseparator-right  #xe0b3
+	airline-utf-glyph-branch              #xe0a0
+	airline-utf-glyph-readonly            #xe0a2
+	airline-utf-glyph-linenumber          #xe0a1)
+  (load-theme 'airline-base16-gui-dark))
 
 ;; Packages
 (use-package evil-leader
@@ -437,12 +451,26 @@
     (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
 
 
+;; Web development
 (use-package emmet-mode
   :ensure t
   :defer t
-
   :init
   (add-hook 'html-mode-hook #'emmet-mode))
+
+(use-package js2-mode
+  :ensure t
+  :mode ("\\.js\\'" . js2-mode))
+
+(use-package company-tern
+  :ensure t
+  :init (add-hook 'js2-mode-hook #'tern-mode)
+  :config
+  (add-to-list 'company-backends 'company-tern)
+  (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
+  (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
+  (evil-leader/set-key-for-mode 'js2-mode
+    "R" 'tern-rename-variable))
 
 (use-package ibuffer
   :ensure t
@@ -506,22 +534,6 @@
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
 
-(use-package xwidget
-  :if (>= emacs-major-version 25)
-  :defer t
-  :init
-  (evil-leader/set-key "w" 'xwidget-webkit-browse-url)
-  :config
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<return>") 'xwidget-webkit-insert-string)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "u") 'xwidget-adjust-size-to-content)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "a") 'xwidget-webkit-adjust-size-dispatch)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "k") 'xwidget-webkit-scroll-down)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "j") 'xwidget-webkit-scroll-up)
-  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
-  (evil-define-key 'normal xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
-  (evil-define-key 'normal xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up))
-
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -532,7 +544,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (setq deactivate-mark  t)
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
-
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -556,49 +567,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal))))
- '(term-color-blue ((t (:background "#00B3EF" :foreground "#00B3EF"))))
- '(term-color-green ((t (:background "#7bc275" :foreground "#7bc275"))))
- '(term-color-magenta ((t (:background "#DC79DC" :foreground "#DC79DC"))))
- '(term-color-red ((t (:background "#ff665c" :foreground "#ff665c"))))
- '(term-color-yellow ((t (:background "#ECBE7B" :foreground "#ECBE7B")))))
+ '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
 
+(provide 'init)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
- '(fci-rule-color "#383838")
- '(nrepl-message-colors
-   (quote
-    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (f zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative magit irony-eldoc flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-jedi company-irony-c-headers company-irony buffer-move benchmark-init)))
- '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
-
-(provide 'init)
+    (airline-themes zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative monokai-theme molokai-theme magit js2-mode irony-eldoc gruvbox-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-tern company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow color-theme buffer-move benchmark-init))))
