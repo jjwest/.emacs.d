@@ -105,25 +105,23 @@
     `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package powerline-evil
-    :ensure t
-    :diminish powerline-minor-modes
-    ;; :config
-    ;; (powerline-evil-vim-color-theme)
-    )
-
-(use-package airline-themes
   :ensure t
+  :diminish powerline-minor-modes
   :config
-  (setq powerline-utf-8-separator-left        #xe0b0
-	powerline-utf-8-separator-right       #xe0b2
-	airline-utf-glyph-separator-left      #xe0b0
-	airline-utf-glyph-separator-right     #xe0b2
-	airline-utf-glyph-subseparator-left   #xe0b1
-	airline-utf-glyph-subseparator-right  #xe0b3
-	airline-utf-glyph-branch              #xe0a0
-	airline-utf-glyph-readonly            #xe0a2
-	airline-utf-glyph-linenumber          #xe0a1)
-  (load-theme 'airline-base16-gui-dark))
+  (use-package airline-themes
+    :load-path "~/.emacs.d/themes"
+    :config
+    (setq powerline-utf-8-separator-left        #xe0b0
+	  powerline-utf-8-separator-right       #xe0b2
+	  airline-utf-glyph-separator-left      #xe0b0
+	  airline-utf-glyph-separator-right     #xe0b2
+	  airline-utf-glyph-subseparator-left   #xe0b1
+	  airline-utf-glyph-subseparator-right  #xe0b3
+	  airline-utf-glyph-branch              #xe0a0
+	  airline-utf-glyph-readonly            #xe0a2
+	  airline-utf-glyph-linenumber          #xe0a1
+	  airline-helm-colors nil)
+    (load-theme 'airline-base16-gui-dark)))
 
 ;; Packages
 (use-package evil-leader
@@ -577,4 +575,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (airline-themes zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative monokai-theme molokai-theme magit js2-mode irony-eldoc gruvbox-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-tern company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow color-theme buffer-move benchmark-init))))
+    (zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative monokai-theme molokai-theme magit js2-mode irony-eldoc gruvbox-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-tern company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow color-theme buffer-move benchmark-init))))
