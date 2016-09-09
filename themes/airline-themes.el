@@ -290,11 +290,11 @@ Valid Values: airline-directory-full, airline-directory-shortened, nil (disabled
                                      ;; (powerline-raw (char-to-string #x2b83) center-face 'l)
 
                                      ;; Minor Modes
-                                     (powerline-minor-modes center-face 'l)
+                                     ;; (powerline-minor-modes center-face 'l)
                                      ;; (powerline-narrow center-face 'l)
 
                                      ;; Subseparator <
-                                     (powerline-raw (char-to-string airline-utf-glyph-subseparator-right) center-face 'l)
+                                     ;; (powerline-raw (char-to-string airline-utf-glyph-subseparator-right) center-face 'l)
 
                                      ;; Major Mode
                                      (powerline-major-mode center-face 'l)
@@ -305,26 +305,26 @@ Valid Values: airline-directory-full, airline-directory-shortened, nil (disabled
                                      (funcall separator-right center-face inner-face)
 
                                      ;; Buffer Size
-                                     (when powerline-display-buffer-size
-                                       (powerline-buffer-size inner-face 'l))
+                                     ;; (when powerline-display-buffer-size
+                                     ;;   (powerline-buffer-size inner-face 'l))
 
                                      ;; Mule Info
-                                     (when powerline-display-mule-info
-                                       (powerline-raw mode-line-mule-info inner-face 'l))
+                                     ;; (when powerline-display-mule-info
+                                     ;;   (powerline-raw mode-line-mule-info inner-face 'l))
 
-                                     (powerline-raw " " inner-face)
+                                     ;; (powerline-raw " " inner-face)
 
                                      ;; Separator <
                                      (funcall separator-right inner-face outer-face)
 
                                      ;; LN charachter
-                                     (powerline-raw (char-to-string airline-utf-glyph-linenumber) outer-face 'l)
+                                     ;; (powerline-raw (char-to-string airline-utf-glyph-linenumber) outer-face 'l)
 
                                      ;; Current Line
-                                     (powerline-raw "%4l" outer-face 'l)
-                                     (powerline-raw ":" outer-face 'l)
+                                     ;; (powerline-raw "%4l" outer-face 'l)
+                                     ;; (powerline-raw ":" outer-face 'l)
                                      ;; Current Column
-                                     (powerline-raw "%3c" outer-face 'r)
+                                     ;; (powerline-raw "%3c" outer-face 'r)
 
                                      ;; % location in file
                                      (powerline-raw "%6p" outer-face 'r)
