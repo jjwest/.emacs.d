@@ -120,7 +120,9 @@
 	  airline-utf-glyph-branch              #xe0a0
 	  airline-utf-glyph-readonly            #xe0a2
 	  airline-utf-glyph-linenumber          #xe0a1
-	  airline-helm-colors nil)
+	  airline-helm-colors nil
+	  airline-display-directory nil
+	  airline-cursor-colors nil)
     (load-theme 'airline-base16-gui-dark)))
 
 ;; Packages
@@ -462,6 +464,7 @@
 
 (use-package company-tern
   :ensure t
+  :diminish tern-mode
   :init (add-hook 'js2-mode-hook #'tern-mode)
   :config
   (add-to-list 'company-backends 'company-tern)
@@ -568,11 +571,3 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (zenburn-theme yasnippet use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative monokai-theme molokai-theme magit js2-mode irony-eldoc gruvbox-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-tern company-jedi company-irony-c-headers company-irony color-theme-sanityinc-tomorrow color-theme buffer-move benchmark-init))))

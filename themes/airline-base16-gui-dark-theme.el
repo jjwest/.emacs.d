@@ -7,15 +7,15 @@
 url: https://github.com/mkaito/base16-emacs")
 
 (let ((normal-outer-foreground  (face-background 'highlight))          (normal-outer-background  (face-foreground 'link))
-      (normal-inner-foreground  (face-foreground 'font-lock-doc-face)) (normal-inner-background  (face-background 'fringe))
+      (normal-inner-foreground  (face-foreground 'font-lock-doc-face)) (normal-inner-background  (face-background 'highlight))
       (normal-center-foreground (face-foreground 'font-lock-doc-face)) (normal-center-background (face-background 'highlight))
 
       (insert-outer-foreground  (face-background 'highlight))          (insert-outer-background  (face-foreground 'success))
-      (insert-inner-foreground  (face-foreground 'success))            (insert-inner-background  (face-background 'default))
+      (insert-inner-foreground  (face-foreground 'success))            (insert-inner-background  (face-background 'highlight))
       (insert-center-foreground (face-foreground 'font-lock-doc-face)) (insert-center-background (face-background 'highlight))
 
       (visual-outer-foreground  (face-background 'highlight))          (visual-outer-background  (face-foreground 'warning))
-      (visual-inner-foreground  (face-foreground 'warning))            (visual-inner-background  (face-background 'default))
+      (visual-inner-foreground  (face-foreground 'warning))            (visual-inner-background  (face-background 'highlight))
       (visual-center-foreground (face-foreground 'font-lock-doc-face)) (visual-center-background (face-background 'highlight))
 
       (replace-outer-foreground (face-background 'highlight)) (replace-outer-background (face-foreground 'error))
