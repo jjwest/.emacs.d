@@ -113,7 +113,8 @@ the path down to `MAX-LENGTH'
 
 ;;;***
 
-;;;### (autoloads nil nil ("airline-badwolf-theme.el" "airline-base16-gui-dark-theme.el"
+;;;### (autoloads nil nil ("airline-badwolf-theme.el" "airline-base16-gui-dark-theme-zenburn.el"
+;;;;;;  "airline-base16-gui-dark-theme.el"
 ;;;;;;  "airline-base16-gui-light-theme.el" "airline-base16-shell-dark-theme.el"
 ;;;;;;  "airline-behelit-theme.el" "airline-dark-theme.el" "airline-distinguished-theme.el"
 ;;;;;;  "airline-durant-theme.el" "airline-hybridline-theme.el" "airline-kalisi-theme.el"

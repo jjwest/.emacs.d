@@ -4,7 +4,7 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 100 1024 1024))
+(setq gc-cons-threshold (* 20 1024 1024))
 (add-hook 'focus-out-hook #'garbage-collect)
 
 (require 'package)
@@ -98,13 +98,11 @@
   (split-window-vertically)
   (windmove-down))
 
-(use-package zenburn-theme
-  :ensure t
+
+(use-package color-theme-sanityinc-tomorrow
+  :load-path "~/.emacs.d/themes"
   :config
-  (load-theme 'zenburn)
-  (custom-theme-set-faces
-    'zenburn
-    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  (load-theme 'sanityinc-tomorrow-eighties))
 
 (use-package powerline-evil
   :ensure t
@@ -113,6 +111,9 @@
   (use-package airline-themes
     :load-path "~/.emacs.d/themes"
     :config
+    (let ((airline-regular (expand-file-name "~/.emacs.d/themes/airline-base16-gui-dark-theme.el")))
+      (unless (file-exists-p (concat airline-regular "c"))
+	(byte-compile-file airline-regular)))
     (setq powerline-utf-8-separator-left        #xe0b0
 	  powerline-utf-8-separator-right       #xe0b2
 	  airline-utf-glyph-separator-left      #xe0b0
@@ -167,8 +168,9 @@
 	      ("C-l" . evil-window-right)
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down)
-	      ("C-a" . beginning-of-line)
-	      ("C-e" . end-of-line)
+	      ("C-q" . evil-scroll-line-up)
+	      ;; ("C-a" . beginning-of-line)
+	      ;; ("C-e" . end-of-line)
 	      ("S" . my/split-line)
 	      ("U" . redo)
 	      ("Q" . "@q")
@@ -574,3 +576,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (airline-themes solarized-theme zenburn-theme use-package smex smart-mode-line rtags rainbow-delimiters racer projectile powerline-evil pdf-tools org-bullets nlinum-relative monokai-theme molokai-theme magit js2-refactor irony-eldoc gruvbox-theme flycheck-rust flycheck-pos-tip flycheck-irony evil-visualstar evil-surround evil-leader evil-anzu emmet-mode counsel company-tern company-jedi company-irony-c-headers company-irony color-theme buffer-move benchmark-init))))
