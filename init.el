@@ -43,6 +43,8 @@
       show-paren-delay 0
       select-enable-clipboard t
       display-time-24hr-format t
+      display-time-day-and-date t
+      display-time-default-load-average nil
       locale-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
@@ -64,7 +66,7 @@
 (global-auto-revert-mode t)
 (winner-mode 1)
 (save-place-mode)
-(display-time-mode)
+(display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 
@@ -330,7 +332,8 @@
 (use-package nlinum-relative
   :ensure t
   :config
-  (setq nlinum-relative-redisplay-delay 0.05)
+  (setq nlinum-relative-redisplay-delay 0.05
+	nlinum-format " %d")
   (add-hook 'html-mode-hook #'nlinum-relative-mode)
   (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
