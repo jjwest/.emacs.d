@@ -4,7 +4,7 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 100 1024 1024))
+(setq gc-cons-threshold (* 20 1024 1024))
 (add-hook 'focus-out-hook #'garbage-collect)
 
 (require 'package)
