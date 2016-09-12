@@ -6,7 +6,7 @@
 
 url: https://github.com/mkaito/base16-emacs")
 
-(let ((normal-outer-foreground  (face-background 'highlight))          (normal-outer-background  (face-foreground 'font-lock-constant-face))
+(let ((normal-outer-foreground  (face-background 'highlight))          (normal-outer-background  (face-foreground 'link))
       (normal-inner-foreground  (face-foreground 'font-lock-doc-face)) (normal-inner-background  (face-background 'region))
       (normal-center-foreground (face-foreground 'font-lock-doc-face)) (normal-center-background (face-background 'region))
 
