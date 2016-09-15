@@ -19,8 +19,7 @@
 ;; Benchmark startup time
 (use-package benchmark-init
   :ensure t
-  :config
-  (benchmark-init/activate))
+  :config (benchmark-init/activate))
 
 
 ;; General settings and better defaults
@@ -112,6 +111,9 @@
   :config
   (use-package airline-themes
     :load-path "~/.emacs.d/themes"
+    :preface
+    (unless (file-exists-p "~/.emacs.d/themes/airline-themes.elc")
+	       (byte-recompile-directory "~/.emacs.d/themes" 0))
     :config
     (setq powerline-utf-8-separator-left        #xe0b0
 	  powerline-utf-8-separator-right       #xe0b2
@@ -221,6 +223,7 @@
 
 (use-package projectile
   :ensure t
+  :defer t
   :diminish projectile-mode
   :config
   (setq projectile-other-file-alist '(("c" "h")
@@ -443,9 +446,9 @@
     :init
     (add-hook 'rust-mode-hook #'racer-mode)
     :config
-    (setq racer-cmd "~/.cargo/bin/racer")
-    (setq racer-rust-src-path "~/.rust/src")
-    (setq racer-cargo-home "~/.cargo")
+    (setq racer-cmd (expand-file-name "~/.cargo/bin/racer"))
+    (setq racer-rust-src-path (expand-file-name "~/.rust/src"))
+    (setq racer-cargo-home (expand-file-name "~/.cargo"))
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition))
 
   (use-package flycheck-rust
@@ -468,6 +471,7 @@
 (use-package company-tern
   :ensure t
   :diminish tern-mode
+  :defer t
   :init (add-hook 'js2-mode-hook #'tern-mode)
   :config
   (add-to-list 'company-backends 'company-tern)
