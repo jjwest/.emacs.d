@@ -52,6 +52,7 @@
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
+
 ;; Strip UI
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -269,6 +270,10 @@
   (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
 (use-package dired
+  :preface
+  (defun my/dired-parent-dir ()
+    (interactive)
+    (find-alternate-file ".."))
   :bind (:map dired-mode-map
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
@@ -282,18 +287,21 @@
 	      ("n" . evil-search-next)
 	      ("N" . evil-search-previous))
   :init
-  (defun my/dired-parent-dir ()
-    (interactive)
-    (find-alternate-file ".."))
+  (setq dired-dwim-target t
+        dired-recursive-copies 'top
+        dired-recursive-deletes 'top
+        dired-listing-switches "-alh")
   :config
-  (put 'dired-find-alternate-file 'disabled nil)
-  (setq dired-recursive-deletes 'always
-	dired-recursive-copies 'always
-	delete-by-moving-to-trash t))
+  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+  (put 'dired-find-alternate-file 'disabled nil))
+  ;; (setq dired-recursive-copies 'always
+  ;; 	delete-by-moving-to-trash t))
 
 (use-package term
-  :bind ("C-x C-d" . term-send-eof)
-  :config (setq term-buffer-maximum-size 0))
+  :bind (:map term-mode-map
+	      ("C-x C-d" . term-send-eof))
+  :config
+  (setq term-buffer-maximum-size 0))
 
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
@@ -575,6 +583,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight regular :height 98 :width normal)))))
+ '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 98 :width normal)))))
 
 (provide 'init)
