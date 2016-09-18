@@ -48,7 +48,6 @@
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
-(set-frame-parameter nil 'fullscreen 'fullboth)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -288,14 +287,13 @@
 	      ("N" . evil-search-previous))
   :init
   (setq dired-dwim-target t
-        dired-recursive-copies 'top
-        dired-recursive-deletes 'top
-        dired-listing-switches "-alh")
+        dired-recursive-copies 'always
+        dired-recursive-deletes 'always
+        dired-listing-switches "-alh"
+	delete-by-moving-to-trash t)
   :config
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
-  ;; (setq dired-recursive-copies 'always
-  ;; 	delete-by-moving-to-trash t))
 
 (use-package term
   :bind (:map term-mode-map
@@ -451,18 +449,17 @@
   (use-package racer
     :ensure t
     :diminish racer-mode
-    :init
-    (add-hook 'rust-mode-hook #'racer-mode)
     :config
     (setq racer-cmd (expand-file-name "~/.cargo/bin/racer"))
     (setq racer-rust-src-path (expand-file-name "~/.rust/src"))
     (setq racer-cargo-home (expand-file-name "~/.cargo"))
-    (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition))
-
+    (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
+    (add-hook 'rust-mode-hook #'racer-mode))
   (use-package flycheck-rust
     :ensure t
     :config
     (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
+
 
 
 ;; Web development
