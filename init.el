@@ -5,7 +5,6 @@
 
 ;; Better garbage collection settings
 (setq gc-cons-threshold (* 20 1024 1024))
-(add-hook 'focus-out-hook #'garbage-collect)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -144,6 +143,7 @@
     "P" 'proced
     "pp" 'projectile-switch-project
     "pf" 'projectile-find-file
+    "pd" 'projectile-find-dir
     "pk" 'projectile-kill-buffers
     "pt" 'projectile-find-other-file
     "pg" 'counsel-git-grep
@@ -163,6 +163,7 @@
   :bind (:map evil-normal-state-map
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line)
+	      ("TAB" . indent-for-tab-command)
 	      ("C-h" . evil-window-left)
 	      ("C-j" . evil-window-down)
 	      ("C-k" . evil-window-up)
@@ -175,6 +176,8 @@
 	      ("U" . redo)
 	      ("Q" . "@q")
 	      ("Y" . "y$")
+	      :map evil-visual-state-map
+	      ("TAB" . indent-for-tab-command)
 	      :map package-menu-mode-map
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line))
@@ -477,9 +480,10 @@
   :ensure t
   :diminish tern-mode
   :defer t
-  :init (add-hook 'js2-mode-hook #'tern-mode)
+  :init (add-hook 'js2-mode-hook (lambda ()
+				   (add-to-list 'company-backends 'company-tern)
+				   (tern-mode)))
   :config
-  (add-to-list 'company-backends 'company-tern)
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
   (evil-leader/set-key-for-mode 'js2-mode
