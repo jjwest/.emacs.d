@@ -59,10 +59,10 @@
 
 ;; Noice utility modes
 (blink-cursor-mode 0)
-(electric-pair-mode 1)
-(show-paren-mode 1)
+(electric-pair-mode)
+(show-paren-mode)
 (global-auto-revert-mode t)
-(winner-mode 1)
+(winner-mode)
 (save-place-mode)
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -141,9 +141,9 @@
     "k" 'kill-this-buffer
     "c" 'counsel-imenu
     "P" 'proced
-    "pp" 'projectile-switch-project
-    "pf" 'projectile-find-file
-    "pd" 'projectile-find-dir
+    "pp" 'counsel-projectile-switch-project
+    "pf" 'counsel-projectile-find-file
+    "pd" 'counsel-projectile-find-dir
     "pk" 'projectile-kill-buffers
     "pt" 'projectile-find-other-file
     "pg" 'counsel-git-grep
@@ -182,18 +182,18 @@
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line))
   :config
-  (use-package evil-surround
-    :ensure t
-    :config (global-evil-surround-mode 1))
-
-  (use-package evil-visualstar
-    :ensure t
-    :config (global-evil-visualstar-mode))
-
   (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-mode 1))
+  (evil-mode 1)
+
+  (use-package evil-surround
+    :ensure t
+    :config (global-evil-surround-mode))
+
+  (use-package evil-visualstar
+    :ensure t
+    :config (global-evil-visualstar-mode)))
 
 (use-package yasnippet
   :ensure t
@@ -224,7 +224,7 @@
 	company-tooltip-align-annotations t))
 
 
-(use-package projectile
+(use-package counsel-projectile
   :ensure t
   :defer t
   :diminish projectile-mode
@@ -288,13 +288,12 @@
 	      ("?" . evil-search-backward)
 	      ("n" . evil-search-next)
 	      ("N" . evil-search-previous))
-  :init
+  :config
   (setq dired-dwim-target t
         dired-recursive-copies 'always
         dired-recursive-deletes 'always
         dired-listing-switches "-alh"
 	delete-by-moving-to-trash t)
-  :config
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
@@ -307,7 +306,9 @@
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
-	      ("k" . ibuffer-backward-line)))
+	      ("k" . ibuffer-backward-line))
+  :config
+  (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
 
 (use-package proced
   :bind (:map proced-mode-map
@@ -327,7 +328,6 @@
   :ensure t
   :ensure smex
   :ensure counsel
-  :functions minibuffer-keyboard-quit
   :diminish ivy-mode
   :bind (("M-x" . counsel-M-x)
 	 :map ivy-mode-map
@@ -464,7 +464,6 @@
     (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
 
 
-
 ;; Web development
 (use-package emmet-mode
   :ensure t
@@ -480,25 +479,20 @@
   :ensure t
   :diminish tern-mode
   :defer t
-  :init (add-hook 'js2-mode-hook (lambda ()
-				   (add-to-list 'company-backends 'company-tern)
-				   (tern-mode)))
+  :init
+  (add-hook 'js2-mode-hook (lambda ()
+			     (add-to-list 'company-backends 'company-tern)
+			     (tern-mode)))
   :config
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
   (evil-leader/set-key-for-mode 'js2-mode
     "R" 'tern-rename-variable))
 
-(use-package ibuffer
-  :ensure t
-  :config
-  (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
-
-
 (use-package org
   :ensure t
   :defer t
-  :init
+  :preface
   (defun my/org-latex-export ()
     (interactive)
     (save-buffer)
@@ -511,6 +505,7 @@
 	    (revert-buffer t t)
 	    (switch-to-buffer org-buffer))
 	(find-file-other-window (replace-regexp-in-string "\.org" ".pdf" (buffer-file-name))))))
+  :init
   (add-hook 'org-mode-hook #'org-indent-mode)
   :config
   (use-package org-bullets
