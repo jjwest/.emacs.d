@@ -299,9 +299,7 @@
 
 (use-package term
   :bind (:map term-mode-map
-	      ("C-x C-d" . term-send-eof))
-  :config
-  (setq term-buffer-maximum-size 0))
+	      ("C-x C-d" . term-send-eof)))
 
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
@@ -473,7 +471,9 @@
 
 (use-package js2-mode
   :ensure t
-  :mode ("\\.js\\'" . js2-mode))
+  :mode ("\\.js\\'" . js2-mode)
+  :config
+  (add-hook 'js2-mode-hook (lambda () (flycheck-mode -1))))
 
 (use-package company-tern
   :ensure t
