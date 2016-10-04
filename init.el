@@ -294,6 +294,7 @@
         dired-recursive-deletes 'always
         dired-listing-switches "-alh"
 	delete-by-moving-to-trash t)
+  (dired-async-mode 1)
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
