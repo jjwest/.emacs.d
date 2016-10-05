@@ -36,6 +36,7 @@
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
       message-log-max 200
+      bidi-paragraph-direction 'left-to-right
       require-final-newline t
       auto-revert-check-vc-info t
       show-paren-delay 0
