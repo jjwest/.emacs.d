@@ -45,11 +45,13 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
+
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+(global-set-key (kbd "M-!") #'async-shell-command)
 
 
 ;; Strip UI
@@ -295,6 +297,7 @@
         dired-recursive-deletes 'always
         dired-listing-switches "-alh"
 	delete-by-moving-to-trash t)
+  (dired-async-mode 1)
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
