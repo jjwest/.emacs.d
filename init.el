@@ -24,7 +24,6 @@
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
       auto-save-default nil
-      make-backup-files nil
       custom-safe-themes t
       scroll-margin 5
       scroll-conservatively 9999
@@ -35,6 +34,7 @@
       indent-tabs-mode nil
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
+      backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
       message-log-max 200
       bidi-paragraph-direction 'left-to-right
       require-final-newline t
@@ -62,11 +62,11 @@
 
 ;; Noice utility modes
 (blink-cursor-mode 0)
-(electric-pair-mode)
-(show-paren-mode)
+(electric-pair-mode 1)
+(show-paren-mode 1)
 (global-auto-revert-mode t)
-(winner-mode)
-(save-place-mode)
+(winner-mode 1)
+(save-place-mode 1)
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
@@ -99,37 +99,41 @@
   (split-window-vertically)
   (windmove-down))
 
-(use-package zenburn-theme
+(use-package darkokai-theme
   :ensure t
   :config
-  (load-theme 'zenburn)
-  (custom-theme-set-faces
-    'zenburn
-    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  (setq darkokai-mode-line-padding 1)
+  (load-theme 'darkokai))
 
-(use-package powerline-evil
-  :ensure t
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'zenburn)
+;;   (custom-theme-set-faces
+;;     'zenburn
+;;     `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+
+(use-package airline-themes
+  :ensure powerline-evil
+  :load-path "~/.emacs.d/themes"
   :diminish powerline-minor-modes
+  :preface
+  (unless (file-exists-p "~/.emacs.d/themes/airline-themes.elc")
+    (byte-recompile-directory "~/.emacs.d/themes" 0))
   :config
-  (use-package airline-themes
-    :load-path "~/.emacs.d/themes"
-    :preface
-    (unless (file-exists-p "~/.emacs.d/themes/airline-themes.elc")
-	       (byte-recompile-directory "~/.emacs.d/themes" 0))
-    :config
-    (setq powerline-utf-8-separator-left        #xe0b0
-	  powerline-utf-8-separator-right       #xe0b2
-	  airline-utf-glyph-separator-left      #xe0b0
-	  airline-utf-glyph-separator-right     #xe0b2
-	  airline-utf-glyph-subseparator-left   #xe0b1
-	  airline-utf-glyph-subseparator-right  #xe0b3
-	  airline-utf-glyph-branch              #xe0a0
-	  airline-utf-glyph-readonly            #xe0a2
-	  airline-utf-glyph-linenumber          #xe0a1
-	  airline-helm-colors nil
-	  airline-display-directory nil
-	  airline-cursor-colors nil)
-    (load-theme 'airline-base16-gui-dark)))
+  (setq powerline-utf-8-separator-left        #xe0b0
+	powerline-utf-8-separator-right       #xe0b2
+	airline-utf-glyph-separator-left      #xe0b0
+	airline-utf-glyph-separator-right     #xe0b2
+	airline-utf-glyph-subseparator-left   #xe0b1
+	airline-utf-glyph-subseparator-right  #xe0b3
+	airline-utf-glyph-branch              #xe0a0
+	airline-utf-glyph-readonly            #xe0a2
+	airline-utf-glyph-linenumber          #xe0a1
+	airline-helm-colors nil
+	airline-display-directory nil
+	airline-cursor-colors nil)
+  (load-theme 'airline-base16-gui-dark))
 
 ;; Packages
 (use-package evil-leader
@@ -236,7 +240,7 @@
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
 				      ("cpp" "h")))
-  (projectile-global-mode))
+  (projectile-mode))
 
 
 (use-package flycheck
@@ -297,7 +301,6 @@
         dired-recursive-deletes 'always
         dired-listing-switches "-alh"
 	delete-by-moving-to-trash t)
-  (dired-async-mode 1)
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
@@ -309,8 +312,9 @@
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
 	      ("k" . ibuffer-backward-line))
-  :config
-  (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face)))
+  ;; :config
+  ;; (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face))
+  )
 
 (use-package proced
   :bind (:map proced-mode-map
@@ -549,6 +553,8 @@
 	 ("k" . pdf-view-previous-line-or-previous-page)
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
+
+(use-package tramp :defer t)
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
