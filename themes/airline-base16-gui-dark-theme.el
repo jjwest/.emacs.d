@@ -7,16 +7,16 @@
 url: https://github.com/mkaito/base16-emacs")
 
 (let ((normal-outer-foreground  (face-background 'highlight))          (normal-outer-background  (face-foreground 'link))
-      (normal-inner-foreground  (face-foreground 'font-lock-doc-face)) (normal-inner-background  "#35393B")
-      (normal-center-foreground (face-foreground 'font-lock-doc-face)) (normal-center-background "#35393B")
+      (normal-inner-foreground  (face-foreground 'font-lock-doc-face)) (normal-inner-background  (face-background 'region))
+      (normal-center-foreground (face-foreground 'font-lock-doc-face)) (normal-center-background (face-background 'region))
 
       (insert-outer-foreground  (face-background 'highlight))          (insert-outer-background  (face-foreground 'success))
-      (insert-inner-foreground  (face-foreground 'success))            (insert-inner-background  "#35393B")
-      (insert-center-foreground (face-foreground 'font-lock-doc-face)) (insert-center-background "#35393B")
+      (insert-inner-foreground  (face-foreground 'success))            (insert-inner-background  (face-background 'region))
+      (insert-center-foreground (face-foreground 'font-lock-doc-face)) (insert-center-background (face-background 'region))
 
       (visual-outer-foreground  (face-background 'highlight))          (visual-outer-background  (face-foreground 'warning))
-      (visual-inner-foreground  (face-foreground 'warning))            (visual-inner-background  "#35393B")
-      (visual-center-foreground (face-foreground 'font-lock-doc-face)) (visual-center-background "#35393B")
+      (visual-inner-foreground  (face-foreground 'warning))            (visual-inner-background (face-background 'region))
+      (visual-center-foreground (face-foreground 'font-lock-doc-face)) (visual-center-background (face-background 'region))
 
       (replace-outer-foreground (face-background 'highlight)) (replace-outer-background (face-foreground 'error))
       (emacs-outer-foreground   (face-background 'highlight)) (emacs-outer-background   (face-foreground 'link-visited))

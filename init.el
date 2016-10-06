@@ -99,19 +99,13 @@
   (split-window-vertically)
   (windmove-down))
 
-(use-package darkokai-theme
+(use-package zenburn-theme
   :ensure t
   :config
-  (setq darkokai-mode-line-padding 1)
-  (load-theme 'darkokai))
-
-;; (use-package zenburn-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'zenburn)
-;;   (custom-theme-set-faces
-;;     'zenburn
-;;     `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  (load-theme 'zenburn)
+  (custom-theme-set-faces
+    'zenburn
+    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
 
 (use-package airline-themes
   :ensure powerline-evil
