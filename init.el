@@ -45,7 +45,7 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
-
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
@@ -172,7 +172,8 @@
 	      ("M-k" . evil-scroll-up)
 	      ("M-j" . evil-scroll-down)
 	      ("C-a" . beginning-of-line)
-	      ("C-e" . end-of-line)
+	      ("C-q" . evil-scroll-line-up)
+	      ("C-e" . evil-scroll-line-down)
 	      ("S" . my/split-line)
 	      ("U" . redo)
 	      ("Q" . "@q")
@@ -290,17 +291,17 @@
 	      ("n" . evil-search-next)
 	      ("N" . evil-search-previous))
   :config
-  (setq dired-dwim-target t
-        dired-recursive-copies 'always
+  (setq dired-recursive-copies 'always
         dired-recursive-deletes 'always
-        dired-listing-switches "-alh"
 	delete-by-moving-to-trash t)
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package term
   :bind (:map term-mode-map
-	      ("C-x C-d" . term-send-eof)))
+	      ("C-c C-d" . term-send-eof)
+	      :map term-raw-map
+	      ("C-c C-d" . term-send-eof)))
 
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
@@ -350,11 +351,12 @@
   (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
 (use-package hl-line
-  :ensure t
   :commands hl-line-mode
   :init
   (add-hook 'prog-mode-hook #'hl-line-mode)
-  (add-hook 'html-mode-hook #'hl-line-mode))
+  (add-hook 'html-mode-hook #'hl-line-mode)
+  :config
+  (setq hl-line-sticky-flag nil))
 
 (use-package buffer-move
   :ensure t
