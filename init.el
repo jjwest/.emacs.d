@@ -45,13 +45,26 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "M-!") #'async-shell-command)
+
+;; Don't litter my init file
+(setq custom-file "~/.emacs.d/local/custom-set.el")
+(load custom-file 'noerror)
+
+;; Set font
+(when (member "Source Code Pro" (font-family-list))
+  (set-face-attribute 'default nil
+		      :family "Source Code Pro"
+		      :foundry 'ADBO
+		      :slant 'normal
+		      :weight 'normal
+		      :height 98
+		      :width 'normal))
 
 
 ;; Strip UI
@@ -111,7 +124,7 @@
   :ensure powerline-evil
   :load-path "~/.emacs.d/themes"
   :diminish powerline-minor-modes
-  :preface
+  :init
   (unless (file-exists-p "~/.emacs.d/themes/airline-themes.elc")
     (byte-recompile-directory "~/.emacs.d/themes" 0))
   :config
@@ -306,10 +319,7 @@
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
-	      ("k" . ibuffer-backward-line))
-  ;; :config
-  ;; (add-to-list 'ibuffer-fontification-alist '(5 buffer-file-name 'font-lock-keyword-face))
-  )
+	      ("k" . ibuffer-backward-line)))
 
 (use-package proced
   :bind (:map proced-mode-map
@@ -333,7 +343,6 @@
   :bind (("M-x" . counsel-M-x)
 	 :map ivy-mode-map
 	 ("<escape>" . minibuffer-keyboard-quit))
-  :demand
   :config
   (setq projectile-completion-system 'ivy
 	ivy-use-virtual-buffers t
@@ -578,13 +587,5 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
             (lambda (&rest args)
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
-
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 98 :width normal)))))
 
 (provide 'init)
