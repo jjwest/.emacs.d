@@ -56,14 +56,6 @@
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 ;; Set font
-;; (set-face-attribute 'default nil
-;; 		    :family "Roboto Mono"
-;; 		    :foundry "pyrs"
-;; 		    :slant 'normal
-;; 		    :weight 'normal
-;; 		    :height 98
-;; 		    :width 'normal)
-
 (when (member "Source Code Pro" (font-family-list))
   (set-face-attribute 'default nil
 		      :family "Source Code Pro"
@@ -117,6 +109,15 @@
   (interactive)
   (split-window-vertically)
   (windmove-down))
+
+(defun my/dont-kill-scratch ()
+  "When scratch buffer is killed, bury instead."
+  (if (not (equal (buffer-name) "*scratch*"))
+      t
+    (bury-buffer)
+    nil))
+
+(add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
 
 (use-package zenburn-theme
   :ensure t
@@ -204,9 +205,7 @@
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line))
   :config
-  (setq evil-insert-state-cursor '(box "#BFEBBF")
-	evil-normal-state-cursor '(box "#DCDCCC"))
-  (evil-set-initial-state 'dired-mode 'emacs)
+  (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1)
 
@@ -232,11 +231,14 @@
 (use-package company
   :ensure t
   :diminish company-mode
-  :commands (company-mode)
+  :preface
+  (defun my/company-abort-and-newline ()
+    (interactive)
+    (company-abort)
+    (newline-and-indent))
   :bind (("C-." . company-manual-begin)
 	 :map company-active-map
-	 ("<C-return>" . newline-and-indent)
-	 ("TAB" . nil)
+	 ("<C-return>" . my/company-abort-and-newline)
 	 ("<tab>" . nil))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
@@ -302,14 +304,7 @@
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
-	      ("j" . dired-next-line)
-	      ("k" . dired-previous-line)
-	      ("q" . kill-this-buffer)
-	      ("<backspace>" . my/dired-parent-dir)
-	      ("/" . evil-search-forward)
-	      ("?" . evil-search-backward)
-	      ("n" . evil-search-next)
-	      ("N" . evil-search-previous))
+	      ("<backspace>" . my/dired-parent-dir))
   :config
   (setq dired-recursive-copies 'always
         dired-recursive-deletes 'always
