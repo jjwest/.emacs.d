@@ -54,9 +54,16 @@
 
 ;; Don't litter my init file
 (setq custom-file "~/.emacs.d/local/custom-set.el")
-(load custom-file 'noerror)
 
 ;; Set font
+;; (set-face-attribute 'default nil
+;; 		    :family "Roboto Mono"
+;; 		    :foundry "pyrs"
+;; 		    :slant 'normal
+;; 		    :weight 'normal
+;; 		    :height 98
+;; 		    :width 'normal)
+
 (when (member "Source Code Pro" (font-family-list))
   (set-face-attribute 'default nil
 		      :family "Source Code Pro"
@@ -92,7 +99,6 @@
 
 
 ;; My own convenience functions
-
 (defun my/split-line ()
   "Split line at point."
   (interactive)
@@ -141,6 +147,7 @@
 	airline-display-directory nil
 	airline-cursor-colors nil)
   (load-theme 'airline-base16-gui-dark))
+
 
 ;; Packages
 (use-package evil-leader
@@ -221,14 +228,13 @@
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all))
 
-
 (use-package company
   :ensure t
   :diminish company-mode
   :commands (company-mode)
-  :bind (("C-RET" . company-manual-begin)
-	 ("<C-return>" . company-manual-begin)
+  :bind (("C-." . company-manual-begin)
 	 :map company-active-map
+	 ("<C-return>" . newline-and-indent)
 	 ("TAB" . nil)
 	 ("<tab>" . nil))
   :init
@@ -484,21 +490,29 @@
 
 (use-package js2-mode
   :ensure t
-  :mode ("\\.js\\'" . js2-mode)
+  :mode (("\\.js\\'" . js2-jsx-mode)
+	 ("\\.jsx\\'" . js2-jsx-mode))
   :config
-  (add-hook 'js2-mode-hook (lambda () (flycheck-mode -1))))
+  (add-hook 'js2-jsx-mode-hook (lambda () (flycheck-mode -1))))
 
 (use-package company-tern
   :ensure t
   :diminish tern-mode
   :defer t
+  :preface
+  (defun my/init-tern ()
+    (add-to-list 'company-backends 'company-tern)
+    (tern-mode))
   :init
-  (add-hook 'js2-mode-hook (lambda ()
-			     (add-to-list 'company-backends 'company-tern)
-			     (tern-mode)))
+  (add-hook 'js2-mode-hook #'my/init-tern)
+  (add-hook 'js2-jsx-mode-hook #'my/init-tern)
   :config
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
+  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") 'tern-find-definition)
+  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-,") 'tern-pop-find-definition)
+  (evil-leader/set-key-for-mode 'js2-jsx-mode
+    "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
     "R" 'tern-rename-variable))
 
