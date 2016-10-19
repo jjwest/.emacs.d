@@ -204,7 +204,8 @@
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line))
   :config
-  (setq evil-insert-state-cursor '(box))
+  (setq evil-insert-state-cursor '(box "#BFEBBF")
+	evil-normal-state-cursor '(box "#DCDCCC"))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1)
