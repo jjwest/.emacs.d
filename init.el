@@ -47,7 +47,8 @@
       locale-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
-	      fill-column 80)
+	      fill-column 80
+              truncate-lines t)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "M-!") #'async-shell-command)
@@ -118,6 +119,13 @@
     nil))
 
 (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
+
+(defun find-file-sudo ()
+  "Reopen the current file as root, preserving point position."
+  (interactive)
+  (let ((p (point)))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))
+    (goto-char p)))
 
 (use-package zenburn-theme
   :ensure t
@@ -206,7 +214,6 @@
 	      ("k" . evil-previous-visual-line))
   :config
   (setq evil-insert-state-cursor '(box))
-  (evil-set-initial-state 'magit-mode 'emacs)
   (evil-mode 1)
 
   (use-package evil-surround
@@ -224,6 +231,7 @@
   :init
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   (add-hook 'org-mode-hook #'yas-minor-mode)
+  (add-hook 'html-mode-hook #'yas-minor-mode)
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all))
@@ -304,7 +312,9 @@
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
-	      ("<backspace>" . my/dired-parent-dir))
+	      ("<backspace>" . my/dired-parent-dir)
+	      ("q" . nil)
+	      ("?" . evil-search-backward))
   :config
   (setq dired-recursive-copies 'always
         dired-recursive-deletes 'always
@@ -570,6 +580,12 @@
 	 ("M-k" . pdf-view-previous-page)))
 
 (use-package tramp :defer t)
+
+(use-package rainbow-mode
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'css-mode-hook #'rainbow-mode))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
