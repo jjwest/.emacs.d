@@ -47,8 +47,7 @@
       locale-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
-	      fill-column 80
-              truncate-lines t)
+	      fill-column 80)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "M-!") #'async-shell-command)
@@ -58,13 +57,22 @@
 
 ;; Set font
 (when (member "Source Code Pro" (font-family-list))
-  (set-face-attribute 'default nil
-		      :family "Source Code Pro"
-		      :foundry 'ADBO
-		      :slant 'normal
-		      :weight 'normal
-		      :height 98
-		      :width 'normal))
+  (if (equal (display-pixel-height) 1440)
+      (set-face-attribute 'default nil
+			  :family "Source Code Pro"
+			  :foundry 'ADBO
+			  :slant 'normal
+			  :weight 'normal
+			  :height 113
+			  :width 'normal)
+    (set-face-attribute 'default nil
+			:family "Source Code Pro"
+			:foundry 'ADBO
+			:slant 'normal
+			:weight 'normal
+			:height 98
+			:width 'normal) )
+  )
 
 
 ;; Strip UI
@@ -214,6 +222,7 @@
 	      ("k" . evil-previous-visual-line))
   :config
   (setq evil-insert-state-cursor '(box))
+  (evil-set-initial-state 'xwidget-webkit-mode 'emacs)
   (evil-mode 1)
 
   (use-package evil-surround
@@ -312,6 +321,7 @@
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
+	      ("W" . wdired-change-to-wdired-mode)
 	      ("<backspace>" . my/dired-parent-dir)
 	      ("q" . nil)
 	      ("?" . evil-search-backward))
@@ -587,6 +597,43 @@
   :init
   (add-hook 'css-mode-hook #'rainbow-mode))
 
+(use-package xwidget
+  :preface
+  (defun xwidget-browse-url-no-reuse (url &optional sessoin)
+    (interactive (progn
+		   (require 'browse-url)
+		   (browse-url-interactive-arg "xwidget-webkit URL: "
+					       )))
+    (xwidget-webkit-browse-url url t))
+  :config
+  (define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
+  (define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
+  (define-key xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
+  (define-key xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)
+  (define-key xwidget-webkit-mode-map (kbd "M-w") 'xwidget-webkit-copy-selection-as-kill)
+  (define-key xwidget-webkit-mode-map (kbd "C-c") 'xwidget-webkit-copy-selection-as-kill)
+
+  ;; adapt webkit according to window configuration chagne automatically
+  ;; without this hook, every time you change your window configuration,
+  ;; you must press 'a' to adapt webkit content to new window size
+  ;; (add-hook 'window-configuration-change-hook (lambda ()
+  ;;                (when (equal major-mode 'xwidget-webkit-mode)
+  ;;                  (xwidget-webkit-adjust-size-dispatch))))
+
+  ;; by default, xwidget reuses previous xwidget window,
+  ;; thus overriding your current website, unless a prefix argument
+  ;; is supplied
+  ;;
+  ;; This function always opens a new website in a new window
+
+
+  ;; make xwidget default browser
+  (setq browse-url-browser-function (lambda (url session)
+				      (other-window 1)
+				      (xwidget-browse-url-no-reuse url)))
+
+  )
+
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -613,5 +660,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
             (lambda (&rest args)
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
+
 
 (provide 'init)

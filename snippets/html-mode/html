@@ -1,6 +1,15 @@
-#contributor : Jimmy Wu <frozenthrone88@gmail.com>
-#name : <html>...</html>
+# -*- mode: snippet -*-
+# name: html
+# key: html
 # --
+<!DOCTYPE html>
 <html>
-  $0
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  </head>
+  <body>
+  </body>
 </html>
