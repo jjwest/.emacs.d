@@ -190,9 +190,9 @@
     "dw" 'delete-window
     "do" 'delete-other-windows
     "sf" 'save-buffer
-    "sa" '(lambda () (interactive) (save-some-buffers t))
+    "sa" (lambda () (interactive) (save-some-buffers t))
     "g" 'magit-status
-    "x" '(lambda () (interactive) (ansi-term "/bin/zsh"))
+    "x" (lambda () (interactive) (ansi-term "/bin/zsh"))
     "W" 'winner-undo)
   (global-evil-leader-mode))
 
@@ -262,7 +262,8 @@
   :config
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
-	company-tooltip-align-annotations t))
+	company-tooltip-align-annotations t
+	company-require-match nil))
 
 
 (use-package counsel-projectile
@@ -329,7 +330,7 @@
   (setq dired-recursive-copies 'always
         dired-recursive-deletes 'always
 	delete-by-moving-to-trash t)
-  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package term
@@ -409,7 +410,7 @@
 ;; C++ SETTINGS
 (use-package c++-mode
   :mode (("\\.h\\'" . c++-mode))
-  :init
+  :config
   (setq c-basic-offset 4
 	gdb-many-windows t
 	c-default-style "bsd"))
@@ -419,18 +420,17 @@
 (use-package rtags
   :ensure t
   :defer t
-  :init
+  :preface
   (defun my/rtags-add-project ()
-    "Add project to the RTags daemon."
+    "Add project to RTags daemon."
     (interactive)
     (shell-command (concat "rc -J " (projectile-project-root))))
+  :init
   (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
   (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
   :config
-  (evil-leader/set-key-for-mode 'c-mode
-    "R" 'rtags-rename-symbol)
-  (evil-leader/set-key-for-mode 'c++-mode
-    "R" 'rtags-rename-symbol)
+  (evil-leader/set-key-for-mode 'c-mode "R" 'rtags-rename-symbol)
+  (evil-leader/set-key-for-mode 'c++-mode "R" 'rtags-rename-symbol)
   (evil-define-key 'normal rtags-mode-map (kbd "<return>") #'rtags-select-other-window)
   (evil-define-key 'normal rtags-mode-map (kbd "q") #'kill-this-buffer)
   (evil-define-key 'normal c-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
@@ -502,7 +502,9 @@
   :ensure t
   :defer t
   :init
-  (add-hook 'html-mode-hook #'emmet-mode))
+  (add-hook 'html-mode-hook #'emmet-mode)
+  (add-hook 'js2-mode-hook #'emmet-mode)
+  (add-hook 'js2-jsx-mode-hook #'emmet-mode))
 
 (use-package js2-mode
   :ensure t
@@ -598,13 +600,7 @@
   (add-hook 'css-mode-hook #'rainbow-mode))
 
 (use-package xwidget
-  :preface
-  (defun xwidget-browse-url-no-reuse (url &optional sessoin)
-    (interactive (progn
-		   (require 'browse-url)
-		   (browse-url-interactive-arg "xwidget-webkit URL: "
-					       )))
-    (xwidget-webkit-browse-url url t))
+  :defer t
   :config
   (define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
   (define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
@@ -613,26 +609,14 @@
   (define-key xwidget-webkit-mode-map (kbd "M-w") 'xwidget-webkit-copy-selection-as-kill)
   (define-key xwidget-webkit-mode-map (kbd "C-c") 'xwidget-webkit-copy-selection-as-kill)
 
-  ;; adapt webkit according to window configuration chagne automatically
-  ;; without this hook, every time you change your window configuration,
-  ;; you must press 'a' to adapt webkit content to new window size
-  ;; (add-hook 'window-configuration-change-hook (lambda ()
-  ;;                (when (equal major-mode 'xwidget-webkit-mode)
-  ;;                  (xwidget-webkit-adjust-size-dispatch))))
-
-  ;; by default, xwidget reuses previous xwidget window,
-  ;; thus overriding your current website, unless a prefix argument
-  ;; is supplied
-  ;;
-  ;; This function always opens a new website in a new window
-
+  (add-hook 'window-configuration-change-hook (lambda ()
+                 (when (equal major-mode 'xwidget-webkit-mode)
+                   (xwidget-webkit-adjust-size-dispatch))))
 
   ;; make xwidget default browser
   (setq browse-url-browser-function (lambda (url session)
 				      (other-window 1)
-				      (xwidget-browse-url-no-reuse url)))
-
-  )
+				      (xwidget-browse-url-no-reuse url))))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
