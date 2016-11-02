@@ -71,8 +71,7 @@
 			:slant 'normal
 			:weight 'normal
 			:height 98
-			:width 'normal) )
-  )
+			:width 'normal) ))
 
 
 ;; Strip UI
@@ -292,14 +291,26 @@
     (setq flycheck-pos-tip-timeout 30)
     (flycheck-pos-tip-mode)))
 
-(use-package evil-anzu
+(use-package iedit
   :ensure t
-  :diminish anzu-mode
+  :preface
+  (defun iedit-dwim (arg)
+    "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
+    (interactive "P")
+    (if arg
+	(iedit-mode)
+      (save-excursion
+	(save-restriction
+	  (widen)
+	  ;; this function determines the scope of `iedit-start'.
+	  (if iedit-mode
+	      (iedit-done)
+	    ;; `current-word' can of course be replaced by other
+	    ;; functions.
+	    (narrow-to-defun)
+	    (iedit-start (current-word) (point-min) (point-max)))))))
   :config
-  (evil-leader/set-key
-    "r" 'anzu-query-replace-at-cursor
-    "R" 'anzu-query-replace)
-  (global-anzu-mode))
+  (evil-leader/set-key "r" 'iedit-dwim))
 
 (use-package eldoc
   :defer t
@@ -524,7 +535,6 @@
   :init
   (add-hook 'js2-mode-hook #'my/init-tern)
   (add-hook 'js2-jsx-mode-hook #'my/init-tern)
-  :config
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
   (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") 'tern-find-definition)
@@ -533,6 +543,21 @@
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
     "R" 'tern-rename-variable))
+
+(use-package omnisharp
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'csharp-mode-hook #'omnisharp-mode)
+  (evil-define-key 'normal csharp-mode-map (kbd "M-.") 'omnisharp-go-to-definition)
+  (evil-define-key 'normal csharp-mode-map (kbd "M-,") 'omnisharp-find-usages)
+  (evil-leader/set-key-for-mode 'csharp-mode
+    "R" 'omnisharp-rename)
+  :config
+  ;; omnisharp-server-executable-path "/usr/bin/OmniSharp.exe"
+  (setq omnisharp-server-executable-path "/opt/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe"
+	omnisharp-curl-executable-path "/usr/bin/curl")
+  (add-to-list 'company-backends 'company-omnisharp))
 
 (use-package org
   :ensure t
