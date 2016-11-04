@@ -308,7 +308,7 @@
 	    ;; `current-word' can of course be replaced by other
 	    ;; functions.
 	    (narrow-to-defun)
-	    (iedit-start (current-word) (point-min) (point-max)))))))
+	    (iedit-start (iedit-regexp-quote (current-word)) (point-min) (point-max)))))))
   :config
   (evil-leader/set-key "r" 'iedit-dwim))
 
