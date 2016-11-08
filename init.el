@@ -20,7 +20,6 @@
   :ensure t
   :config (benchmark-init/activate))
 
-
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
       auto-save-default nil
@@ -40,6 +39,7 @@
       require-final-newline t
       auto-revert-check-vc-info t
       show-paren-delay 0
+      save-interprogram-paste-before-kill t
       select-enable-clipboard t
       display-time-24hr-format t
       display-time-day-and-date t
@@ -335,7 +335,6 @@
 	      ("a" . dired-find-file)
 	      ("W" . wdired-change-to-wdired-mode)
 	      ("<backspace>" . my/dired-parent-dir)
-	      ("q" . nil)
 	      ("?" . evil-search-backward))
   :config
   (setq dired-recursive-copies 'always
@@ -421,7 +420,7 @@
 ;; C++ SETTINGS
 (use-package c++-mode
   :mode (("\\.h\\'" . c++-mode))
-  :config
+  :init
   (setq c-basic-offset 4
 	gdb-many-windows t
 	c-default-style "bsd"))
@@ -528,13 +527,9 @@
   :ensure t
   :diminish tern-mode
   :defer t
-  :preface
-  (defun my/init-tern ()
-    (add-to-list 'company-backends 'company-tern)
-    (tern-mode))
   :init
-  (add-hook 'js2-mode-hook #'my/init-tern)
-  (add-hook 'js2-jsx-mode-hook #'my/init-tern)
+  (add-hook 'js2-mode-hook #'tern-mode)
+  (add-hook 'js2-jsx-mode-hook #'tern-mode)
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
   (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") 'tern-find-definition)
@@ -542,7 +537,10 @@
   (evil-leader/set-key-for-mode 'js2-jsx-mode
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
-    "R" 'tern-rename-variable))
+    "R" 'tern-rename-variable)
+  :config
+  (add-to-list 'company-backends 'company-tern))
+
 
 (use-package omnisharp
   :ensure t
