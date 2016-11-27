@@ -173,6 +173,7 @@
   (evil-leader/set-leader ",")
   (evil-leader/set-key
     "f" 'counsel-find-file
+    "F" 'counsel-recentf
     "b" 'ivy-switch-buffer
     "B" 'ibuffer
     "k" 'kill-this-buffer
@@ -191,7 +192,7 @@
     "sf" 'save-buffer
     "sa" (lambda () (interactive) (save-some-buffers t))
     "g" 'magit-status
-    "x" (lambda () (interactive) (ansi-term "/bin/zsh"))
+    "x" 'multi-term
     "W" 'winner-undo)
   (global-evil-leader-mode))
 
@@ -291,6 +292,19 @@
     (setq flycheck-pos-tip-timeout 30)
     (flycheck-pos-tip-mode)))
 
+(use-package multi-term
+  :ensure t
+  :bind (:map term-mode-map
+	      ("C-c C-d" . term-send-eof)
+	      :map term-raw-map
+	      ("C-c C-d" . term-send-eof))
+  :init
+  (evil-define-key 'normal term-raw-map (kbd "C-n") #'multi-term-next)
+  (evil-define-key 'normal term-raw-map (kbd "C-p") #'multi-term-prev)
+  :config
+  (setq multi-term-program "/bin/zsh"))
+
+
 (use-package iedit
   :ensure t
   :preface
@@ -343,16 +357,11 @@
   (add-hook 'dired-mode-hook #'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
-(use-package term
-  :bind (:map term-mode-map
-	      ("C-c C-d" . term-send-eof)
-	      :map term-raw-map
-	      ("C-c C-d" . term-send-eof)))
-
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
-	      ("k" . ibuffer-backward-line)))
+	      ("k" . ibuffer-backward-line)
+	      ("q" . kill-this-buffer)))
 
 (use-package proced
   :bind (:map proced-mode-map
@@ -378,7 +387,6 @@
 	 ("<escape>" . minibuffer-keyboard-quit))
   :config
   (setq projectile-completion-system 'ivy
-	ivy-use-virtual-buffers t
 	ivy-height 15
 	ivy-count-format "(%d/%d) "
 	ivy-display-style 'fancy)
@@ -490,22 +498,24 @@
 ;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
-  :mode ("\\.rs\\'" . rust-mode)
-  :config
-  (use-package racer
+  :mode ("\\.rs\\'" . rust-mode))
+
+(use-package racer
     :ensure t
     :diminish racer-mode
+    :after rust-mode
     :config
     (setq racer-cmd (expand-file-name "~/.cargo/bin/racer"))
     (setq racer-rust-src-path (expand-file-name "~/.rust/src"))
     (setq racer-cargo-home (expand-file-name "~/.cargo"))
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
-  (use-package flycheck-rust
-    :ensure t
-    :config
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup)))
 
+(use-package flycheck-rust
+    :ensure t
+    :after rust-mode
+    :config
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
 ;; Web development
 (use-package emmet-mode
