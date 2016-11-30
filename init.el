@@ -285,12 +285,14 @@
   :init (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
   (setq flycheck-c/c++-gcc-executable "gcc-5")
-  (setq flycheck-gcc-language-standard "c++14")
-  (use-package flycheck-pos-tip
-    :ensure t
-    :config
-    (setq flycheck-pos-tip-timeout 30)
-    (flycheck-pos-tip-mode)))
+  (setq flycheck-gcc-language-standard "c++14"))
+
+(use-package flycheck-pos-tip
+  :ensure t
+  :after flycheck
+  :config
+  (setq flycheck-pos-tip-timeout 30)
+  (flycheck-pos-tip-mode))
 
 (use-package multi-term
   :ensure t
@@ -460,32 +462,40 @@
   :ensure t
   :defer t
   :diminish irony-mode
-  :init
+  :preface
   (defun my/irony-mode-hook ()
     (define-key irony-mode-map [remap completion-at-point]
       'irony-completion-at-point-async)
     (define-key irony-mode-map [remap complete-symbol]
       'irony-completion-at-point-async))
-
+  :init
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'my/irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   :config
-  (setq irony-additional-clang-options '("-std=c++14"))
-  (use-package company-irony
-    :ensure t
-    :config (add-to-list 'company-backends '(company-irony)))
-  (use-package flycheck-irony
-    :ensure t
-    :config (flycheck-irony-setup))
-  (use-package company-irony-c-headers
-    :ensure t
-    :config (add-to-list 'company-backends '(company-irony-c-headers)))
-  (use-package irony-eldoc
-    :ensure t
-    :config (add-hook 'irony-mode-hook #'irony-eldoc)))
+  (setq irony-additional-clang-options '("-std=c++14")))
+
+(use-package company-irony
+  :ensure t
+  :after irony
+  :config (add-to-list 'company-backends '(company-irony)))
+
+(use-package flycheck-irony
+  :ensure t
+  :after irony
+  :config (flycheck-irony-setup))
+
+(use-package company-irony-c-headers
+  :ensure t
+  :after irony
+  :config (add-to-list 'company-backends '(company-irony-c-headers)))
+
+(use-package irony-eldoc
+  :ensure t
+  :after irony
+  :config (add-hook 'irony-mode-hook #'irony-eldoc))
 
 (use-package company-jedi
   :ensure t
@@ -586,13 +596,15 @@
   :init
   (add-hook 'org-mode-hook #'org-indent-mode)
   :config
-  (use-package org-bullets
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook #'org-bullets-mode))
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
   (evil-define-key 'normal org-mode-map (kbd "M-l") 'my/org-latex-export))
+
+(use-package org-bullets
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 (use-package ox-latex
   :defer t
