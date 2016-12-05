@@ -644,25 +644,6 @@
   :init
   (add-hook 'css-mode-hook #'rainbow-mode))
 
-(use-package xwidget
-  :defer t
-  :config
-  (define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
-  (define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
-  (define-key xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
-  (define-key xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)
-  (define-key xwidget-webkit-mode-map (kbd "M-w") 'xwidget-webkit-copy-selection-as-kill)
-  (define-key xwidget-webkit-mode-map (kbd "C-c") 'xwidget-webkit-copy-selection-as-kill)
-
-  (add-hook 'window-configuration-change-hook (lambda ()
-                 (when (equal major-mode 'xwidget-webkit-mode)
-                   (xwidget-webkit-adjust-size-dispatch))))
-
-  ;; make xwidget default browser
-  (setq browse-url-browser-function (lambda (url session)
-				      (other-window 1)
-				      (xwidget-browse-url-no-reuse url))))
-
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
