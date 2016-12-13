@@ -358,7 +358,8 @@
 	      ("<backspace>" . my/dired-parent-dir)
 	      ("?" . evil-search-backward))
   :config
-  (setq dired-recursive-copies 'always
+  (setq dired-dwim-target t
+	dired-recursive-copies 'always
         dired-recursive-deletes 'always
 	delete-by-moving-to-trash t)
   (add-hook 'dired-mode-hook #'dired-hide-details-mode)
@@ -646,7 +647,10 @@
 	 ("M-j" . pdf-view-next-page)
 	 ("M-k" . pdf-view-previous-page)))
 
-(use-package tramp :defer t)
+(use-package tramp
+  :defer t
+  :config
+  (setq tramp-verbose 2))
 
 (use-package rainbow-mode
   :ensure t
