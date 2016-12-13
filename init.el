@@ -50,7 +50,9 @@
 	      fill-column 80)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+
 (global-set-key (kbd "M-!") #'async-shell-command)
+(global-set-key (kbd "M-%") #'shell-command)
 
 ;; Don't litter my init file
 (setq custom-file "~/.emacs.d/local/custom-set.el")
@@ -303,6 +305,8 @@
   :init
   (evil-define-key 'normal term-raw-map (kbd "C-n") #'multi-term-next)
   (evil-define-key 'normal term-raw-map (kbd "C-p") #'multi-term-prev)
+  (evil-define-key 'normal term-raw-map (kbd "C-d") #'term-send-eof)
+  (evil-define-key 'insert term-raw-map (kbd "C-d") #'term-send-eof)
   :config
   (setq multi-term-program "/bin/zsh"))
 
@@ -349,6 +353,7 @@
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
+	      ("q" . kill-this-buffer)
 	      ("W" . wdired-change-to-wdired-mode)
 	      ("<backspace>" . my/dired-parent-dir)
 	      ("?" . evil-search-backward))
@@ -421,6 +426,12 @@
 	      ("C-M-S-j" . shrink-window)
 	      ("C-M-S-k" . enlarge-window)
 	      ("C-M-S-l" . enlarge-window-horizontally)))
+
+(use-package transpose-frame
+  :ensure t
+  :defer t
+  :init
+  (evil-leader/set-key "T" 'transpose-frame))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -572,7 +583,6 @@
   (evil-leader/set-key-for-mode 'csharp-mode
     "R" 'omnisharp-rename)
   :config
-  ;; omnisharp-server-executable-path "/usr/bin/OmniSharp.exe"
   (setq omnisharp-server-executable-path "/opt/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe"
 	omnisharp-curl-executable-path "/usr/bin/curl")
   (add-to-list 'company-backends 'company-omnisharp))
