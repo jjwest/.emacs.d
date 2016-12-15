@@ -332,6 +332,12 @@
   :config
   (evil-leader/set-key "r" 'iedit-dwim))
 
+(use-package wgrep
+  :ensure t
+  :defer t
+  :init
+  (evil-leader/set-key-for-mode 'grep-mode "W" 'wgrep-change-to-wgrep-mode))
+
 (use-package eldoc
   :defer t
   :diminish eldoc-mode
