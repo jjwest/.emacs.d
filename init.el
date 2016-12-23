@@ -360,6 +360,8 @@
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
 	      ("q" . kill-this-buffer)
+	      ("n" . evil-search-next)
+	      ("N" . evil-search-previous)
 	      ("W" . wdired-change-to-wdired-mode)
 	      ("<backspace>" . my/dired-parent-dir)
 	      ("?" . evil-search-backward))
@@ -533,8 +535,7 @@
     :diminish racer-mode
     :after rust-mode
     :config
-    (setq racer-cmd (expand-file-name "~/.cargo/bin/racer"))
-    (setq racer-rust-src-path (expand-file-name "~/.rust/src"))
+    (setq racer-rust-src-path (expand-file-name "~/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"))
     (setq racer-cargo-home (expand-file-name "~/.cargo"))
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
@@ -567,7 +568,7 @@
   :defer t
   :init
   (add-hook 'js2-mode-hook #'tern-mode)
-  (add-hook 'js2-jsx-mode-hook #'tern-mode)
+  (add-hook 'js2-mode-hook (lambda () (interactive) (add-to-list 'company-backends 'company-tern)))
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
   (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") 'tern-find-definition)
@@ -575,9 +576,7 @@
   (evil-leader/set-key-for-mode 'js2-jsx-mode
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
-    "R" 'tern-rename-variable)
-  :config
-  (add-to-list 'company-backends 'company-tern))
+    "R" 'tern-rename-variable))
 
 
 (use-package omnisharp
