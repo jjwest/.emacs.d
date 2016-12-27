@@ -560,8 +560,9 @@
   :config
   (add-hook 'js2-jsx-mode-hook (lambda () (flycheck-mode -1))))
 
-(use-package company-tern
+(use-package tern
   :ensure t
+  :ensure company-tern
   :diminish tern-mode
   :defer t
   :init
@@ -574,9 +575,7 @@
   (evil-leader/set-key-for-mode 'js2-jsx-mode
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
-    "R" 'tern-rename-variable))
-
-(use-package tern
+    "R" 'tern-rename-variable)
   :config
   (setq tern-command (append tern-command '("--no-port-file"))))
 
