@@ -535,8 +535,6 @@
     :diminish racer-mode
     :after rust-mode
     :config
-    (setq racer-rust-src-path (expand-file-name "~/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"))
-    (setq racer-cargo-home (expand-file-name "~/.cargo"))
     (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
 
@@ -577,6 +575,10 @@
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
     "R" 'tern-rename-variable))
+
+(use-package tern
+  :config
+  (setq tern-command (append tern-command '("--no-port-file"))))
 
 
 (use-package omnisharp
