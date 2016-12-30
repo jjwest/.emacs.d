@@ -45,6 +45,7 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
+
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
@@ -136,6 +137,10 @@
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))
     (goto-char p)))
 
+(defun my/save-all-buffers ()
+  (interactive)
+  (save-some-buffers t))
+
 (use-package zenburn-theme
   :ensure t
   :config
@@ -166,7 +171,6 @@
 	airline-cursor-colors nil)
   (load-theme 'airline-base16-gui-dark))
 
-
 ;; Packages
 (use-package evil-leader
   :ensure t
@@ -192,7 +196,7 @@
     "dw" 'delete-window
     "do" 'delete-other-windows
     "sf" 'save-buffer
-    "sa" (lambda () (interactive) (save-some-buffers t))
+    "sa" 'my/save-all-buffers
     "g" 'magit-status
     "x" 'multi-term
     "W" 'winner-undo)
@@ -527,7 +531,9 @@
 ;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
-  :mode ("\\.rs\\'" . rust-mode))
+  :mode ("\\.rs\\'" . rust-mode)
+  :config
+  (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
 (use-package racer
     :ensure t
