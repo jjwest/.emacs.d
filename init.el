@@ -468,7 +468,6 @@
   :init
   (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
   (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
-  :config
   (evil-leader/set-key-for-mode 'c-mode "R" 'rtags-rename-symbol)
   (evil-leader/set-key-for-mode 'c++-mode "R" 'rtags-rename-symbol)
   (evil-define-key 'normal rtags-mode-map (kbd "<return>") #'rtags-select-other-window)
