@@ -50,6 +50,7 @@
       delete-old-versions t
       kept-new-versions 5
       kept-old-versions 0
+      vc-make-backup-files t
       version-control t)
 
 (prefer-coding-system 'utf-8)
