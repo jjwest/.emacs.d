@@ -22,7 +22,6 @@
 
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
-      auto-save-default nil
       custom-safe-themes t
       scroll-margin 5
       scroll-conservatively 9999
@@ -33,7 +32,6 @@
       indent-tabs-mode nil
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
-      backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
       message-log-max 200
       bidi-paragraph-direction 'left-to-right
       require-final-newline t
@@ -45,6 +43,14 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
+
+;; I like my backups, but keep them hidden
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 5
+      kept-old-versions 0
+      version-control t)
 
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
@@ -141,6 +147,9 @@
   (interactive)
   (save-some-buffers t))
 
+
+
+
 (use-package zenburn-theme
   :ensure t
   :config
@@ -227,6 +236,8 @@
 	      ("j" . evil-next-visual-line)
 	      ("k" . evil-previous-visual-line))
   :config
+  (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-.") #'xref-find-definitions)
+  (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-,") #'xref-find-references)
   (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'xwidget-webkit-mode 'emacs)
   (evil-mode 1)
@@ -238,6 +249,7 @@
   (use-package evil-visualstar
     :ensure t
     :config (global-evil-visualstar-mode)))
+
 
 (use-package yasnippet
   :ensure t
@@ -290,6 +302,7 @@
   :diminish flycheck-mode
   :init (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
+  (evil-leader/set-key "e" 'flycheck-list-errors)
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq flycheck-gcc-language-standard "c++14"))
 
@@ -560,9 +573,10 @@
 
 (use-package js2-mode
   :ensure t
-  :mode (("\\.js\\'" . js2-jsx-mode)
+  :mode (("\\.js\\'" . js2-mode)
 	 ("\\.jsx\\'" . js2-jsx-mode))
   :config
+  (setq js2-strict-missing-semi-warning nil)
   (add-hook 'js2-jsx-mode-hook (lambda () (flycheck-mode -1))))
 
 (use-package tern
@@ -572,7 +586,9 @@
   :defer t
   :init
   (add-hook 'js2-mode-hook #'tern-mode)
-  (add-hook 'js2-mode-hook (lambda () (interactive) (add-to-list 'company-backends 'company-tern)))
+  (add-hook 'js2-mode-hook (lambda ()
+			     (interactive)
+			     (add-to-list 'company-backends 'company-tern)))
   (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
   (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") 'tern-find-definition)
@@ -583,7 +599,6 @@
     "R" 'tern-rename-variable)
   :config
   (setq tern-command (append tern-command '("--no-port-file"))))
-
 
 (use-package omnisharp
   :ensure t
