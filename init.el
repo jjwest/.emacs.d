@@ -45,6 +45,9 @@
       locale-coding-system 'utf-8)
 
 ;; I like my backups, but keep them hidden
+(unless (file-exists-p "~/.emacs.d/backups")
+  (mkdir "~/.emacs.d/backups"))
+
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
       backup-by-copying t
       delete-old-versions t
@@ -148,38 +151,23 @@
   (interactive)
   (save-some-buffers t))
 
-
-
-
-(use-package zenburn-theme
+(use-package doom-themes
   :ensure t
   :config
-  (load-theme 'zenburn)
-  (custom-theme-set-faces
-    'zenburn
-    `(fringe ((t (:foreground  "#3F3F3F" :background "#3F3F3F"))))))
+  (add-hook 'find-file-hook 'doom-buffer-mode)
+  (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
+  (with-eval-after-load 'multi-term
+    (set-face-attribute 'term-color-blue nil :foreground "#51afef")
+    (set-face-attribute 'term-color-green nil :foreground "#98be65")
+    (set-face-attribute 'term-color-red nil :foreground "#ff6c6b")
+    (set-face-attribute 'term-color-magenta nil :foreground "#c678dd")
+    (set-face-attribute 'term-color-cyan nil :foreground "#46D9FF")
+    (set-face-attribute 'term-color-yellow nil :foreground "#ECBE7B"))
+  (load-theme 'doom-one))
 
-(use-package airline-themes
-  :ensure powerline-evil
-  :load-path "~/.emacs.d/themes"
-  :diminish powerline-minor-modes
-  :init
-  (unless (file-exists-p "~/.emacs.d/themes/airline-themes.elc")
-    (byte-recompile-directory "~/.emacs.d/themes" 0))
-  :config
-  (setq powerline-utf-8-separator-left        #xe0b0
-	powerline-utf-8-separator-right       #xe0b2
-	airline-utf-glyph-separator-left      #xe0b0
-	airline-utf-glyph-separator-right     #xe0b2
-	airline-utf-glyph-subseparator-left   #xe0b1
-	airline-utf-glyph-subseparator-right  #xe0b3
-	airline-utf-glyph-branch              #xe0a0
-	airline-utf-glyph-readonly            #xe0a2
-	airline-utf-glyph-linenumber          #xe0a1
-	airline-helm-colors nil
-	airline-display-directory nil
-	airline-cursor-colors nil)
-  (load-theme 'airline-base16-gui-dark))
+(use-package doom-modeline
+  :ensure powerline
+  :load-path "~/.emacs.d/themes")
 
 ;; Packages
 (use-package evil-leader
@@ -239,7 +227,7 @@
   :config
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-.") #'xref-find-definitions)
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-,") #'xref-find-references)
-  (setq evil-insert-state-cursor '(box))
+  ;; (setq evil-insert-state-cursor '(box))
   (evil-set-initial-state 'xwidget-webkit-mode 'emacs)
   (evil-mode 1)
 
@@ -287,7 +275,6 @@
 
 (use-package counsel-projectile
   :ensure t
-  :defer t
   :diminish projectile-mode
   :config
   (setq projectile-other-file-alist '(("c" "h")
@@ -679,11 +666,6 @@
   :config
   (setq tramp-verbose 2))
 
-(use-package rainbow-mode
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'css-mode-hook #'rainbow-mode))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
