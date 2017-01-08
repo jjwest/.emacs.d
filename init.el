@@ -168,6 +168,9 @@
 
 (use-package doom-modeline
   :ensure powerline
+  :ensure font-lock+
+  :ensure s
+  :ensure f
   :load-path "~/.emacs.d/themes")
 
 ;; Packages
@@ -228,16 +231,15 @@
   :config
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-.") #'xref-find-definitions)
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-,") #'xref-find-references)
-  (evil-mode 1)
+  (evil-mode 1))
 
-  (use-package evil-surround
+(use-package evil-surround
     :ensure t
     :config (global-evil-surround-mode))
 
-  (use-package evil-visualstar
+(use-package evil-visualstar
     :ensure t
-    :config (global-evil-visualstar-mode)))
-
+    :config (global-evil-visualstar-mode))
 
 (use-package yasnippet
   :ensure t
