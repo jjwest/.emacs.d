@@ -157,6 +157,9 @@
   :config
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
+  (custom-theme-set-faces
+   'doom-one
+   `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t)))))
   (with-eval-after-load 'multi-term
     (set-face-attribute 'term-color-blue nil :foreground "#51afef")
     (set-face-attribute 'term-color-green nil :foreground "#98be65")
