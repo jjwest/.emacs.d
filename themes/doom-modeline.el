@@ -333,7 +333,7 @@ to be enabled."
                       " "
                       (*buffer-state)
                       ,(if (eq id 'scratch) '(*buffer-pwd))))
-           (rhs (list (*buffer-encoding-abbrev)
+           (rhs (list ;; (*buffer-encoding-abbrev)
                       (*vc)
                       "  " (*major-mode) "  "
                       (propertize

@@ -148,6 +148,7 @@
     (goto-char p)))
 
 (defun my/save-all-buffers ()
+  "Save all open buffers without prompt."
   (interactive)
   (save-some-buffers t))
 
@@ -227,8 +228,6 @@
   :config
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-.") #'xref-find-definitions)
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-,") #'xref-find-references)
-  ;; (setq evil-insert-state-cursor '(box))
-  (evil-set-initial-state 'xwidget-webkit-mode 'emacs)
   (evil-mode 1)
 
   (use-package evil-surround
