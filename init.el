@@ -155,6 +155,7 @@
 (use-package doom-themes
   :ensure t
   :config
+  (load-theme 'doom-one)
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
   (custom-theme-set-faces
@@ -166,8 +167,7 @@
     (set-face-attribute 'term-color-red nil :foreground "#ff6c6b")
     (set-face-attribute 'term-color-magenta nil :foreground "#c678dd")
     (set-face-attribute 'term-color-cyan nil :foreground "#46D9FF")
-    (set-face-attribute 'term-color-yellow nil :foreground "#ECBE7B"))
-  (load-theme 'doom-one))
+    (set-face-attribute 'term-color-yellow nil :foreground "#ECBE7B")))
 
 (use-package doom-modeline
   :ensure powerline
