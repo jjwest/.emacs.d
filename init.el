@@ -62,8 +62,7 @@
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(global-set-key (kbd "M-!") #'async-shell-command)
-(global-set-key (kbd "M-%") #'shell-command)
+(global-set-key (kbd "M-%") #'async-shell-command)
 
 ;; Don't litter my init file
 (setq custom-file "~/.emacs.d/local/custom-set.el")
@@ -171,7 +170,6 @@
 
 (use-package doom-modeline
   :ensure powerline
-  :ensure font-lock+
   :ensure s
   :ensure f
   :load-path "~/.emacs.d/themes")
@@ -529,7 +527,7 @@
   :ensure t
   :defer t
   :init
-  (add-hook 'python-mode-hook '(lambda () (add-to-list 'company-backends 'company-jedi)))
+  (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
   :config
   (evil-define-key 'normal python-mode-map (kbd "M-.") #'jedi:goto-definition))
 
