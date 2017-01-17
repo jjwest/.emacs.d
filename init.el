@@ -468,7 +468,7 @@
   :ensure t
   :defer t
   :preface
-  (defun my/rtags-add-project ()
+  (defun rtags-add-project ()
     "Add project to RTags daemon."
     (interactive)
     (shell-command (concat "rc -J " (projectile-project-root))))
