@@ -114,9 +114,8 @@
 (defun my/split-line ()
   "Split line at point."
   (interactive)
-  (newline-and-indent)
-  (forward-line -1)
-  (move-end-of-line 1))
+  (save-excursion
+    (newline-and-indent)))
 
 (defun my/split-window-horizontal ()
   "Split window horizontally and change to new window."
@@ -579,10 +578,10 @@
   (add-hook 'js2-mode-hook (lambda ()
 			     (interactive)
 			     (add-to-list 'company-backends 'company-tern)))
-  (evil-define-key 'normal js2-mode-map (kbd "M-.") 'tern-find-definition)
-  (evil-define-key 'normal js2-mode-map (kbd "M-,") 'tern-pop-find-definition)
-  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") 'tern-find-definition)
-  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-,") 'tern-pop-find-definition)
+  (evil-define-key 'normal js2-mode-map (kbd "M-.") #'tern-find-definition)
+  (evil-define-key 'normal js2-mode-map (kbd "M-,") #'tern-pop-find-definition)
+  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") #'tern-find-definition)
+  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-,") #'tern-pop-find-definition)
   (evil-leader/set-key-for-mode 'js2-jsx-mode
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
