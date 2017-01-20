@@ -15,6 +15,24 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(use-package general
+  :ensure t
+  :defines my-leader
+  :config
+  (setq general-default-keymaps 'normal)
+  (setq my-leader ",")
+  (general-define-key :prefix my-leader
+   "dw" 'delete-window
+   "do" 'delete-other-windows
+   "sf" 'save-buffer
+   "sa" 'my/save-all-buffers
+   "k" 'kill-this-buffer
+   "B" 'ibuffer
+   "P" 'proced
+   "W" 'winner-undo
+   "ss" 'my/split-window-horizontal
+   "vv" 'my/split-window-vertical))
+
 ;; Benchmark startup time
 (use-package benchmark-init
   :ensure t
@@ -63,8 +81,6 @@
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(global-set-key (kbd "M-%") #'async-shell-command)
-
 ;; Don't litter my init file
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
@@ -105,10 +121,13 @@
 (add-hook 'prog-mode-hook #'subword-mode)
 
 ;; Changing active window
-(global-set-key (kbd "C-h") 'windmove-left)
-(global-set-key (kbd "C-j") 'windmove-down)
-(global-set-key (kbd "C-k") 'windmove-up)
-(global-set-key (kbd "C-l") 'windmove-right)
+(general-define-key
+ "C-h" #'windmove-left
+ "C-j" #'windmove-down
+ "C-k" #'windmove-up
+ "C-l" #'windmove-right
+ "M-%" #'async-shell-command)
+
 
 
 ;; My own convenience functions
@@ -173,24 +192,6 @@
   :ensure s
   :ensure f
   :load-path "~/.emacs.d/themes")
-
-(use-package general
-  :ensure t
-  :defines my-leader
-  :config
-  (setq general-default-keymaps 'normal)
-  (setq my-leader ",")
-  (general-define-key :prefix my-leader
-   "dw" 'delete-window
-   "do" 'delete-other-windows
-   "sf" 'save-buffer
-   "sa" 'my/save-all-buffers
-   "k" 'kill-this-buffer
-   "B" 'ibuffer
-   "P" 'proced
-   "W" 'winner-undo
-   "ss" 'my/split-window-horizontal
-   "vv" 'my/split-window-vertical))
 
 (use-package evil
   :ensure t
