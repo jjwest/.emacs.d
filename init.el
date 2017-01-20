@@ -20,6 +20,7 @@
   :ensure t
   :config (benchmark-init/activate))
 
+
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
       custom-safe-themes t
@@ -173,64 +174,51 @@
   :ensure f
   :load-path "~/.emacs.d/themes")
 
-;; Packages
-(use-package evil-leader
+(use-package general
   :ensure t
-  :diminish evil-leader-mode
+  :defines my-leader
   :config
-  (evil-leader/set-leader ",")
-  (evil-leader/set-key
-    "f" 'counsel-find-file
-    "F" 'counsel-recentf
-    "b" 'ivy-switch-buffer
-    "B" 'ibuffer
-    "k" 'kill-this-buffer
-    "c" 'counsel-imenu
-    "P" 'proced
-    "pp" 'counsel-projectile-switch-project
-    "pf" 'counsel-projectile-find-file
-    "pd" 'counsel-projectile-find-dir
-    "pk" 'projectile-kill-buffers
-    "pt" 'projectile-find-other-file
-    "pg" 'counsel-git-grep
-    "ss" 'my/split-window-horizontal
-    "vv" 'my/split-window-vertical
-    "dw" 'delete-window
-    "do" 'delete-other-windows
-    "sf" 'save-buffer
-    "sa" 'my/save-all-buffers
-    "g" 'magit-status
-    "x" 'multi-term
-    "W" 'winner-undo)
-  (global-evil-leader-mode))
+  (setq general-default-keymaps 'normal)
+  (setq my-leader ",")
+  (general-define-key :prefix my-leader
+   "dw" 'delete-window
+   "do" 'delete-other-windows
+   "sf" 'save-buffer
+   "sa" 'my/save-all-buffers
+   "k" 'kill-this-buffer
+   "B" 'ibuffer
+   "P" 'proced
+   "W" 'winner-undo
+   "ss" 'my/split-window-horizontal
+   "vv" 'my/split-window-vertical))
 
 (use-package evil
   :ensure t
-  :bind (:map evil-normal-state-map
-	      ("j" . evil-next-visual-line)
-	      ("k" . evil-previous-visual-line)
-	      ("TAB" . indent-for-tab-command)
-	      ("C-h" . evil-window-left)
-	      ("C-j" . evil-window-down)
-	      ("C-k" . evil-window-up)
-	      ("C-l" . evil-window-right)
-	      ("M-k" . evil-scroll-up)
-	      ("M-j" . evil-scroll-down)
-	      ("C-a" . beginning-of-line)
-	      ("C-q" . evil-scroll-line-up)
-	      ("C-e" . evil-scroll-line-down)
-	      ("S" . my/split-line)
-	      ("U" . redo)
-	      ("Q" . "@q")
-	      ("Y" . "y$")
-	      :map evil-visual-state-map
-	      ("TAB" . indent-for-tab-command)
-	      :map package-menu-mode-map
-	      ("j" . evil-next-visual-line)
-	      ("k" . evil-previous-visual-line))
   :config
-  (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-.") #'xref-find-definitions)
-  (evil-define-key 'normal emacs-lisp-mode-map (kbd "M-,") #'xref-find-references)
+  (general-define-key
+   "j" 'evil-next-visual-line
+   "k" 'evil-previous-visual-line
+   "TAB" 'indent-for-tab-command
+   "C-h" 'evil-window-left
+   "C-j" 'evil-window-down
+   "C-k" 'evil-window-up
+   "C-l" 'evil-window-right
+   "M-k" 'evil-scroll-up
+   "M-j" 'evil-scroll-down
+   "C-a" 'beginning-of-line
+   "C-q" 'evil-scroll-line-up
+   "C-e" 'evil-scroll-line-down
+   "S" 'my/split-line
+   "U" 'redo
+   "M-." 'xref-find-definitions
+   "M-," 'xref-find-references
+   "Q" "@q"
+   "Y" "y$")
+  (general-define-key :keymaps 'evil-visual-state-map
+  		      "TAB" 'indent-for-tab-command)
+  (general-define-key :keymaps 'package-menu-mode-map
+		      "j" 'evil-next-visual-line
+		      "k" 'evil-previous-visual-line)
   (evil-mode 1))
 
 (use-package evil-surround
@@ -282,6 +270,12 @@
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
 				      ("cpp" "h")))
+  (general-define-key :prefix ",p"
+  		      "p" 'counsel-projectile-switch-project
+  		      "f" 'counsel-projectile-find-file
+  		      "d" 'counsel-projectile-find-dir
+  		      "k" 'projectile-kill-buffers
+  		      "t" 'projectile-find-other-file)
   (projectile-mode))
 
 
@@ -309,10 +303,13 @@
 	      :map term-raw-map
 	      ("C-c C-d" . term-send-eof))
   :init
-  (evil-define-key 'normal term-raw-map (kbd "C-n") #'multi-term-next)
-  (evil-define-key 'normal term-raw-map (kbd "C-p") #'multi-term-prev)
-  (evil-define-key 'normal term-raw-map (kbd "C-d") #'term-send-eof)
-  (evil-define-key 'insert term-raw-map (kbd "C-d") #'term-send-eof)
+  (general-define-key :prefix my-leader
+		      "x" 'multi-term)
+  (general-define-key :keymaps 'term-raw-map
+		      :states '(normal insert)
+		      "C-n" 'multi-term-next
+		      "C-p" 'multi-term-prev
+		      "C-d" 'term-send-eof)
   :config
   (setq multi-term-program "/bin/zsh"))
 
@@ -397,7 +394,10 @@
 	      ("j" . next-line)
 	      ("k" . previous-line)
 	      ("K" . magit-discard))
-  :diminish auto-revert-mode)
+  :diminish auto-revert-mode
+  :init
+  (general-define-key :prefix my-leader
+		      "g" 'magit-status))
 
 (use-package ivy
   :ensure t
@@ -412,6 +412,12 @@
 	ivy-height 15
 	ivy-count-format "(%d/%d) "
 	ivy-display-style 'fancy)
+  (general-define-key :prefix ","
+   "f" 'counsel-find-file
+   "F" 'counsel-recentf
+   "b" 'ivy-switch-buffer
+   "c" 'counsel-imenu
+   "pg" 'counsel-git-grep)
   (ivy-mode 1))
 
 (use-package nlinum-relative
@@ -474,14 +480,15 @@
   :init
   (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
   (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
-  (evil-leader/set-key-for-mode 'c-mode "R" 'rtags-rename-symbol)
-  (evil-leader/set-key-for-mode 'c++-mode "R" 'rtags-rename-symbol)
-  (evil-define-key 'normal rtags-mode-map (kbd "<return>") #'rtags-select-other-window)
-  (evil-define-key 'normal rtags-mode-map (kbd "q") #'kill-this-buffer)
-  (evil-define-key 'normal c-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
-  (evil-define-key 'normal c-mode-map (kbd "M-,") #'rtags-find-references-at-point)
-  (evil-define-key 'normal c++-mode-map (kbd "M-.") #'rtags-find-symbol-at-point)
-  (evil-define-key 'normal c++-mode-map (kbd "M-,") #'rtags-find-references-at-point))
+  (general-define-key :keymaps '(c-mode-map c++-mode-map)
+		      :states 'normal
+		      "M-." 'rtags-find-symbol-at-point
+		      "M-," 'rtags-find-references-at-point
+		      "R" 'rtags-rename-symbol)
+  (general-define-key :keymaps 'rtags-mode-map
+		      "<return>" 'rtags-select-other-window
+		      "q" 'kill-this-buffer))
+
 
 (use-package irony
   :ensure t
@@ -528,7 +535,7 @@
   :init
   (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
   :config
-  (evil-define-key 'normal python-mode-map (kbd "M-.") #'jedi:goto-definition))
+  (general-define-key :keymaps 'python-mode-map "M-." 'jedi:goto-definition))
 
 ;; RUST SETTINGS
 (use-package rust-mode
@@ -542,7 +549,7 @@
     :diminish racer-mode
     :after rust-mode
     :config
-    (evil-define-key 'normal rust-mode-map (kbd "M-.") 'racer-find-definition)
+    (general-define-key :keymaps rust-mode-map "M-." 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
 
 (use-package flycheck-rust
@@ -578,10 +585,9 @@
   (add-hook 'js2-mode-hook (lambda ()
 			     (interactive)
 			     (add-to-list 'company-backends 'company-tern)))
-  (evil-define-key 'normal js2-mode-map (kbd "M-.") #'tern-find-definition)
-  (evil-define-key 'normal js2-mode-map (kbd "M-,") #'tern-pop-find-definition)
-  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-.") #'tern-find-definition)
-  (evil-define-key 'normal js2-jsx-mode-map (kbd "M-,") #'tern-pop-find-definition)
+  (general-define-key :keymaps '(js2-mode-map js2-jsx-mode-map)
+		      "M-." 'tern-find-definition
+		      "M-," 'tern-pop-find-definition)
   (evil-leader/set-key-for-mode 'js2-jsx-mode
     "R" 'tern-rename-variable)
   (evil-leader/set-key-for-mode 'js2-mode
@@ -594,12 +600,14 @@
   :defer t
   :init
   (add-hook 'csharp-mode-hook #'omnisharp-mode)
-  (evil-define-key 'normal csharp-mode-map (kbd "M-.") 'omnisharp-go-to-definition)
-  (evil-define-key 'normal csharp-mode-map (kbd "M-,") 'omnisharp-find-usages)
-  (evil-leader/set-key-for-mode 'csharp-mode
-    "R" 'omnisharp-rename)
+  (general-define-key :keymaps 'csharp-mode-map
+		      "M-." 'omnisharp-go-to-definition
+		      "M-," 'omnisharp-find-usages)
+  (general-define-key :keymaps 'csharp-mode-map
+		      :prefix my-leader
+		      "R" 'omnisharp-rename)
   :config
-  (setq omnisharp-server-executable-path "/opt/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe"
+  (setq omnisharp-server-executable-path (executable-find "Omnisharp.exe")
 	omnisharp-curl-executable-path "/usr/bin/curl")
   (add-to-list 'company-backends 'company-omnisharp))
 
@@ -624,7 +632,8 @@
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
-  (evil-define-key 'normal org-mode-map (kbd "M-l") 'my/org-latex-export))
+  (general-define-key :keymaps 'org-mode-map
+		      "M-l" 'my/org-latex-export))
 
 (use-package org-bullets
   :ensure t
