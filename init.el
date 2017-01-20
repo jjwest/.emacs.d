@@ -285,7 +285,7 @@
   :diminish flycheck-mode
   :init (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
-  (evil-leader/set-key "e" 'flycheck-list-errors)
+  (general-define-key :prefix my-leader "e" 'flycheck-list-errors)
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq flycheck-gcc-language-standard "c++14"))
 
@@ -333,13 +333,15 @@
 	    (narrow-to-defun)
 	    (iedit-start (iedit-regexp-quote (current-word)) (point-min) (point-max)))))))
   :config
-  (evil-leader/set-key "r" 'iedit-dwim))
+  (general-define-key :prefix my-leader "r" 'iedit-dwim))
 
 (use-package wgrep
   :ensure t
   :defer t
   :init
-  (evil-leader/set-key-for-mode 'grep-mode "W" 'wgrep-change-to-wgrep-mode))
+  (general-define-key :keymaps 'grep-mode-map
+		      :states 'normal
+		      "W" 'wgrep-change-to-wgrep-mode))
 
 (use-package eldoc
   :defer t
@@ -452,7 +454,7 @@
   :ensure t
   :defer t
   :init
-  (evil-leader/set-key "T" 'transpose-frame))
+  (general-define-key :prefix my-leader "T" 'transpose-frame))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -586,12 +588,13 @@
 			     (interactive)
 			     (add-to-list 'company-backends 'company-tern)))
   (general-define-key :keymaps '(js2-mode-map js2-jsx-mode-map)
+		      :states 'normal
 		      "M-." 'tern-find-definition
 		      "M-," 'tern-pop-find-definition)
-  (evil-leader/set-key-for-mode 'js2-jsx-mode
-    "R" 'tern-rename-variable)
-  (evil-leader/set-key-for-mode 'js2-mode
-    "R" 'tern-rename-variable)
+  (general-define-key :prefix my-leader
+		      :keymaps '(js2-mode-map js2-jsx-mode-map)
+		      :states 'normal
+		      "R" 'tern-rename-variable)
   :config
   (setq tern-command (append tern-command '("--no-port-file"))))
 
