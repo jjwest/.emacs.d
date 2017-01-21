@@ -372,10 +372,15 @@
 	      ("<backspace>" . my/dired-parent-dir)
 	      ("?" . evil-search-backward))
   :config
+  (require 'dired-x)
+  (setq dired-omit-files
+	"^\\..*\\|^\\.?#\\|^\\.$\\|^\\.\\.$")
+  (setq dired-omit-files-p t)
+  (add-hook 'dired-mode-hook #'dired-omit-mode)
   (setq dired-dwim-target t
-	dired-recursive-copies 'always
+  	dired-recursive-copies 'always
         dired-recursive-deletes 'always
-	delete-by-moving-to-trash t)
+  	delete-by-moving-to-trash t)
   (add-hook 'dired-mode-hook #'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
