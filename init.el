@@ -551,8 +551,9 @@
     :ensure t
     :diminish racer-mode
     :after rust-mode
-    :config
-    (general-define-key :keymaps rust-mode-map "M-." 'racer-find-definition)
+    :init
+    (general-define-key :keymaps 'rust-mode-map
+			"M-." 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
 
 (use-package flycheck-rust
