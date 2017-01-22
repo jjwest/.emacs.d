@@ -2,7 +2,6 @@
 # name : elseif { ... }
 # key: elif
 # --
-else if (${1:condition})
-{
+else if (${1:condition}) `(insert-brace)`
      $0
 }
