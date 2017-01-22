@@ -15,6 +15,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; Benchmark startup time
+(use-package benchmark-init
+  :ensure t
+  :config (benchmark-init/activate))
+
 (use-package general
   :ensure t
   :defines my-leader
@@ -32,12 +37,6 @@
    "W" 'winner-undo
    "ss" 'my/split-window-horizontal
    "vv" 'my/split-window-vertical))
-
-;; Benchmark startup time
-(use-package benchmark-init
-  :ensure t
-  :config (benchmark-init/activate))
-
 
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
@@ -361,6 +360,7 @@
   (defun my/dired-parent-dir ()
     (interactive)
     (find-alternate-file ".."))
+  :defines (dired-omit-files dired-omit-files-p)
   :bind (:map dired-mode-map
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
@@ -494,6 +494,7 @@
 		      "M-," 'rtags-find-references-at-point
 		      "R" 'rtags-rename-symbol)
   (general-define-key :keymaps 'rtags-mode-map
+		      :states 'normal
 		      "<return>" 'rtags-select-other-window
 		      "q" 'kill-this-buffer))
 
@@ -558,6 +559,7 @@
     :after rust-mode
     :init
     (general-define-key :keymaps 'rust-mode-map
+			:states 'normal
 			"M-." 'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
 
