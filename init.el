@@ -71,6 +71,7 @@
       delete-old-versions t
       kept-new-versions 5
       kept-old-versions 0
+      auto-save-default nil
       vc-make-backup-files t
       version-control t)
 
@@ -81,6 +82,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Don't litter my init file
+(unless (file-exists-p "~/.emacs.d/local/custom-set.el")
+  (mkdir "~/.emacs.d/local"))
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 ;; Set font
@@ -470,7 +473,8 @@
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 ;; C/C++ SETTINGS
-(setq current-brace-style 'own-line)
+(defvar current-brace-style 'own-line
+  "Sets the brace style for yasnippet.")
 
 (defun toggle-brace-style ()
   "Toggle the current C/C++ brace style."
