@@ -238,6 +238,8 @@
   (add-hook 'org-mode-hook #'yas-minor-mode)
   (add-hook 'html-mode-hook #'yas-minor-mode)
   :config
+  (require 'warnings)
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-reload-all))
 
@@ -467,7 +469,23 @@
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
-;; C++ SETTINGS
+;; C/C++ SETTINGS
+(setq current-brace-style 'own-line)
+
+(defun toggle-brace-style ()
+  "Toggle the current C/C++ brace style."
+  (interactive)
+  (if (eq current-brace-style 'own-line)
+      (setq current-brace-style 'same-line)
+    (setq current-brace-style 'own-line)))
+
+(defun insert-brace ()
+  "Insert brace matching current brace style."
+  (interactive)
+  (if (eq current-brace-style 'own-line)
+      (insert "\n{")
+    (insert "{")))
+
 (use-package c++-mode
   :mode (("\\.h\\'" . c++-mode))
   :init
@@ -718,3 +736,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 (provide 'init)
+;;; init.el ends here

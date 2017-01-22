@@ -2,7 +2,6 @@
 # name: fori
 # key: fori
 # --
-for (${1:const auto&} ${2:var} : ${3:var})
-{
+for (${1:const auto&} ${2:var} : ${3:var}) `(insert-brace)`
     $0
 }

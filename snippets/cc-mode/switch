@@ -2,8 +2,7 @@
 # name : switch (...) { case : ... default: ...}
 # key: switch
 # --
-switch (${1:expr}) 
-{
+switch (${1:expr}) `(insert-brace)`
 case ${2:constexpr}:
 ${3: \{}
     $0
