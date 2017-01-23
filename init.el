@@ -62,19 +62,31 @@
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
 
-;; I like my backups, but keep them hidden
+;; I like my backups hidden and in abundance
 (unless (file-exists-p "~/.emacs.d/backups")
-  (mkdir "~/.emacs.d/backups"))
+  (mkdir "~/.emacs.d/backups/per-save")
+  (mkdir "~/.emacs.d/backups/per-session"))
 
-(setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
-      backup-by-copying t
-      delete-old-versions t
-      kept-new-versions 5
-      kept-old-versions 0
-      auto-save-default nil
-      vc-make-backup-files t
-      version-control t)
+ (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
+       backup-by-copying t
+       delete-old-versions t
+       kept-new-versions 5
+       kept-old-versions 0
+       auto-save-default nil
+       vc-make-backup-files t
+       version-control t)
 
+(defun force-backup-of-buffer ()
+  "Always save file backups on save."
+  (unless buffer-backed-up
+    (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session"))))
+      (backup-buffer)))
+  (let ((buffer-backed-up nil))
+    (backup-buffer)))
+(add-hook 'before-save-hook  'force-backup-of-buffer)
+
+
+;; Misc
 (prefer-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
@@ -82,7 +94,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Don't litter my init file
-(unless (file-exists-p "~/.emacs.d/local/custom-set.el")
+(unless (file-exists-p "~/.emacs.d/local")
   (mkdir "~/.emacs.d/local"))
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
@@ -657,10 +669,10 @@
 	  (pdf-buffer (replace-regexp-in-string "\.org" ".pdf" (buffer-name))))
       (if (get-buffer pdf-buffer)
 	  (progn
-	    (switch-to-buffer pdf-buffer)
+	    (switch-to-buffer-other-window pdf-buffer)
 	    (revert-buffer t t)
-	    (switch-to-buffer org-buffer))
-	(find-file-other-window (replace-regexp-in-string "\.org" ".pdf" (buffer-file-name))))))
+	    (switch-to-buffer-other-window org-buffer))
+	(find-file-other-window (replace-regexp-in-string "\.org$" ".pdf" (buffer-file-name))))))
   :init
   (add-hook 'org-mode-hook #'org-indent-mode)
   :config
