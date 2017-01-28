@@ -527,6 +527,10 @@
 		      "M-." 'rtags-find-symbol-at-point
 		      "M-," 'rtags-find-references-at-point
 		      "R" 'rtags-rename-symbol)
+  (general-define-key :keymaps '(c-mode-map c++-mode-map)
+		      :states 'normal
+		      :prefix my-leader
+		      "R" 'rtags-rename-symbol)
   (general-define-key :keymaps 'rtags-mode-map
 		      :states 'normal
 		      "<return>" 'rtags-select-other-window
@@ -586,6 +590,22 @@
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
+
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :defer t
+;;   :init
+;;   (add-hook 'rust-mode-hook (lambda () (global-lsp-mode 1)))
+;;   :config
+;;   (general-define-key :keymaps 'rust-mode-map
+;; 		      :states '(normal insert)
+;; 		      "C-." 'completion-at-point)
+;;   (general-define-key :keymaps 'rust-mode-map
+;; 		      :states 'normal
+;; 		      :prefix my-leader
+;; 		      "R" 'lsp-rename))
+
+
 
 (use-package racer
     :ensure t
