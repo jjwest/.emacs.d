@@ -244,6 +244,11 @@
     :ensure t
     :config (global-evil-visualstar-mode))
 
+(use-package evil-mc
+  :ensure t
+  :config
+  (global-evil-mc-mode))
+
 (use-package yasnippet
   :ensure t
   :defer t
