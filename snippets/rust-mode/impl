@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: implement
+# key: impl
+# --
+impl ${1:Type} {
+pub fn new(${2:Args}) -> $1 {
+$1 {
+$0
+}
+}
+}

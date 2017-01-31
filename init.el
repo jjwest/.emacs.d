@@ -88,6 +88,7 @@
 
 ;; Misc
 (prefer-coding-system 'utf-8)
+(set-buffer-file-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	      fill-column 80)
 (put 'narrow-to-region 'disabled nil)

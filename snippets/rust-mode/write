@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: write
+# key: wr
+# --
+write!(&mut ${1:Stream}, "${2:Text}", ${3:Args})$0;
