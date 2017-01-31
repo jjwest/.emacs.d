@@ -2,4 +2,4 @@
 # name: write
 # key: wr
 # --
-write!(&mut ${1:Stream}, "${2:Text}", ${3:Args})$0;
+write!(&mut ${1:stream}, "${2:text}", ${3:args})$0;

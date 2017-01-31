@@ -2,4 +2,4 @@
 # name: print
 # key: pr
 # --
-print!("${1:Text}"${2:, ${3:Args}}); $0
+print!("${1:text}"${2:, ${3:args}}); $0
