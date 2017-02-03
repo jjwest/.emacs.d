@@ -64,13 +64,14 @@
 
 ;; I like my backups hidden and in abundance
 (unless (file-exists-p "~/.emacs.d/backups")
+  (mkdir "~/.emacs.d/backups")
   (mkdir "~/.emacs.d/backups/per-save")
   (mkdir "~/.emacs.d/backups/per-session"))
 
  (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
        backup-by-copying t
        delete-old-versions t
-       kept-new-versions 5
+       kept-new-versions 10
        kept-old-versions 0
        auto-save-default nil
        vc-make-backup-files t
