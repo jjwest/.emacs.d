@@ -26,14 +26,6 @@
   :config
   (setq general-default-keymaps 'normal)
   (setq my-leader ",")
-
-  (general-define-key "M-%" #'async-shell-command)
-  (general-define-key :states 'emacs
-   "C-h" #'windmove-left
-   "C-j" #'windmove-down
-   "C-k" #'windmove-up
-   "C-l" #'windmove-right)
-
   (general-define-key :prefix my-leader
    "dw" 'delete-window
    "do" 'delete-other-windows
@@ -124,7 +116,7 @@
 			:slant 'normal
 			:weight 'normal
 			:height 98
-			:width 'normal)))
+			:width 'normal) ))
 
 
 ;; Strip UI
@@ -144,23 +136,17 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 
-(defvar current-brace-style 'own-line
-  "Sets the brace style for yasnippet.")
+;; Changing active window
+(general-define-key
+ "C-h" #'windmove-left
+ "C-j" #'windmove-down
+ "C-k" #'windmove-up
+ "C-l" #'windmove-right
+ "M-%" #'async-shell-command)
 
-(defun toggle-brace-style ()
-  "Toggle the brace style."
-  (interactive)
-  (if (eq current-brace-style 'own-line)
-      (setq current-brace-style 'same-line)
-    (setq current-brace-style 'own-line)))
 
-(defun insert-brace ()
-  "Insert brace matching current brace style."
-  (interactive)
-  (if (eq current-brace-style 'own-line)
-      (insert "\n{")
-    (insert "{")))
 
+;; My own convenience functions
 (defun my/split-line ()
   "Split line at point."
   (interactive)
@@ -181,9 +167,9 @@
 
 (defun my/dont-kill-scratch ()
   "When scratch buffer is killed, bury instead."
-  (if (equal (buffer-name) "*scratch*")
-      (bury-buffer)
-    t
+  (if (not (equal (buffer-name) "*scratch*"))
+      t
+    (bury-buffer)
     nil))
 
 (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
@@ -245,7 +231,7 @@
    "M-," 'xref-find-references
    "Q" "@q"
    "Y" "y$")
-  (general-define-key :keymaps 'visual
+  (general-define-key :keymaps 'evil-visual-state-map
   		      "TAB" 'indent-for-tab-command)
   (general-define-key :keymaps 'package-menu-mode-map
 		      "j" 'evil-next-visual-line
@@ -262,7 +248,8 @@
 
 (use-package evil-mc
   :ensure t
-  :config (global-evil-mc-mode))
+  :config
+  (global-evil-mc-mode))
 
 (use-package yasnippet
   :ensure t
@@ -307,12 +294,12 @@
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
 				      ("cpp" "h")))
-  (general-define-key :prefix my-leader
-  		      "pp" 'counsel-projectile-switch-project
-  		      "pf" 'counsel-projectile-find-file
-  		      "pd" 'counsel-projectile-find-dir
-  		      "pk" 'projectile-kill-buffers
-  		      "pt" 'projectile-find-other-file)
+  (general-define-key :prefix ",p"
+  		      "p" 'counsel-projectile-switch-project
+  		      "f" 'counsel-projectile-find-file
+  		      "d" 'counsel-projectile-find-dir
+  		      "k" 'projectile-kill-buffers
+  		      "t" 'projectile-find-other-file)
   (projectile-mode))
 
 
@@ -362,8 +349,11 @@
       (save-excursion
 	(save-restriction
 	  (widen)
+	  ;; this function determines the scope of `iedit-start'.
 	  (if iedit-mode
 	      (iedit-done)
+	    ;; `current-word' can of course be replaced by other
+	    ;; functions.
 	    (narrow-to-defun)
 	    (iedit-start (iedit-regexp-quote (current-word)) (point-min) (point-max)))))))
   :config
@@ -501,12 +491,31 @@
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
+;; C/C++ SETTINGS
+(defvar current-brace-style 'own-line
+  "Sets the brace style for yasnippet.")
+
+(defun toggle-brace-style ()
+  "Toggle the current C/C++ brace style."
+  (interactive)
+  (if (eq current-brace-style 'own-line)
+      (setq current-brace-style 'same-line)
+    (setq current-brace-style 'own-line)))
+
+(defun insert-brace ()
+  "Insert brace matching current brace style."
+  (interactive)
+  (if (eq current-brace-style 'own-line)
+      (insert "\n{")
+    (insert "{")))
+
 (use-package c++-mode
   :mode (("\\.h\\'" . c++-mode))
   :init
   (setq c-basic-offset 4
 	gdb-many-windows t
 	c-default-style "bsd"))
+
 
 ;; RTAGS must be placed before irony for them to work together
 (use-package rtags
@@ -582,6 +591,7 @@
   :config
   (general-define-key :keymaps 'python-mode-map "M-." 'jedi:goto-definition))
 
+;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
@@ -620,6 +630,7 @@
     :config
     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
+;; Web development
 (use-package emmet-mode
   :ensure t
   :defer t
