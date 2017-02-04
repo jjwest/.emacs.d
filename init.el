@@ -300,6 +300,10 @@
   		      "d" 'counsel-projectile-find-dir
   		      "k" 'projectile-kill-buffers
   		      "t" 'projectile-find-other-file)
+
+  ;; Don't slow Emacs to a crawl when working with TRAMP.
+  (defadvice projectile-project-root (around ignore-remote first activate)
+    (unless (file-remote-p default-directory) ad-do-it))
   (projectile-mode))
 
 
