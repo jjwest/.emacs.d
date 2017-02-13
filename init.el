@@ -64,9 +64,8 @@
 
 ;; I like my backups hidden and in abundance
 (unless (file-exists-p "~/.emacs.d/backups")
-  (mkdir "~/.emacs.d/backups")
-  (mkdir "~/.emacs.d/backups/per-save")
-  (mkdir "~/.emacs.d/backups/per-session"))
+  (mkdir "~/.emacs.d/backups/per-save" t)
+  (mkdir "~/.emacs.d/backups/per-session" t))
 
  (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
        backup-by-copying t
@@ -273,13 +272,16 @@
     (interactive)
     (company-abort)
     (newline-and-indent))
-  :bind (("C-." . company-manual-begin)
+  :bind (("C-." . company-complete)
 	 :map company-active-map
 	 ("<C-return>" . my/company-abort-and-newline)
 	 ("<tab>" . nil))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
+  (general-define-key "C-." 'company-complete)
+  (general-define-key :states '(normal insert)
+		      "C-." 'company-complete)
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
 	company-tooltip-align-annotations t
@@ -294,16 +296,17 @@
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
 				      ("cpp" "h")))
-  (general-define-key :prefix ",p"
-  		      "p" 'counsel-projectile-switch-project
-  		      "f" 'counsel-projectile-find-file
-  		      "d" 'counsel-projectile-find-dir
-  		      "k" 'projectile-kill-buffers
-  		      "t" 'projectile-find-other-file)
+  (general-define-key :prefix my-leader
+  		      "pp" 'counsel-projectile-switch-project
+  		      "pf" 'counsel-projectile-find-file
+  		      "pd" 'counsel-projectile-find-dir
+  		      "pk" 'projectile-kill-buffers
+  		      "pt" 'projectile-find-other-file)
 
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
-    (unless (file-remote-p default-directory) ad-do-it))
+    (unless (file-remote-p default-directory)
+      ad-do-it))
   (projectile-mode))
 
 
@@ -610,7 +613,7 @@
 ;;   :config
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
-;; 		      "C-." 'completion-at-point)
+;; 		      "C-." 'company-complete)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states 'normal
 ;; 		      :prefix my-leader
@@ -689,7 +692,6 @@
   (add-to-list 'company-backends 'company-omnisharp))
 
 (use-package org
-  :ensure t
   :defer t
   :preface
   (defun my/org-latex-export ()
@@ -697,7 +699,7 @@
     (save-buffer)
     (org-latex-export-to-pdf)
     (let ((org-buffer (buffer-name))
-	  (pdf-buffer (replace-regexp-in-string "\.org" ".pdf" (buffer-name))))
+	  (pdf-buffer (replace-regexp-in-string "\.org$" ".pdf" (buffer-name))))
       (if (get-buffer pdf-buffer)
 	  (progn
 	    (switch-to-buffer-other-window pdf-buffer)
@@ -743,10 +745,14 @@
   :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :bind (:map pdf-view-mode-map
-	 ("j" . pdf-view-next-line-or-next-page)
-	 ("k" . pdf-view-previous-line-or-previous-page)
-	 ("M-j" . pdf-view-next-page)
-	 ("M-k" . pdf-view-previous-page)))
+	      ("C-h" . windmove-left)
+	      ("C-j" . windmove-down)
+	      ("C-k" . windmove-up)
+	      ("C-l" . windmove-right)
+	      ("j" . pdf-view-next-line-or-next-page)
+	      ("k" . pdf-view-previous-line-or-previous-page)
+	      ("M-j" . pdf-view-next-page)
+	      ("M-k" . pdf-view-previous-page)))
 
 (use-package tramp
   :defer t
