@@ -100,17 +100,17 @@
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 ;; Set font
-(when (member "Source Code Pro" (font-family-list))
+(when (member "Office Code Pro" (font-family-list))
   (if (equal (display-pixel-height) 1440)
       (set-face-attribute 'default nil
-			  :family "Source Code Pro"
+			  :family "Office Code Pro"
 			  :foundry 'ADBO
 			  :slant 'normal
 			  :weight 'normal
 			  :height 113
 			  :width 'normal)
     (set-face-attribute 'default nil
-			:family "Source Code Pro"
+			:family "Office Code Pro"
 			:foundry 'ADBO
 			:slant 'normal
 			:weight 'normal
