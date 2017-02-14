@@ -245,16 +245,18 @@ project root). Excludes the file basename. See `doom-buffer-name' for that."
 directory, the file name, and its state (modified, read-only or non-existent)."
   (let ((all-the-icons-scale-factor 1.2)
         (modified-p (buffer-modified-p))
+	(term-mode (eq major-mode 'term-mode))
         faces)
     (if (active)   (push 'doom-modeline-buffer-path faces))
-    (if modified-p (push 'doom-modeline-buffer-modified faces))
+    (if (and modified-p (not term-mode))
+	(push 'doom-modeline-buffer-modified faces))
     (concat (if buffer-read-only
                 (concat (all-the-icons-octicon
                          "lock"
                          :face 'doom-modeline-warning
                          :v-adjust -0.05)
                         " ")
-              (when modified-p
+              (when (and modified-p (not term-mode))
                 (concat
                  (all-the-icons-faicon "floppy-o"
                                        :face 'doom-modeline-buffer-modified
