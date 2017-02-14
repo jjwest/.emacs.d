@@ -246,9 +246,12 @@ directory, the file name, and its state (modified, read-only or non-existent)."
   (let ((all-the-icons-scale-factor 1.2)
         (modified-p (buffer-modified-p))
 	(term-mode (eq major-mode 'term-mode))
+	(scratch (string= (buffer-name) "*scratch*"))
         faces)
     (if (active)   (push 'doom-modeline-buffer-path faces))
-    (if (and modified-p (not term-mode))
+    (if (and modified-p
+	     (not term-mode)
+	     (not scratch) )
 	(push 'doom-modeline-buffer-modified faces))
     (concat (if buffer-read-only
                 (concat (all-the-icons-octicon
@@ -256,7 +259,7 @@ directory, the file name, and its state (modified, read-only or non-existent)."
                          :face 'doom-modeline-warning
                          :v-adjust -0.05)
                         " ")
-              (when (and modified-p (not term-mode))
+              (when (and modified-p (not term-mode) (not scratch))
                 (concat
                  (all-the-icons-faicon "floppy-o"
                                        :face 'doom-modeline-buffer-modified

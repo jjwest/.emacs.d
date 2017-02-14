@@ -136,7 +136,7 @@
 (add-hook 'prog-mode-hook #'subword-mode)
 
 ;; Changing active window
-(general-define-key
+(general-define-key :keymaps 'global
  "C-h" #'windmove-left
  "C-j" #'windmove-down
  "C-k" #'windmove-up
@@ -206,7 +206,12 @@
   :ensure powerline
   :ensure s
   :ensure f
-  :load-path "~/.emacs.d/themes")
+  :load-path "~/.emacs.d/themes"
+  :config
+  (unless (file-exists-p "~/.emacs.d/themes/doom-modeline.elc")
+    (add-hook 'after-init-hook
+	      (lambda ()
+		(byte-compile-file "~/.emacs.d/themes/doom-modeline.el")))))
 
 (use-package evil
   :ensure t
@@ -787,6 +792,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
 
+
+(use-package workgroups2
+  :ensure t
+  :config
+  (general-define-key :prefix ",w"
+		      "c" 'wg-create-workgroup
+		      "d" 'wg-delete-workgroup
+		      "D" 'wg-delete-other-workgroups
+		      "b" 'wg-switch-to-workgroup)
+  (setq wg-session-load-on-start nil
+	wg-emacs-exit-save-behavior nil
+	wg-workgroups-mode-exit-save-behavior nil)
+
+  (workgroups-mode 1))
 
 (provide 'init)
 ;;; init.el ends here
