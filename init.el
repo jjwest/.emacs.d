@@ -680,22 +680,6 @@
   :config
   (setq tern-command (append tern-command '("--no-port-file"))))
 
-(use-package omnisharp
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'csharp-mode-hook #'omnisharp-mode)
-  (general-define-key :keymaps 'csharp-mode-map
-		      "M-." 'omnisharp-go-to-definition
-		      "M-," 'omnisharp-find-usages)
-  (general-define-key :keymaps 'csharp-mode-map
-		      :prefix my-leader
-		      "R" 'omnisharp-rename)
-  :config
-  (setq omnisharp-server-executable-path (executable-find "Omnisharp.exe")
-	omnisharp-curl-executable-path "/usr/bin/curl")
-  (add-to-list 'company-backends 'company-omnisharp))
-
 (use-package org
   :defer t
   :preface
@@ -803,7 +787,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		      "b" 'wg-switch-to-workgroup)
   (setq wg-session-load-on-start nil
 	wg-emacs-exit-save-behavior nil
-	wg-workgroups-mode-exit-save-behavior nil)
+	wg-workgroups-mode-exit-save-behavior nil
+	wg-session-file "~/.emacs.d/workgroups")
 
   (workgroups-mode 1))
 
