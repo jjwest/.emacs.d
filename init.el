@@ -253,6 +253,9 @@
 (use-package evil-mc
   :ensure t
   :config
+  (general-define-key :keymaps 'evil-mc-key-map
+		      :states 'normal
+		      "C-p" nil)
   (global-evil-mc-mode))
 
 (use-package yasnippet
