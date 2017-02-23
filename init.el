@@ -27,6 +27,9 @@
   (setq general-default-keymaps 'normal)
   (setq my-leader ",")
   (general-define-key :prefix my-leader
+		      :keymaps '(normal visual)
+		      "n" 'narrow-or-widen-dwim)
+  (general-define-key :prefix my-leader
    "dw" 'delete-window
    "do" 'delete-other-windows
    "sf" 'save-buffer
@@ -184,6 +187,32 @@
   "Save all open buffers without prompt."
   (interactive)
   (save-some-buffers t))
+
+(defun narrow-or-widen-dwim (p)
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+Dwim means: region, org-src-block, org-subtree, or
+defun, whichever applies first. Narrowing to
+org-src-block actually calls `org-edit-src-code'.
+
+With prefix P, don't widen, just narrow even if buffer
+is already narrowed."
+  (interactive "P")
+  (declare (interactive-only))
+  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning)
+                           (region-end)))
+        ((derived-mode-p 'org-mode)
+         ;; `org-edit-src-code' is not a real narrowing
+         ;; command. Remove this first conditional if
+         ;; you don't want it.
+         (cond ((ignore-errors (org-edit-src-code) t)
+                (delete-other-windows))
+               ((ignore-errors (org-narrow-to-block) t))
+               (t (org-narrow-to-subtree))))
+        ((derived-mode-p 'latex-mode)
+         (LaTeX-narrow-to-environment))
+        (t (narrow-to-defun))))
 
 (use-package doom-themes
   :ensure t
@@ -359,7 +388,8 @@
   (defun iedit-dwim (arg)
     "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
     (interactive "P")
-    (if arg
+    (if (or arg
+	    (buffer-narrowed-p))
 	(iedit-mode)
       (save-excursion
 	(save-restriction
@@ -616,8 +646,12 @@
 ;; (use-package lsp-mode
 ;;   :ensure t
 ;;   :defer t
+;;   :preface
+;;   (defun my/rust-mode-hook ()
+;;     (setq-local company-backends '(company-capf))
+;;     (global-lsp-mode 1))
 ;;   :init
-;;   (add-hook 'rust-mode-hook (lambda () (global-lsp-mode 1)))
+;;   (add-hook 'rust-mode-hook #'my/rust-mode-hook)
 ;;   :config
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
