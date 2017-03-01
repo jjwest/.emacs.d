@@ -33,7 +33,7 @@
    "dw" 'delete-window
    "do" 'delete-other-windows
    "sf" 'save-buffer
-   "sa" 'my/save-all-buffers
+   "sa" (lambda () (save-some-buffers t))
    "k" 'kill-this-buffer
    "B" 'ibuffer
    "P" 'proced
@@ -183,11 +183,6 @@
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))
     (goto-char p)))
 
-(defun my/save-all-buffers ()
-  "Save all open buffers without prompt."
-  (interactive)
-  (save-some-buffers t))
-
 (defun narrow-or-widen-dwim (p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
 Dwim means: region, org-src-block, org-subtree, or
@@ -284,7 +279,8 @@ is already narrowed."
   :config
   (general-define-key :keymaps 'evil-mc-key-map
 		      :states 'normal
-		      "C-p" nil)
+		      "C-p" nil
+		      "C-n" nil)
   (global-evil-mc-mode))
 
 (use-package yasnippet
@@ -351,7 +347,8 @@ is already narrowed."
   :ensure t
   :defer t
   :diminish flycheck-mode
-  :init (add-hook 'prog-mode-hook #'flycheck-mode)
+  :init
+  (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
   (general-define-key :prefix my-leader "e" 'flycheck-list-errors)
   (setq flycheck-c/c++-gcc-executable "gcc-5")
@@ -630,11 +627,15 @@ is already narrowed."
 
 (use-package company-jedi
   :ensure t
-  :defer t
+  :preface
+  (defun my/init-python-hook ()
+    (add-to-list 'company-backends 'company-jedi))
   :init
-  (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
-  :config
-  (general-define-key :keymaps 'python-mode-map "M-." 'jedi:goto-definition))
+  (add-hook 'python-mode-hook #'my/init-python-hook)
+  (general-define-key :keymaps 'python-mode-map
+		      :states 'normal
+		      "M-." 'jedi:goto-definition
+		      "M-," 'jedi:goto-definition-pop-marker))
 
 ;; RUST SETTINGS
 (use-package rust-mode
