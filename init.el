@@ -238,11 +238,9 @@ is already narrowed."
   :ensure evil
   :ensure projectile
   :load-path "~/.emacs.d/themes"
-  :config
+  :init
   (unless (file-exists-p "~/.emacs.d/themes/doom-modeline.elc")
-    (add-hook 'after-init-hook
-	      (lambda ()
-		(byte-compile-file "~/.emacs.d/themes/doom-modeline.el")))))
+    (byte-compile-file "~/.emacs.d/themes/doom-modeline.el")))
 
 (use-package evil
   :ensure t
@@ -634,11 +632,13 @@ is already narrowed."
 
 (use-package company-jedi
   :ensure t
+  :defer t
   :preface
   (defun my/init-python-hook ()
     (add-to-list 'company-backends 'company-jedi))
   :init
   (add-hook 'python-mode-hook #'my/init-python-hook)
+  :config
   (general-define-key :keymaps 'python-mode-map
 		      :states 'normal
 		      "M-." 'jedi:goto-definition
