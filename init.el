@@ -33,7 +33,7 @@
    "dw" 'delete-window
    "do" 'delete-other-windows
    "sf" 'save-buffer
-   "sa" (lambda () (save-some-buffers t))
+   "sa" 'my/save-all-buffers
    "k" 'kill-this-buffer
    "B" 'ibuffer
    "P" 'proced
@@ -175,6 +175,10 @@
     nil))
 
 (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
+
+(defun my/save-all-buffers ()
+  (interactive)
+  (save-some-buffers t))
 
 (defun find-file-sudo ()
   "Reopen the current file as root, preserving point position."
@@ -652,7 +656,12 @@ is already narrowed."
 ;;   :defer t
 ;;   :preface
 ;;   (defun my/rust-mode-hook ()
-;;     (setq-local company-backends '(company-capf))
+;;     (let ((root (f-join
+;; 		    (s-trim-right
+;; 		     (shell-command-to-string "rustc --print sysroot"))
+;; 		    "lib")))
+;;       (setenv "LD_LIBRARY_PATH" root)
+;;       (setenv "RLS_ROOT" "~/rls"))
 ;;     (global-lsp-mode 1))
 ;;   :init
 ;;   (add-hook 'rust-mode-hook #'my/rust-mode-hook)
