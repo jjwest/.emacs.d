@@ -226,11 +226,16 @@ is already narrowed."
     (set-face-attribute 'term-color-cyan nil :foreground "#46D9FF")
     (set-face-attribute 'term-color-yellow nil :foreground "#ECBE7B")))
 
+
 (use-package doom-modeline
   :ensure powerline
   :ensure s
   :ensure f
   :load-path "~/.emacs.d/themes"
+  :defer t
+  :init
+  (eval-after-load 'projectile
+    (require 'doom-modeline))
   :config
   (unless (file-exists-p "~/.emacs.d/themes/doom-modeline.elc")
     (add-hook 'after-init-hook
