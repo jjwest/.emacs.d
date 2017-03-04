@@ -231,11 +231,9 @@ is already narrowed."
   :ensure powerline
   :ensure s
   :ensure f
+  :ensure evil
+  :ensure projectile
   :load-path "~/.emacs.d/themes"
-  :defer t
-  :init
-  (eval-after-load 'projectile
-    (require 'doom-modeline))
   :config
   (unless (file-exists-p "~/.emacs.d/themes/doom-modeline.elc")
     (add-hook 'after-init-hook
