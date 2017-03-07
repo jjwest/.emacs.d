@@ -275,6 +275,10 @@ is already narrowed."
     :ensure t
     :config (global-evil-surround-mode))
 
+(use-package evil-exchange
+  :ensure t
+  :config (evil-exchange-install))
+
 (use-package evil-visualstar
     :ensure t
     :config (global-evil-visualstar-mode))
