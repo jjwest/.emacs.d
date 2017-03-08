@@ -279,9 +279,27 @@ is already narrowed."
   :ensure t
   :config (evil-exchange-install))
 
+(use-package evil-args
+  :ensure t
+  :config
+  ;; bind evil-args text objects
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+
+  ;; bind evil-forward/backward-args
+  (define-key evil-normal-state-map "L" 'evil-forward-arg)
+  (define-key evil-normal-state-map "H" 'evil-backward-arg)
+  (define-key evil-motion-state-map "L" 'evil-forward-arg)
+  (define-key evil-motion-state-map "H" 'evil-backward-arg))
+
+(use-package evil-cleverparens
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode))
+
 (use-package evil-visualstar
-    :ensure t
-    :config (global-evil-visualstar-mode))
+  :ensure t
+  :config (global-evil-visualstar-mode))
 
 (use-package evil-mc
   :ensure t
