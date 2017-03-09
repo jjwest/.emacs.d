@@ -294,8 +294,11 @@ is already narrowed."
 
 (use-package evil-cleverparens
   :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   :config
-  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode))
+  (setq evil-cleverparens-use-additional-bindings nil))
+
 
 (use-package evil-visualstar
   :ensure t
