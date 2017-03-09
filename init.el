@@ -216,6 +216,7 @@ is already narrowed."
 (use-package doom-themes
   :ensure t
   :config
+  (require 'doom-neotree)
   (load-theme 'doom-one)
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
@@ -294,8 +295,13 @@ is already narrowed."
 
 (use-package evil-cleverparens
   :ensure t
+  :bind (:map evil-cleverparens-mode-map
+	      ("M-j" . nil)
+	      ("M-k" . nil))
+  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   :config
-  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode))
+  (setq evil-cleverparens-use-additional-bindings nil))
+
 
 (use-package evil-visualstar
   :ensure t
