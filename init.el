@@ -298,6 +298,7 @@ is already narrowed."
   :bind (:map evil-cleverparens-mode-map
 	      ("M-j" . nil)
 	      ("M-k" . nil))
+  :init
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   :config
   (setq evil-cleverparens-use-additional-bindings nil))
