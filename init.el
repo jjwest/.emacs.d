@@ -295,13 +295,15 @@ is already narrowed."
 
 (use-package evil-cleverparens
   :ensure t
-  :bind (:map evil-cleverparens-mode-map
-	      ("M-j" . nil)
-	      ("M-k" . nil))
+  :defer t
   :init
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   :config
-  (setq evil-cleverparens-use-additional-bindings nil))
+  (general-define-key :keymaps 'evil-cleverparens-mode-map
+		      :states 'normal
+		      "S" nil
+		      "M-j" nil
+		      "M-k" nil))
 
 
 (use-package evil-visualstar
