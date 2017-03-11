@@ -28,18 +28,18 @@
   (setq my-leader ",")
   (general-define-key :prefix my-leader
 		      :keymaps '(normal visual)
-		      "n" 'narrow-or-widen-dwim)
-  (general-define-key :prefix my-leader
-   "dw" 'delete-window
-   "do" 'delete-other-windows
-   "sf" 'save-buffer
-   "sa" 'my/save-all-buffers
-   "k" 'kill-this-buffer
-   "B" 'ibuffer
-   "P" 'proced
-   "W" 'winner-undo
-   "ss" 'my/split-window-horizontal
-   "vv" 'my/split-window-vertical))
+		      "n" ' narrow-or-widen-dwim
+		      :prefix my-leader
+		      "dw" 'delete-window
+		      "do" 'delete-other-windows
+		      "sf" 'save-buffer
+		      "sa" 'my/save-all-buffers
+		      "k" 'kill-this-buffer
+		      "B" 'ibuffer
+		      "P" 'proced
+		      "W" 'winner-undo
+		      "ss" 'my/split-window-horizontal
+		      "vv" 'my/split-window-vertical))
 
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
@@ -264,12 +264,12 @@ is already narrowed."
    "M-." 'xref-find-definitions
    "M-," 'xref-find-references
    "Q" "@q"
-   "Y" "y$")
-  (general-define-key :keymaps 'evil-visual-state-map
-  		      "TAB" 'indent-for-tab-command)
-  (general-define-key :keymaps 'package-menu-mode-map
-		      "j" 'evil-next-visual-line
-		      "k" 'evil-previous-visual-line)
+   "Y" "y$"
+   :keymaps 'evil-visual-state-map
+   "TAB" 'indent-for-tab-command
+   :keymaps 'package-menu-mode-map
+   "j" 'evil-next-visual-line
+   "k" 'evil-previous-visual-line)
   (evil-mode 1))
 
 (use-package evil-surround
@@ -348,8 +348,8 @@ is already narrowed."
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
-  (general-define-key "C-." 'company-complete)
-  (general-define-key :states '(normal insert)
+  (general-define-key "C-." 'company-complete
+		      :states '(normal insert)
 		      "C-." 'company-complete)
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
@@ -405,8 +405,8 @@ is already narrowed."
 	      ("C-c C-d" . term-send-eof))
   :init
   (general-define-key :prefix my-leader
-		      "x" 'multi-term)
-  (general-define-key :keymaps 'term-raw-map
+		      "x" 'multi-term
+		      :keymaps 'term-raw-map
 		      :states '(normal insert)
 		      "C-n" 'multi-term-next
 		      "C-p" 'multi-term-prev
@@ -611,12 +611,12 @@ is already narrowed."
 		      :states 'normal
 		      "M-." 'rtags-find-symbol-at-point
 		      "M-," 'rtags-find-references-at-point
-		      "R" 'rtags-rename-symbol)
-  (general-define-key :keymaps '(c-mode-map c++-mode-map)
+		      "R" 'rtags-rename-symbol
+		      :keymaps '(c-mode-map c++-mode-map)
 		      :states 'normal
 		      :prefix my-leader
-		      "R" 'rtags-rename-symbol)
-  (general-define-key :keymaps 'rtags-mode-map
+		      "R" 'rtags-rename-symbol
+		      :keymaps 'rtags-mode-map
 		      :states 'normal
 		      "<return>" 'rtags-select-other-window
 		      "q" 'kill-this-buffer))
@@ -753,8 +753,8 @@ is already narrowed."
   (general-define-key :keymaps '(js2-mode-map js2-jsx-mode-map)
 		      :states 'normal
 		      "M-." 'tern-find-definition
-		      "M-," 'tern-pop-find-definition)
-  (general-define-key :prefix my-leader
+		      "M-," 'tern-pop-find-definition
+		      :prefix my-leader
 		      :keymaps '(js2-mode-map js2-jsx-mode-map)
 		      :states 'normal
 		      "R" 'tern-rename-variable)
