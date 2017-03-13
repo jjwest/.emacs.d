@@ -534,7 +534,7 @@ is already narrowed."
   :ensure t
   :config
   (setq nlinum-relative-redisplay-delay 0.05
-	nlinum-format " %d")
+	nlinum-format " %d ")
   (add-hook 'html-mode-hook #'nlinum-relative-mode)
   (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
