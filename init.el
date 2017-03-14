@@ -222,14 +222,7 @@ is already narrowed."
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
   (custom-theme-set-faces
    'doom-one
-   `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t)))))
-  (with-eval-after-load 'multi-term
-    (set-face-attribute 'term-color-blue nil :foreground "#51afef")
-    (set-face-attribute 'term-color-green nil :foreground "#98be65")
-    (set-face-attribute 'term-color-red nil :foreground "#ff6c6b")
-    (set-face-attribute 'term-color-magenta nil :foreground "#c678dd")
-    (set-face-attribute 'term-color-cyan nil :foreground "#46D9FF")
-    (set-face-attribute 'term-color-yellow nil :foreground "#ECBE7B")))
+   `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))))
 
 
 (use-package doom-modeline
