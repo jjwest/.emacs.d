@@ -603,7 +603,7 @@ is already narrowed."
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
 		      :states 'normal
 		      "M-." 'rtags-find-symbol-at-point
-		      "M-," 'rtags-find-references-at-point
+		      "M-," 'rtags-location-stack-back
 		      "R" 'rtags-rename-symbol)
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
 		      :states 'normal
@@ -707,7 +707,8 @@ is already narrowed."
     :init
     (general-define-key :keymaps 'rust-mode-map
 			:states 'normal
-			"M-." 'racer-find-definition)
+			"M-," #'pop-tag-mark
+			"M-." #'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
 
 (use-package flycheck-rust
@@ -849,22 +850,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
             (lambda (&rest args)
               "Do nothing if `allow-window-shrinking' is nil."
               allow-window-shrinking))
-
-
-(use-package workgroups2
-  :ensure t
-  :config
-  (general-define-key :prefix ",w"
-		      "c" 'wg-create-workgroup
-		      "d" 'wg-delete-workgroup
-		      "D" 'wg-delete-other-workgroups
-		      "b" 'wg-switch-to-workgroup)
-  (setq wg-session-load-on-start nil
-	wg-emacs-exit-save-behavior nil
-	wg-workgroups-mode-exit-save-behavior nil
-	wg-session-file "~/.emacs.d/workgroups")
-
-  (workgroups-mode 1))
 
 (provide 'init)
 ;;; init.el ends here
