@@ -387,7 +387,7 @@ is already narrowed."
 (use-package flycheck-pos-tip
   :ensure t
   :defer t
-  :config
+  :init
   (setq flycheck-pos-tip-timeout 30)
   (flycheck-pos-tip-mode))
 
