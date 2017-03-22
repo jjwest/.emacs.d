@@ -724,15 +724,15 @@ is already narrowed."
   :init
   (add-hook 'clojure-mode-hook #'cider-mode)
   :config
-  (general-define-key :keymaps 'clojure-mode-map
-		      :states '(normal insert)
+  (general-define-key :keymaps 'cider-mode-map
+		      :states 'normal
 		      "C-r" #'cider-run
 		      "C-f" #'cider-eval-buffer))
 
 (use-package flycheck-rust
     :ensure t
     :defer t
-    :config
+    :init
     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
 ;; Web development
