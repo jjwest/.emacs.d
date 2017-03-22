@@ -296,7 +296,8 @@ is already narrowed."
 		      :states 'normal
 		      "S" nil
 		      "M-j" nil
-		      "M-k" nil))
+		      "M-k" nil
+		      "d" nil))
 
 
 (use-package evil-visualstar
@@ -385,7 +386,7 @@ is already narrowed."
 
 (use-package flycheck-pos-tip
   :ensure t
-  :after flycheck
+  :defer t
   :config
   (setq flycheck-pos-tip-timeout 30)
   (flycheck-pos-tip-mode))
@@ -630,29 +631,35 @@ is already narrowed."
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'my/irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  :config
-  (setq irony-additional-clang-options '("-std=c++14")))
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
 (use-package company-irony
   :ensure t
-  :after irony
-  :config (add-to-list 'company-backends '(company-irony)))
+  :defer t
+  :init
+  (with-eval-after-load 'irony
+    (add-to-list 'company-backends 'company-irony)))
 
 (use-package flycheck-irony
   :ensure t
-  :after irony
-  :config (flycheck-irony-setup))
+  :defer t
+  :init
+  (with-eval-after-load 'irony
+    (flycheck-irony-setup)))
 
 (use-package company-irony-c-headers
   :ensure t
-  :after irony
-  :config (add-to-list 'company-backends '(company-irony-c-headers)))
+  :defer t
+  :init
+  (with-eval-after-load 'irony
+    (add-to-list 'company-backends 'company-irony-c-headers)))
 
 (use-package irony-eldoc
   :ensure t
-  :after irony
-  :config (add-hook 'irony-mode-hook #'irony-eldoc))
+  :defer t
+  :init
+  (with-eval-after-load 'irony
+    (add-hook 'irony-mode-hook #'irony-eldoc)))
 
 (use-package company-jedi
   :ensure t
@@ -680,11 +687,11 @@ is already narrowed."
 ;;   :defer t
 ;;   :preface
 ;;   (defun my/rust-mode-hook ()
-;;     (let ((root (f-join
+;;     (let ((sysroot (f-join
 ;; 		    (s-trim-right
 ;; 		     (shell-command-to-string "rustc --print sysroot"))
 ;; 		    "lib")))
-;;       (setenv "LD_LIBRARY_PATH" root)
+;;       (setenv "LD_LIBRARY_PATH" sysroot)
 ;;       (setenv "RLS_ROOT" "~/rls"))
 ;;     (global-lsp-mode 1))
 ;;   :init
@@ -703,7 +710,7 @@ is already narrowed."
 (use-package racer
     :ensure t
     :diminish racer-mode
-    :after rust-mode
+    :defer t
     :init
     (general-define-key :keymaps 'rust-mode-map
 			:states 'normal
@@ -711,9 +718,20 @@ is already narrowed."
 			"M-." #'racer-find-definition)
     (add-hook 'rust-mode-hook #'racer-mode))
 
+(use-package cider
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'clojure-mode-hook #'cider-mode)
+  :config
+  (general-define-key :keymaps 'clojure-mode-map
+		      :states '(normal insert)
+		      "C-r" #'cider-run
+		      "C-f" #'cider-eval-buffer))
+
 (use-package flycheck-rust
     :ensure t
-    :after rust-mode
+    :defer t
     :config
     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
@@ -780,8 +798,8 @@ is already narrowed."
 
 (use-package org-bullets
   :ensure t
-  :after org
-  :config
+  :defer t
+  :init
   (add-hook 'org-mode-hook #'org-bullets-mode))
 
 (use-package ox-latex
