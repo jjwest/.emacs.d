@@ -213,6 +213,23 @@ is already narrowed."
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
 
+(defvar current-brace-style 'own-line
+  "Sets the brace style for yasnippet.")
+
+(defun toggle-brace-style ()
+  "Toggle the current C/C++ brace style."
+  (interactive)
+  (if (eq current-brace-style 'own-line)
+      (setq current-brace-style 'same-line)
+    (setq current-brace-style 'own-line)))
+
+(defun insert-brace ()
+  "Insert brace matching current brace style."
+  (interactive)
+  (if (eq current-brace-style 'own-line)
+      (insert "\n{")
+    (insert "{")))
+
 (use-package doom-themes
   :ensure t
   :config
@@ -391,6 +408,19 @@ is already narrowed."
   (setq flycheck-pos-tip-timeout 30)
   (flycheck-pos-tip-mode))
 
+(use-package dumb-jump
+  :ensure t
+  :config
+  (setq dumb-jump-selector 'ivy)
+  (general-define-key :keymaps 'global
+		      :states 'normal
+		      "M-." #'dumb-jump-go
+		      "M-," #'dumb-jump-back)
+  (general-define-key :keymaps 'emacs-lisp-mode-map
+		      :states 'normal
+		      "M-." #'xref-find-definitions
+		      "M-," #'xref-pop-marker-stack))
+
 (use-package multi-term
   :ensure t
   :bind (:map term-mode-map
@@ -564,23 +594,6 @@ is already narrowed."
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 ;; C/C++ SETTINGS
-(defvar current-brace-style 'own-line
-  "Sets the brace style for yasnippet.")
-
-(defun toggle-brace-style ()
-  "Toggle the current C/C++ brace style."
-  (interactive)
-  (if (eq current-brace-style 'own-line)
-      (setq current-brace-style 'same-line)
-    (setq current-brace-style 'own-line)))
-
-(defun insert-brace ()
-  "Insert brace matching current brace style."
-  (interactive)
-  (if (eq current-brace-style 'own-line)
-      (insert "\n{")
-    (insert "{")))
-
 (use-package c++-mode
   :mode (("\\.h\\'" . c++-mode))
   :init
@@ -625,13 +638,13 @@ is already narrowed."
     (define-key irony-mode-map [remap completion-at-point]
       'irony-completion-at-point-async)
     (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
+      'irony-completion-at-point-async)
+    (irony-cdb-autosetup-compile-options))
   :init
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'my/irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  (add-hook 'irony-mode-hook 'my/irony-mode-hook))
 
 (use-package company-irony
   :ensure t
@@ -644,8 +657,7 @@ is already narrowed."
   :ensure t
   :defer t
   :init
-  (with-eval-after-load 'irony
-    (flycheck-irony-setup)))
+  (with-eval-after-load 'irony (flycheck-irony-setup)))
 
 (use-package company-irony-c-headers
   :ensure t
@@ -724,7 +736,7 @@ is already narrowed."
   :init
   (add-hook 'clojure-mode-hook #'cider-mode)
   :config
-  (general-define-key :keymaps 'cider-mode-map
+  (general-define-key :keymaps 'clojure-mode-map
 		      :states 'normal
 		      "C-r" #'cider-run
 		      "C-f" #'cider-eval-buffer))
