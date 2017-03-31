@@ -408,28 +408,41 @@ is already narrowed."
   (setq flycheck-pos-tip-timeout 30)
   (flycheck-pos-tip-mode))
 
-(use-package dumb-jump
-  :ensure t
-  :config
-  (setq dumb-jump-selector 'ivy)
-  (general-define-key :keymaps 'global
-		      :states 'normal
-		      "M-." #'dumb-jump-go
-		      "M-," #'dumb-jump-back)
-  (general-define-key :keymaps 'emacs-lisp-mode-map
-		      :states 'normal
-		      "M-." #'xref-find-definitions
-		      "M-," #'xref-pop-marker-stack))
-
 (use-package multi-term
   :ensure t
+  :preface
+  (defun toggle-terminal ()
+    (interactive)
+    (if (s-matches-p (rx "*terminal<"
+			 digit
+			 ">*")
+		     (buffer-name))
+	(progn
+	  (switch-to-prev-buffer)
+	  (other-window 1))
+      (let* ((open-buffers (mapcar 'buffer-name (buffer-list)))
+	     (term-buffers (cl-remove-if-not
+			    (lambda (buffer)
+			      (s-matches-p
+			       (rx "*terminal<"
+				   digit
+				   ">*")
+			       buffer))
+			    open-buffers)))
+	(if term-buffers
+	    (switch-to-buffer-other-window (car term-buffers))
+	  (when (eq (count-windows) 1)
+	    (split-window-right))
+	  (other-window 1)
+	  (multi-term)))))
   :bind (:map term-mode-map
 	      ("C-c C-d" . term-send-eof)
 	      :map term-raw-map
 	      ("C-c C-d" . term-send-eof))
   :init
   (general-define-key :prefix my-leader
-		      "x" 'multi-term)
+		      "x" 'toggle-terminal
+		      "X" 'multi-term)
   (general-define-key :keymaps 'term-raw-map
 		      :states '(normal insert)
 		      "C-n" 'multi-term-next
