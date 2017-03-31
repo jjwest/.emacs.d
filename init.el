@@ -411,24 +411,21 @@ is already narrowed."
 (use-package multi-term
   :ensure t
   :preface
+  (defun buffer-is-term-p (buf)
+    (s-matches-p (rx "*terminal<"
+		     digit
+		     ">*")
+		 buf))
+
   (defun toggle-terminal ()
     (interactive)
-    (if (s-matches-p (rx "*terminal<"
-			 digit
-			 ">*")
-		     (buffer-name))
+    (if (buffer-is-term-p (buffer-name))
 	(progn
-	  (switch-to-prev-buffer)
+	  (while (buffer-is-term-p (buffer-name))
+	    (switch-to-prev-buffer))
 	  (other-window 1))
       (let* ((open-buffers (mapcar 'buffer-name (buffer-list)))
-	     (term-buffers (cl-remove-if-not
-			    (lambda (buffer)
-			      (s-matches-p
-			       (rx "*terminal<"
-				   digit
-				   ">*")
-			       buffer))
-			    open-buffers)))
+	     (term-buffers (cl-remove-if-not #'buffer-is-term-p open-buffers)))
 	(if term-buffers
 	    (switch-to-buffer-other-window (car term-buffers))
 	  (when (eq (count-windows) 1)
