@@ -177,6 +177,7 @@
 (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
 
 (defun my/save-all-buffers ()
+  "Save all buffers without prompt."
   (interactive)
   (save-some-buffers t))
 
@@ -217,7 +218,7 @@ is already narrowed."
   "Sets the brace style for yasnippet.")
 
 (defun toggle-brace-style ()
-  "Toggle the current C/C++ brace style."
+  "Toggle the current brace style."
   (interactive)
   (if (eq current-brace-style 'own-line)
       (setq current-brace-style 'same-line)
@@ -233,7 +234,6 @@ is already narrowed."
 (use-package doom-themes
   :ensure t
   :config
-  (require 'doom-neotree)
   (load-theme 'doom-one)
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
@@ -315,7 +315,6 @@ is already narrowed."
 		      "M-j" nil
 		      "M-k" nil
 		      "d" nil))
-
 
 (use-package evil-visualstar
   :ensure t
@@ -399,7 +398,7 @@ is already narrowed."
   :config
   (general-define-key :prefix my-leader "e" 'flycheck-list-errors)
   (setq flycheck-c/c++-gcc-executable "gcc-5")
-  (setq flycheck-gcc-language-standard "c++14"))
+  (setq-default flycheck-gcc-language-standard "c++14"))
 
 (use-package flycheck-pos-tip
   :ensure t
@@ -412,9 +411,7 @@ is already narrowed."
   :ensure t
   :preface
   (defun buffer-is-term-p (buf)
-    (s-matches-p (rx "*terminal<"
-		     digit
-		     ">*")
+    (s-matches-p (rx "*terminal<" digit ">*")
 		 buf))
 
   (defun toggle-terminal ()
@@ -425,7 +422,7 @@ is already narrowed."
 	    (switch-to-prev-buffer))
 	  (other-window 1))
       (let* ((open-buffers (mapcar 'buffer-name (buffer-list)))
-	     (term-buffers (cl-remove-if-not #'buffer-is-term-p open-buffers)))
+	     (term-buffers (cl-remove-if-not 'buffer-is-term-p open-buffers)))
 	(if term-buffers
 	    (switch-to-buffer-other-window (car term-buffers))
 	  (when (eq (count-windows) 1)
@@ -710,15 +707,14 @@ is already narrowed."
 ;;   :preface
 ;;   (defun my/rust-mode-hook ()
 ;;     (let ((sysroot (f-join
-;; 		    (s-trim-right
-;; 		     (shell-command-to-string "rustc --print sysroot"))
-;; 		    "lib")))
+;;     		    (s-trim-right
+;;     		     (shell-command-to-string "rustc --print sysroot"))
+;;     		    "lib")))
 ;;       (setenv "LD_LIBRARY_PATH" sysroot)
 ;;       (setenv "RLS_ROOT" "~/rls"))
 ;;     (global-lsp-mode 1))
 ;;   :init
 ;;   (add-hook 'rust-mode-hook #'my/rust-mode-hook)
-;;   :config
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
 ;; 		      "C-." 'company-complete)
