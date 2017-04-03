@@ -241,7 +241,6 @@ is already narrowed."
    'doom-one
    `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))))
 
-
 (use-package doom-modeline
   :ensure powerline
   :ensure s
@@ -252,6 +251,13 @@ is already narrowed."
   :init
   (unless (file-exists-p "~/.emacs.d/themes/doom-modeline.elc")
     (byte-compile-file "~/.emacs.d/themes/doom-modeline.el")))
+
+(use-package doom-vcs
+  :load-path "~/.emacs.d/themes"
+  :init
+  (unless (file-exists-p "~/.emacs.d/themes/doom-vcs.elc")
+    (byte-compile-file "~/.emacs.d/themes/doom-vcs.el"))
+  (setq-default fringes-outside-margins t))
 
 (use-package evil
   :ensure t
