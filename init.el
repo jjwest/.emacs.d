@@ -431,8 +431,8 @@ is already narrowed."
 	     (term-buffers (cl-remove-if-not 'buffer-is-term-p open-buffers)))
 	(if term-buffers
 	    (switch-to-buffer-other-window (car term-buffers))
-	  (when (eq (count-windows) 1)
-	    (split-window-right))
+	  (when (equal (count-windows) 1)
+	    (split-window-sensibly))
 	  (other-window 1)
 	  (multi-term)))))
   :bind (:map term-mode-map
