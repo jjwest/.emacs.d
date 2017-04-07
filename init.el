@@ -247,16 +247,16 @@ is already narrowed."
   :ensure f
   :ensure evil
   :ensure projectile
-  :load-path "~/.emacs.d/themes"
+  :load-path "~/.emacs.d/lisp"
   :init
-  (unless (file-exists-p "~/.emacs.d/themes/doom-modeline.elc")
-    (byte-compile-file "~/.emacs.d/themes/doom-modeline.el")))
+  (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
+    (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
 
 (use-package doom-vcs
-  :load-path "~/.emacs.d/themes"
+  :load-path "~/.emacs.d/lisp"
   :init
-  (unless (file-exists-p "~/.emacs.d/themes/doom-vcs.elc")
-    (byte-compile-file "~/.emacs.d/themes/doom-vcs.el"))
+  (unless (file-exists-p "~/.emacs.d/lisp/doom-vcs.elc")
+    (byte-compile-file "~/.emacs.d/lisp/doom-vcs.el"))
   (setq-default fringes-outside-margins t))
 
 (use-package evil
