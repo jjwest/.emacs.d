@@ -802,16 +802,15 @@ is already narrowed."
   (setq tern-command (append tern-command '("--no-port-file"))))
 
 (use-package org
-  :defer t
+  :mode ("\\.org\\'" . org-mode)
   :defines org-export-async-init-file
   :preface
   (defun my/org-latex-export ()
     (interactive)
     (save-buffer)
     (org-latex-export-to-pdf t))
-  :init
-  (add-hook 'org-mode-hook #'org-indent-mode)
   :config
+  (add-hook 'org-mode-hook #'org-indent-mode)
   (setq org-export-async-init-file (f-join user-emacs-directory
 					   "lisp"
 					   "org-export.el"))
@@ -819,12 +818,6 @@ is already narrowed."
    'org-babel-load-languages '((python . t)))
   (general-define-key :keymaps 'org-mode-map
 		      "M-l" 'my/org-latex-export))
-
-(use-package org-bullets
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 ;; PDF-tools requires installation with (pdf-tools-install) first time it is used
 (use-package pdf-tools
