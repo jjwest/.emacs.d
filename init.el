@@ -139,16 +139,6 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 
-;; Changing active window
-(general-define-key :keymaps 'global
- "C-h" #'windmove-left
- "C-j" #'windmove-down
- "C-k" #'windmove-up
- "C-l" #'windmove-right
- "M-%" #'async-shell-command)
-
-
-
 ;; My own convenience functions
 (defun my/split-line ()
   "Split line at point."
