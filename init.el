@@ -404,11 +404,11 @@ is already narrowed."
   :config
   (general-define-key :prefix my-leader "e" 'flycheck-list-errors)
   (setq flycheck-c/c++-gcc-executable "gcc-5")
-  (setq-default flycheck-gcc-language-standard "c++14"))
+  (setq-default flycheck-gcc-language-standard "c++14")
+  (setq-default flycheck-clang-language-standard "c++14"))
 
 (use-package flycheck-pos-tip
   :ensure t
-  :defer t
   :init
   (setq flycheck-pos-tip-timeout 30)
   (flycheck-pos-tip-mode))
@@ -631,6 +631,7 @@ is already narrowed."
 		      :states 'normal
 		      "M-." 'rtags-find-symbol-at-point
 		      "M-," 'rtags-location-stack-back
+		      "M--" 'rtags-find-all-references-at-point
 		      "R" 'rtags-rename-symbol)
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
 		      :states 'normal
@@ -654,10 +655,12 @@ is already narrowed."
       'irony-completion-at-point-async)
     (irony-cdb-autosetup-compile-options))
   :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'my/irony-mode-hook))
+  (add-hook 'c++-mode-hook #'irony-mode)
+  (add-hook 'c-mode-hook #'irony-mode)
+  (add-hook 'objc-mode-hook #'irony-mode)
+  (add-hook 'irony-mode-hook #'my/irony-mode-hook)
+  :config
+  (setq irony-additional-clang-options '("-std=c++14")))
 
 (use-package company-irony
   :ensure t
