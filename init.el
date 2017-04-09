@@ -51,6 +51,7 @@
       initial-scratch-message ""
       load-prefer-newer t
       indent-tabs-mode nil
+      tab-width 4
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
       message-log-max 200
@@ -559,7 +560,7 @@ is already narrowed."
 	ivy-height 15
 	ivy-count-format "(%d/%d) "
 	ivy-display-style 'fancy)
-  (general-define-key :prefix ","
+  (general-define-key :prefix my-leader
    "f" 'counsel-find-file
    "F" 'counsel-recentf
    "b" 'ivy-switch-buffer
@@ -802,22 +803,18 @@ is already narrowed."
 
 (use-package org
   :defer t
+  :defines org-export-async-init-file
   :preface
   (defun my/org-latex-export ()
     (interactive)
     (save-buffer)
-    (org-latex-export-to-pdf)
-    (let ((org-buffer (buffer-name))
-	  (pdf-buffer (replace-regexp-in-string "\.org$" ".pdf" (buffer-name))))
-      (if (get-buffer pdf-buffer)
-	  (progn
-	    (switch-to-buffer-other-window pdf-buffer)
-	    (revert-buffer t t)
-	    (switch-to-buffer-other-window org-buffer))
-	(find-file-other-window (replace-regexp-in-string "\.org$" ".pdf" (buffer-file-name))))))
+    (org-latex-export-to-pdf t))
   :init
   (add-hook 'org-mode-hook #'org-indent-mode)
   :config
+  (setq org-export-async-init-file (f-join user-emacs-directory
+					   "lisp"
+					   "org-export.el"))
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
   (general-define-key :keymaps 'org-mode-map
@@ -828,26 +825,6 @@ is already narrowed."
   :defer t
   :init
   (add-hook 'org-mode-hook #'org-bullets-mode))
-
-(use-package ox-latex
-  :defer t
-  :config
-  (add-to-list 'org-latex-classes
-	       '("koma-article"
-		 "\\documentclass{scrartcl}"
-		 ("\\section{%s}" . "\\section*{%s}")
-		 ("\\subsection{%s}" . "\\subsection*{%s}")
-		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-  (setq org-latex-pdf-process
-  	'("xelatex -interaction nonstopmode %f"
-  	  "xelatex -interaction nonstopmode %f"))
-  (setq org-latex-listings 'listings
-	org-export-with-sub-superscripts nil
-	org-export-with-smart-quotes t)
-  (add-to-list 'org-latex-packages-alist '("" "listings"))
-  (add-to-list 'org-latex-packages-alist '("" "color")))
 
 ;; PDF-tools requires installation with (pdf-tools-install) first time it is used
 (use-package pdf-tools
