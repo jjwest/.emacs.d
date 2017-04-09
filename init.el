@@ -674,7 +674,8 @@ is already narrowed."
   :ensure t
   :defer t
   :init
-  (with-eval-after-load 'irony (flycheck-irony-setup)))
+  (with-eval-after-load 'irony
+    (flycheck-irony-setup)))
 
 (use-package company-irony-c-headers
   :ensure t
