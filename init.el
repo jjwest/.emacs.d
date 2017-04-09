@@ -20,27 +20,6 @@
   :ensure t
   :config (benchmark-init/activate))
 
-(use-package general
-  :ensure t
-  :defines my-leader
-  :config
-  (setq general-default-keymaps 'normal)
-  (setq my-leader ",")
-  (general-define-key :prefix my-leader
-		      :keymaps '(normal visual)
-		      "n" 'narrow-or-widen-dwim)
-  (general-define-key :prefix my-leader
-   "dw" 'delete-window
-   "do" 'delete-other-windows
-   "sf" 'save-buffer
-   "sa" 'my/save-all-buffers
-   "k" 'kill-this-buffer
-   "B" 'ibuffer
-   "P" 'proced
-   "W" 'winner-undo
-   "ss" 'my/split-window-horizontal
-   "vv" 'my/split-window-vertical))
-
 ;; General settings and better defaults
 (setq initial-major-mode 'fundamental-mode
       custom-safe-themes t
@@ -221,6 +200,28 @@ is already narrowed."
   (if (eq current-brace-style 'own-line)
       (insert "\n{")
     (insert "{")))
+
+;; Packages
+(use-package general
+  :ensure t
+  :defines my-leader
+  :config
+  (setq general-default-keymaps 'normal)
+  (setq my-leader ",")
+  (general-define-key :prefix my-leader
+		      :keymaps '(normal visual)
+		      "n" 'narrow-or-widen-dwim)
+  (general-define-key :prefix my-leader
+   "dw" 'delete-window
+   "do" 'delete-other-windows
+   "sf" 'save-buffer
+   "sa" 'my/save-all-buffers
+   "k" 'kill-this-buffer
+   "B" 'ibuffer
+   "P" 'proced
+   "W" 'winner-undo
+   "ss" 'my/split-window-horizontal
+   "vv" 'my/split-window-vertical))
 
 (use-package doom-themes
   :ensure t
