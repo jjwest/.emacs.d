@@ -1,4 +1,7 @@
 ;;; doom-vcs.el --- version control awareness
+
+(eval-when-compile
+  (require 'use-package))
 (setq shackle-rules
         `(;; Util
           ("^\\*.+-Profiler-Report .+\\*$" :align below :size 0.3 :regexp t)
