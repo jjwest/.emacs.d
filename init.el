@@ -223,6 +223,7 @@ is already narrowed."
    "ss" 'my/split-window-horizontal
    "vv" 'my/split-window-vertical))
 
+
 (use-package doom-themes
   :ensure t
   :config
@@ -232,6 +233,14 @@ is already narrowed."
   (custom-theme-set-faces
    'doom-one
    `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))))
+
+;; (use-package spacemacs-theme
+;;   :ensure t
+;;   :init
+;;   (load-theme 'spacemacs-light)
+;;   (custom-theme-set-faces
+;;    'spacemacs-light
+;;    `(nlinum-relative-current-face ((t (:foreground "#efeae9" :background "#a8a8bf" :bold t))))))
 
 (use-package doom-modeline
   :ensure powerline
@@ -317,15 +326,6 @@ is already narrowed."
 (use-package evil-visualstar
   :ensure t
   :config (global-evil-visualstar-mode))
-
-(use-package evil-mc
-  :ensure t
-  :config
-  (general-define-key :keymaps 'evil-mc-key-map
-		      :states 'normal
-		      "C-p" nil
-		      "C-n" nil)
-  (global-evil-mc-mode))
 
 (use-package yasnippet
   :ensure t
@@ -423,7 +423,7 @@ is already narrowed."
 	     (term-buffers (cl-remove-if-not 'buffer-is-term-p open-buffers)))
 	(if term-buffers
 	    (switch-to-buffer-other-window (car term-buffers))
-	  (when (equal (count-windows) 1)
+	  (when (= (count-windows) 1)
 	    (split-window-sensibly))
 	  (other-window 1)
 	  (multi-term)))))
@@ -563,7 +563,7 @@ is already narrowed."
   :ensure t
   :config
   (setq nlinum-relative-redisplay-delay 0.05
-	nlinum-format " %d ")
+	nlinum-format "%d ")
   (add-hook 'html-mode-hook #'nlinum-relative-mode)
   (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
@@ -804,26 +804,13 @@ is already narrowed."
   :config
   (add-hook 'org-mode-hook #'org-indent-mode)
   (setq org-export-async-init-file (f-join user-emacs-directory
-					   "lisp"
-					   "org-export.el"))
+  					   "lisp"
+  					   "org-export.el"))
+  (setq org-src-preserve-indentation t)
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
   (general-define-key :keymaps 'org-mode-map
 		      "M-l" 'my/org-latex-export))
-
-;; PDF-tools requires installation with (pdf-tools-install) first time it is used
-(use-package pdf-tools
-  :ensure t
-  :mode ("\\.pdf\\'" . pdf-view-mode)
-  :bind (:map pdf-view-mode-map
-	      ("C-h" . windmove-left)
-	      ("C-j" . windmove-down)
-	      ("C-k" . windmove-up)
-	      ("C-l" . windmove-right)
-	      ("j" . pdf-view-next-line-or-next-page)
-	      ("k" . pdf-view-previous-line-or-previous-page)
-	      ("M-j" . pdf-view-next-page)
-	      ("M-k" . pdf-view-previous-page)))
 
 (use-package tramp
   :defer t
