@@ -6,6 +6,7 @@
 (require 'org-ref)
 (require 'ox)
 (require 'ox-latex)
+
 (add-to-list 'org-latex-classes
 	     '("koma-article"
 	       "\\documentclass{scrartcl}"
@@ -21,9 +22,11 @@
 	"bibtex %b"
 	"xelatex -bibtex -interaction nonstopmode %f"
 	"xelatex -bibtex -interaction nonstopmode %f"))
+
 (setq org-latex-listings 'listings
       org-export-with-sub-superscripts nil
       org-export-with-smart-quotes t)
+
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
 (add-to-list 'org-latex-default-packages-alist

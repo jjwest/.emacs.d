@@ -653,14 +653,14 @@ is already narrowed."
     (irony-cdb-autosetup-compile-options))
 
   (defun my/irony-cleanup ()
-    (let ((c-cpp-buffers (--filter
-			  (with-current-buffer it
-			    (or (eq major-mode 'c-mode)
-				(eq major-mode 'c++-mode)))
-			  (buffer-list))))
-      (when (and (get-process "Irony")
-		 (not c-cpp-buffers))
-	(irony-server-kill))))
+    (when (get-process "Irony")
+      (let ((c-cpp-buffers (--filter
+			    (with-current-buffer it
+			      (or (eq major-mode 'c-mode)
+				  (eq major-mode 'c++-mode)))
+			    (buffer-list))))
+	(unless c-cpp-buffers
+	  (irony-server-kill)))))
   :init
   (add-hook 'c++-mode-hook #'irony-mode)
   (add-hook 'c-mode-hook #'irony-mode)
@@ -668,7 +668,7 @@ is already narrowed."
   (add-hook 'irony-mode-hook #'my/irony-mode-hook)
   :config
   (setq irony-additional-clang-options '("-std=c++14"))
-  (advice-add #'projectile-kill-buffers :after #'my/irony-cleanup))
+  (add-hook 'kill-buffer-hook #'my/irony-cleanup))
 
 
 (use-package company-irony
@@ -720,26 +720,23 @@ is already narrowed."
   :config
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :defer t
-;;   :preface
-;;   (defun my/rust-mode-hook ()
-;;     (let* ((sysroot (s-trim-right
-;; 		     (shell-command-to-string "rustc --print sysroot")))
-;; 	   (lib (f-join sysroot
-;; 			"lib")))
-;;       (setenv "LD_LIBRARY_PATH" lib))
-;;     (global-lsp-mode 1))
-;;   :init
-;;   (add-hook 'rust-mode-hook #'my/rust-mode-hook)
-;;   (general-define-key :keymaps 'rust-mode-map
-;; 		      :states '(normal insert)
-;; 		      "C-." 'company-complete)
-;;   (general-define-key :keymaps 'rust-mode-map
-;; 		      :states 'normal
-;; 		      :prefix my-leader
-;; 		      "R" 'lsp-rename))
+(use-package lsp-mode
+  :ensure t
+  :after rust-mode
+  :config
+  (let* ((sysroot (s-trim-right
+		   (shell-command-to-string "rustc --print sysroot")))
+	 (lib (f-join sysroot
+		      "lib")))
+    (setenv "LD_LIBRARY_PATH" lib))
+  (global-lsp-mode 1)
+  (general-define-key :keymaps 'rust-mode-map
+		      :states '(normal insert)
+		      "C-." 'company-complete)
+  (general-define-key :keymaps 'rust-mode-map
+		      :states 'normal
+		      :prefix my-leader
+		      "R" 'lsp-rename))
 
 
 
