@@ -240,7 +240,9 @@ is already narrowed."
 ;;   (load-theme 'spacemacs-light)
 ;;   (custom-theme-set-faces
 ;;    'spacemacs-light
-;;    `(nlinum-relative-current-face ((t (:foreground "#efeae9" :background "#a8a8bf" :bold t))))))
+;;    `(nlinum-relative-current-face ((t (:foreground "#efeae9" :background "#a8a8bf" :bold t)))))
+;;   (with-eval-after-load 'nlinum-relative
+;;     (setq nlinum-format " %d ")))
 
 (use-package doom-modeline
   :ensure powerline
@@ -561,7 +563,7 @@ is already narrowed."
 
 (use-package nlinum-relative
   :ensure t
-  :config
+  :init
   (setq nlinum-relative-redisplay-delay 0.05
 	nlinum-format "%d ")
   (add-hook 'html-mode-hook #'nlinum-relative-mode)
@@ -708,12 +710,11 @@ is already narrowed."
 ;;   :defer t
 ;;   :preface
 ;;   (defun my/rust-mode-hook ()
-;;     (let ((sysroot (f-join
-;;     		    (s-trim-right
-;;     		     (shell-command-to-string "rustc --print sysroot"))
-;;     		    "lib")))
-;;       (setenv "LD_LIBRARY_PATH" sysroot)
-;;       (setenv "RLS_ROOT" "~/rls"))
+;;     (let* ((sysroot (s-trim-right
+;; 		     (shell-command-to-string "rustc --print sysroot")))
+;; 	   (lib (f-join sysroot
+;; 			"lib")))
+;;       (setenv "LD_LIBRARY_PATH" lib))
 ;;     (global-lsp-mode 1))
 ;;   :init
 ;;   (add-hook 'rust-mode-hook #'my/rust-mode-hook)
@@ -811,6 +812,12 @@ is already narrowed."
    'org-babel-load-languages '((python . t)))
   (general-define-key :keymaps 'org-mode-map
 		      "M-l" 'my/org-latex-export))
+
+(use-package org-ref
+  :ensure t
+  :after org
+  :config
+  (require 'doi-utils))
 
 (use-package tramp
   :defer t

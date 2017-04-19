@@ -1,6 +1,11 @@
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+(require 'org)
+(require 'org-ref)
 (require 'ox)
 (require 'ox-latex)
-
 (add-to-list 'org-latex-classes
 	     '("koma-article"
 	       "\\documentclass{scrartcl}"
@@ -9,12 +14,21 @@
 	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
 	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-(setq org-export-async-debug nil)
+
+(setq org-export-async-debug t)
 (setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode %f"
-	"xelatex -interaction nonstopmode %f"))
+      '("xelatex -bibtex -interaction nonstopmode %f"
+	"bibtex %b"
+	"xelatex -bibtex -interaction nonstopmode %f"
+	"xelatex -bibtex -interaction nonstopmode %f"))
 (setq org-latex-listings 'listings
       org-export-with-sub-superscripts nil
       org-export-with-smart-quotes t)
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
+(add-to-list 'org-latex-default-packages-alist
+	     '("linktocpage,pdfstartview=FitH,colorlinks,
+linkcolor=blue,anchorcolor=blue,
+citecolor=blue,filecolor=blue,menucolor=blue,urlcolor=blue"
+	       "hyperref" nil)
+	     t)
