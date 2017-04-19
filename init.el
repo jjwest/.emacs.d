@@ -651,13 +651,25 @@ is already narrowed."
     (define-key irony-mode-map [remap complete-symbol]
       'irony-completion-at-point-async)
     (irony-cdb-autosetup-compile-options))
+
+  (defun my/irony-cleanup ()
+    (let ((c-cpp-buffers (--filter
+			  (with-current-buffer it
+			    (or (eq major-mode 'c-mode)
+				(eq major-mode 'c++-mode)))
+			  (buffer-list))))
+      (when (and (get-process "Irony")
+		 (not c-cpp-buffers))
+	(irony-server-kill))))
   :init
   (add-hook 'c++-mode-hook #'irony-mode)
   (add-hook 'c-mode-hook #'irony-mode)
   (add-hook 'objc-mode-hook #'irony-mode)
   (add-hook 'irony-mode-hook #'my/irony-mode-hook)
   :config
-  (setq irony-additional-clang-options '("-std=c++14")))
+  (setq irony-additional-clang-options '("-std=c++14"))
+  (advice-add #'projectile-kill-buffers :after #'my/irony-cleanup))
+
 
 (use-package company-irony
   :ensure t
