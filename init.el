@@ -232,6 +232,9 @@ is already narrowed."
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
   (custom-theme-set-faces
    'doom-one
+   `(doom-linum
+     ((((type graphic)) :inherit linum :foreground "#5B6268" :background "#282c34")
+      (t                :inherit linum)))
    `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))))
 
 ;; (use-package spacemacs-theme
