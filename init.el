@@ -720,24 +720,24 @@ is already narrowed."
   :config
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
-(use-package lsp-mode
-  :ensure t
-  :after rust-mode
-  :config
-  (let* ((sysroot (s-trim-right
-		   (shell-command-to-string "rustc --print sysroot")))
-	 (lib (f-join sysroot
-		      "lib")))
-    (setenv "LD_LIBRARY_PATH" lib))
-  (global-lsp-mode 1)
-  (general-define-key :keymaps 'rust-mode-map
-		      :states '(normal insert)
-		      "C-." 'company-complete)
-  (general-define-key :keymaps 'rust-mode-map
-		      :states 'normal
-		      :prefix my-leader
-		      "R" 'lsp-rename))
 
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :after rust-mode
+;;   :config
+;;   (let* ((sysroot (s-trim-right
+;; 		   (shell-command-to-string "rustc --print sysroot")))
+;; 	 (lib (f-join sysroot
+;; 		      "lib")))
+;;     (setenv "LD_LIBRARY_PATH" lib))
+;;   (global-lsp-mode 1)
+;;   (general-define-key :keymaps 'rust-mode-map
+;; 		      :states '(normal insert)
+;; 		      "C-." 'company-complete)
+;;   (general-define-key :keymaps 'rust-mode-map
+;; 		      :states 'normal
+;; 		      :prefix my-leader
+;; 		      "R" 'lsp-rename))
 
 
 (use-package racer
@@ -840,9 +840,9 @@ is already narrowed."
   (general-define-key :prefix my-leader
 		      :keymaps 'org-mode-map
 		      :states 'normal
-		      "R" 'org-ref-helm-insert-ref-link
-		      "C" 'org-ref-helm-insert-cite-link
-		      "L" 'org-ref-helm-insert-label-link))
+		      "R" #'org-ref-helm-insert-ref-link
+		      "C" #'org-ref-helm-insert-cite-link
+		      "L" #'org-ref-helm-insert-label-link))
 
 (use-package tramp
   :defer t
