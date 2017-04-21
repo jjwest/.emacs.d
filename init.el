@@ -287,6 +287,11 @@ is already narrowed."
    "M-," 'xref-find-references
    "Q" "@q"
    "Y" "y$")
+  (general-define-key :keymaps 'global
+		      "C-h" #'windmove-left
+		      "C-j" #'windmove-down
+		      "C-k" #'windmove-up
+		      "C-l" #'windmove-right)
   (general-define-key :keymaps 'evil-visual-state-map
   		      "TAB" 'indent-for-tab-command)
   (general-define-key :keymaps 'package-menu-mode-map
@@ -373,7 +378,8 @@ is already narrowed."
 (use-package counsel-projectile
   :ensure t
   :diminish projectile-mode
-  :config
+  :defer t
+  :init
   (setq projectile-other-file-alist '(("c" "h")
 				      ("h" "c" "cc" "cpp")
 				      ("cc" "h")
@@ -389,6 +395,7 @@ is already narrowed."
   (defadvice projectile-project-root (around ignore-remote first activate)
     (unless (file-remote-p default-directory)
       ad-do-it))
+  :config
   (projectile-mode))
 
 
@@ -704,10 +711,10 @@ is already narrowed."
   :defer t
   :preface
   (defun my/init-python-hook ()
-    (add-to-list 'company-backends 'company-jedi))
+    (add-to-list 'company-backends 'company-jedi)
+    (jedi:setup))
   :init
   (add-hook 'python-mode-hook #'my/init-python-hook)
-  :config
   (general-define-key :keymaps 'python-mode-map
 		      :states 'normal
 		      "M-." 'jedi:goto-definition
@@ -739,6 +746,9 @@ is already narrowed."
 ;; 		      :prefix my-leader
 ;; 		      "R" 'lsp-rename))
 
+
+;; (use-package lsp-rust
+;;   :ensure t)
 
 (use-package racer
     :ensure t
