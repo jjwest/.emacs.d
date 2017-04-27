@@ -25,7 +25,8 @@
 
 (setq org-latex-listings 'listings
       org-export-with-sub-superscripts nil
-      org-export-with-smart-quotes t)
+      org-export-with-smart-quotes t
+      org-src-preserve-indentation t)
 
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))

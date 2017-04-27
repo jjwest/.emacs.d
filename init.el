@@ -8,6 +8,7 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (package-initialize)
 
 ;; Bootstrap use-package
@@ -151,13 +152,6 @@
   (interactive)
   (save-some-buffers t))
 
-(defun find-file-sudo ()
-  "Reopen the current file as root, preserving point position."
-  (interactive)
-  (let ((p (point)))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))
-    (goto-char p)))
-
 (defun narrow-or-widen-dwim (p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
 Dwim means: region, org-src-block, org-subtree, or
@@ -222,7 +216,6 @@ is already narrowed."
    "W" 'winner-undo
    "ss" 'my/split-window-horizontal
    "vv" 'my/split-window-vertical))
-
 
 (use-package doom-themes
   :ensure t
@@ -558,7 +551,7 @@ is already narrowed."
   :bind (("M-x" . counsel-M-x)
 	 :map ivy-mode-map
 	 ("<escape>" . minibuffer-keyboard-quit))
-  :config
+  :init
   (setq projectile-completion-system 'ivy
 	ivy-height 15
 	ivy-count-format "(%d/%d) "
@@ -824,6 +817,7 @@ is already narrowed."
     (interactive)
     (save-buffer)
     (org-latex-export-to-pdf t))
+  :init
   :config
   (add-hook 'org-mode-hook #'org-indent-mode)
   (setq org-export-async-init-file (f-join user-emacs-directory
