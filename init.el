@@ -195,6 +195,15 @@ is already narrowed."
       (insert "\n{")
     (insert "{")))
 
+(defun change-theme (theme)
+  (interactive
+   (list
+    (intern (completing-read "Change to theme: "
+			     (mapcar 'symbol-name
+				     (custom-available-themes))))))
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme theme))
+
 ;; Packages
 (use-package general
   :ensure t
@@ -219,26 +228,39 @@ is already narrowed."
 
 (use-package doom-themes
   :ensure t
+  :preface
+  (defun tweak-doom-theme (&rest args)
+    (when (member 'doom-one custom-enabled-themes)
+      (custom-theme-set-faces
+       'doom-one
+       `(doom-linum
+	 ((((type graphic)) :inherit linum :foreground "#5B6268" :background "#282c34")
+	  (t                :inherit linum)))
+       `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t)))))))
+  :init
+  (advice-add #'change-theme :after #'tweak-doom-theme)
+  (advice-add #'load-theme :after #'tweak-doom-theme)
   :config
   (load-theme 'doom-one)
   (add-hook 'find-file-hook 'doom-buffer-mode)
-  (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
-  (custom-theme-set-faces
-   'doom-one
-   `(doom-linum
-     ((((type graphic)) :inherit linum :foreground "#5B6268" :background "#282c34")
-      (t                :inherit linum)))
-   `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))))
+  (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
 
-;; (use-package spacemacs-theme
-;;   :ensure t
-;;   :init
-;;   (load-theme 'spacemacs-light)
-;;   (custom-theme-set-faces
-;;    'spacemacs-light
-;;    `(nlinum-relative-current-face ((t (:foreground "#efeae9" :background "#a8a8bf" :bold t)))))
-;;   (with-eval-after-load 'nlinum-relative
-;;     (setq nlinum-format " %d ")))
+(use-package solarized-theme
+  :ensure t)
+
+(use-package spacemacs-theme
+  :ensure t
+  :preface
+  (defun tweak-spacemacs-theme (&rest args)
+    (when (member 'spacemacs-light custom-enabled-themes)
+      (custom-theme-set-faces
+       'spacemacs-light
+       `(nlinum-relative-current-face ((t (:foreground "#efeae9" :background "#a8a8bf" :bold t)))))
+      (with-eval-after-load 'nlinum-relative
+	(setq nlinum-format " %d "))))
+  :init
+  (advice-add #'change-theme :after #'tweak-spacemacs-theme)
+  (advice-add #'load-theme :after #'tweak-spacemacs-theme))
 
 (use-package doom-modeline
   :ensure powerline
@@ -817,9 +839,9 @@ is already narrowed."
     (interactive)
     (save-buffer)
     (org-latex-export-to-pdf t))
-  :init
   :config
   (add-hook 'org-mode-hook #'org-indent-mode)
+  (add-hook 'org-mode-hook #'auto-fill-mode)
   (setq org-export-async-init-file (f-join user-emacs-directory
   					   "lisp"
   					   "org-export.el"))
@@ -847,6 +869,13 @@ is already narrowed."
 		      "R" #'org-ref-helm-insert-ref-link
 		      "C" #'org-ref-helm-insert-cite-link
 		      "L" #'org-ref-helm-insert-label-link))
+
+(use-package darkroom
+  :ensure t
+  :after org
+  :config
+  (setq darkroom-margins 0.25)
+  (add-hook 'org-mode-hook #'darkroom-mode))
 
 (use-package tramp
   :defer t

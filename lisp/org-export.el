@@ -18,12 +18,12 @@
 
 (setq org-export-async-debug t)
 (setq org-latex-pdf-process
-      '("xelatex -bibtex -interaction nonstopmode %f"
+      '("xelatex -bibtex -shell-escape -interaction nonstopmode %f"
 	"bibtex %b"
-	"xelatex -bibtex -interaction nonstopmode %f"
-	"xelatex -bibtex -interaction nonstopmode %f"))
+	"xelatex -bibtex -shell-escape -interaction nonstopmode %f"
+	"xelatex -bibtex -shell-escape -interaction nonstopmode %f"))
 
-(setq org-latex-listings 'listings
+(setq org-latex-listings t
       org-export-with-sub-superscripts nil
       org-export-with-smart-quotes t
       org-src-preserve-indentation t)
