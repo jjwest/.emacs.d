@@ -23,7 +23,6 @@ backgroundcolor=\color{codebg},
 tabsize=4,
 showspaces=false,
 showstringspaces=false,
-xleftmargin=.23in
 }
 #+end_LaTeX
 $0

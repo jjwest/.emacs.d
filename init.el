@@ -298,7 +298,8 @@ is already narrowed."
    "S" 'my/split-line
    "U" 'redo
    "M-." 'xref-find-definitions
-   "M-," 'xref-find-references
+   "M-," 'xref-pop-marker-stack
+   "M--" 'xref-find-references
    "Q" "@q"
    "Y" "y$")
   (general-define-key :keymaps 'global
@@ -746,11 +747,14 @@ is already narrowed."
 ;;   :ensure t
 ;;   :after rust-mode
 ;;   :config
-;;   (let* ((sysroot (s-trim-right
-;; 		   (shell-command-to-string "rustc --print sysroot")))
-;; 	 (lib (f-join sysroot
-;; 		      "lib")))
-;;     (setenv "LD_LIBRARY_PATH" lib))
+;;   (setq lsp-enable-flycheck nil)
+;;   (if (executable-find "rustc")
+;;       (let* ((sysroot (s-trim-right
+;; 		       (shell-command-to-string "rustc --print sysroot")))
+;; 	     (lib (f-join sysroot
+;; 			  "lib")))
+;; 	(setenv "LD_LIBRARY_PATH" lib))
+;;     (error "Could not find rustc"))
 ;;   (global-lsp-mode 1)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
@@ -766,9 +770,8 @@ is already narrowed."
 
 (use-package racer
     :ensure t
-    :diminish racer-mode
-    :defer t
-    :init
+    :after rust-mode
+    :config
     (general-define-key :keymaps 'rust-mode-map
 			:states 'normal
 			"M-," #'pop-tag-mark
@@ -869,11 +872,13 @@ is already narrowed."
 		      "C" #'org-ref-helm-insert-cite-link
 		      "L" #'org-ref-helm-insert-label-link))
 
+
 (use-package darkroom
   :ensure t
   :after org
   :config
-  (setq darkroom-margins 0.25)
+  (setq darkroom-margins 0.25
+	darkroom-text-scale-increase 1)
   (add-hook 'org-mode-hook #'darkroom-mode))
 
 (use-package tramp

@@ -4,9 +4,9 @@
 # --
 #+TITLE: $1
 #+AUTHOR: $2
-#+LATEX_CLASS: koma-article
 #+LATEX_CLASS_OPTIONS: [a4paper, 11pt]
 #+LANGUAGE: sv
+#+LATEX_HEADER: \usepackage[a4paper, bindingoffset=0.2in, left=1in, right=1in, top=1in, bottom=1in, footskip=.25in]{geometry}
 #+LATEX_HEADER: \usepackage[AUTO]{babel}
 #+LATEX_HEADER: \usepackage{libertine}
 #+LATEX_HEADER: \usepackage{unicode-math}
