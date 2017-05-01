@@ -411,7 +411,8 @@ is already narrowed."
     (unless (file-remote-p default-directory)
       ad-do-it))
   :config
-  (projectile-mode))
+  (projectile-mode)
+  (counsel-projectile-on))
 
 
 (use-package flycheck
