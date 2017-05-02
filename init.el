@@ -195,6 +195,7 @@ is already narrowed."
     (insert "{")))
 
 (defun change-theme (theme)
+  "Change to theme to THEME, disabling all current themes first."
   (interactive
    (list
     (intern (completing-read "Change to theme: "
