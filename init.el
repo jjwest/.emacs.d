@@ -8,6 +8,7 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (package-initialize)
 
 ;; Bootstrap use-package
@@ -640,6 +641,7 @@ is already narrowed."
 ;; RTAGS must be placed before irony for them to work together
 (use-package rtags
   :ensure t
+  :pin melpa-stable
   :defer t
   :preface
   (defun rtags-add-project ()
@@ -758,17 +760,18 @@ is already narrowed."
 ;; 			  "lib")))
 ;; 	(setenv "LD_LIBRARY_PATH" lib))
 ;;     (error "Could not find rustc"))
-;;   (global-lsp-mode 1)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
 ;; 		      "C-." 'company-complete)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states 'normal
 ;; 		      :prefix my-leader
-;; 		      "R" 'lsp-rename))
+;; 		      "R" 'lsp-rename)
+;;   (add-hook 'prog-major-mode #'lsp-mode))
 
 
 ;; (use-package lsp-rust
+;;   :after lsp-mode
 ;;   :ensure t)
 
 (use-package racer
