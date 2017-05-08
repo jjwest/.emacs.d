@@ -119,7 +119,7 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 
-;; My own convenience functions
+;; Convenience functions
 (defun my/split-line ()
   "Split line at point."
   (interactive)
@@ -205,6 +205,17 @@ is already narrowed."
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme))
 
+(defun align-values (start end)
+  "Vertically aligns region based on lengths of the first value of each line.
+Example output:
+
+    foo        bar
+    foofoo     bar
+    foofoofoo  bar"
+  (interactive "r")
+  (align-regexp start end
+                "\\S-+\\(\\s-+\\)"
+                1 1 nil))
 ;; Packages
 (use-package general
   :ensure t
