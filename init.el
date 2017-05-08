@@ -405,7 +405,8 @@ is already narrowed."
   		      "pf" 'counsel-projectile-find-file
   		      "pd" 'counsel-projectile-find-dir
   		      "pk" 'projectile-kill-buffers
-  		      "pt" 'projectile-find-other-file)
+  		      "pt" 'projectile-find-other-file
+		      "pT" 'projectile-find-other-file-other-window)
 
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
