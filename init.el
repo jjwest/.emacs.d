@@ -652,7 +652,6 @@ Example output:
 ;; RTAGS must be placed before irony for them to work together
 (use-package rtags
   :ensure t
-  :pin melpa-stable
   :defer t
   :preface
   (defun rtags-add-project ()
@@ -786,14 +785,14 @@ Example output:
 ;;   :ensure t)
 
 (use-package racer
-    :ensure t
-    :after rust-mode
-    :config
-    (general-define-key :keymaps 'rust-mode-map
-			:states 'normal
-			"M-," #'pop-tag-mark
-			"M-." #'racer-find-definition)
-    (add-hook 'rust-mode-hook #'racer-mode))
+  :ensure t
+  :after rust-mode
+  :config
+  (general-define-key :keymaps 'rust-mode-map
+		      :states 'normal
+		      "M-," #'pop-tag-mark
+		      "M-." #'racer-find-definition)
+  (add-hook 'rust-mode-hook #'racer-mode))
 
 (use-package cider
   :ensure t
@@ -902,6 +901,11 @@ Example output:
   :defer t
   :config
   (setq tramp-verbose 2))
+
+(use-package backup-walker
+  :ensure t
+  :commands backup-walker-start
+  :init (add-to-list 'evil-emacs-state-modes 'backup-walker-mode))
 
 
 ;; Escape quits everything
