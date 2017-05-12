@@ -54,7 +54,7 @@
  (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
        backup-by-copying t
        delete-old-versions t
-       kept-new-versions 10
+       kept-new-versions 20
        kept-old-versions 0
        auto-save-default nil
        vc-make-backup-files t
