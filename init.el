@@ -248,7 +248,8 @@ Example output:
        `(doom-linum
 	 ((((type graphic)) :inherit linum :foreground "#5B6268" :background "#282c34")
 	  (t                :inherit linum)))
-       `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t)))))))
+       `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))
+       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
@@ -469,10 +470,6 @@ Example output:
 	    (split-window-sensibly))
 	  (other-window 1)
 	  (multi-term)))))
-  :bind (:map term-mode-map
-	      ("C-c C-d" . term-send-eof)
-	      :map term-raw-map
-	      ("C-c C-d" . term-send-eof))
   :init
   (general-define-key :prefix my-leader
 		      "x" 'toggle-terminal
