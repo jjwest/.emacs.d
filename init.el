@@ -349,6 +349,9 @@ Example output:
   (define-key evil-motion-state-map "L" 'evil-forward-arg)
   (define-key evil-motion-state-map "H" 'evil-backward-arg))
 
+(use-package evil-iedit-state
+  :ensure t)
+
 (use-package evil-cleverparens
   :ensure t
   :defer t
