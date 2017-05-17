@@ -249,7 +249,13 @@ Example output:
 	 ((((type graphic)) :inherit linum :foreground "#5B6268" :background "#282c34")
 	  (t                :inherit linum)))
        `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))
-       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
+       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF"))))))
+    (when (member 'doom-tomorrow-night custom-enabled-themes)
+      (remove-hook 'find-file-hook 'doom-buffer-mode)
+      (remove-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
+      (custom-theme-set-faces
+       'doom-tomorrow-night
+       `(default ((t (:foreground "#c5c8c6" :background "#25282b")))))))
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
