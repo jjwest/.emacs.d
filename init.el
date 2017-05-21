@@ -255,7 +255,8 @@ Example output:
       (remove-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
       (custom-theme-set-faces
        'doom-tomorrow-night
-       `(default ((t (:foreground "#c5c8c6" :background "#25282b")))))))
+       `(default ((t (:foreground "#c5c8c6" :background "#25282b"))))
+       `(hl-line ((t (:background "#282c34")))))))
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)

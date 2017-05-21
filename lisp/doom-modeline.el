@@ -109,7 +109,7 @@ Examples:
   '((t (:inherit doom-modeline-buffer-path :bold nil)))
   "Face used for the filename part of the mode-line buffer path.")
 
-(defface doom-modeline-buffer-modified '((t (:inherit highlight :background nil)))
+(defface doom-modeline-buffer-modified '((t (:foreground "#ff6c6b" :background nil)))
   "Face used for the 'unsaved' symbol in the mode-line.")
 
 (defface doom-modeline-buffer-major-mode '((t (:inherit mode-line :bold t)))
