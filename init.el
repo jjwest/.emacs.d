@@ -466,6 +466,8 @@ Example output:
 		 buf))
 
   (defun toggle-terminal ()
+    "Toggle the last used terminal in the other window.
+If no terminal exists, one is created."
     (interactive)
     (if (buffer-is-term-p (buffer-name))
 	(progn
@@ -473,9 +475,16 @@ Example output:
 	    (switch-to-prev-buffer))
 	  (other-window 1))
       (let* ((open-buffers (mapcar 'buffer-name (buffer-list)))
-	     (term-buffers (cl-remove-if-not 'buffer-is-term-p open-buffers)))
-	(if term-buffers
-	    (switch-to-buffer-other-window (car term-buffers))
+	     (latest-term-buffer (car (cl-remove-if-not 'buffer-is-term-p open-buffers)))
+	     (buffer-window (get-buffer-window latest-term-buffer)))
+	(if latest-term-buffer
+	    (if buffer-window
+		(progn
+		  (pop-to-buffer latest-term-buffer)
+		  (while (buffer-is-term-p (buffer-name))
+		    (switch-to-prev-buffer))
+		  (other-window 1))
+	      (switch-to-buffer-other-window latest-term-buffer))
 	  (when (= (count-windows) 1)
 	    (split-window-sensibly))
 	  (other-window 1)
