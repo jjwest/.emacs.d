@@ -879,9 +879,26 @@ If no terminal exists, one is created."
     (interactive)
     (save-buffer)
     (org-latex-export-to-pdf t))
+
+  (defun bootstrap-org-ref ()
+    "Set up org-ref."
+    (use-package org-ref
+      :ensure t
+      :after org
+      :config
+      (require 'doi-utils)
+      (general-define-key :keymaps 'org-mode-map
+			  :states '(normal insert)
+			  "M-r" #'org-ref-helm-insert-cite-link)))
   :config
   (add-hook 'org-mode-hook #'org-indent-mode)
   (add-hook 'org-mode-hook #'auto-fill-mode)
+  (advice-add #'org-latex-export-to-pdf
+	      :after
+	      (lambda (&rest args)
+		(unless (featurep 'org-ref)
+		  (package-refresh-contents)
+		  (bootstrap-org-ref))))
   (setq org-export-async-init-file (f-join user-emacs-directory
   					   "lisp"
   					   "org-export.el"))
@@ -890,15 +907,6 @@ If no terminal exists, one is created."
    'org-babel-load-languages '((python . t)))
   (general-define-key :keymaps 'org-mode-map
 		      "M-l" 'my/org-latex-export))
-
-(use-package org-ref
-  :ensure t
-  :after org
-  :config
-  (require 'doi-utils)
-  (general-define-key :keymaps 'org-mode-map
-		      :states '(normal insert)
-		      "M-r" #'org-ref-helm-insert-cite-link))
 
 
 (use-package darkroom
