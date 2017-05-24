@@ -186,7 +186,8 @@ is already narrowed."
   (interactive)
   (if (eq current-brace-style 'own-line)
       (setq current-brace-style 'same-line)
-    (setq current-brace-style 'own-line)))
+    (setq current-brace-style 'own-line))
+  (message "Brace style set to %s" current-brace-style))
 
 (defun insert-brace ()
   "Insert brace matching current brace style."
@@ -607,8 +608,12 @@ If no terminal exists, one is created."
   :init
   (setq projectile-completion-system 'ivy
 	ivy-height 15
+	ivy-fixed-height-minibuffer t
+	ivy-format-function #'ivy-format-function-line
 	ivy-count-format "(%d/%d) "
 	ivy-display-style 'fancy)
+  (with-eval-after-load 'magit
+    (setq magit-completing-read-function #'ivy-completing-read))
   (general-define-key :prefix my-leader
    "f" 'counsel-find-file
    "F" 'counsel-recentf
@@ -669,6 +674,7 @@ If no terminal exists, one is created."
 (use-package rtags
   :ensure t
   :defer t
+  :pin melpa-stable
   :preface
   (defun rtags-add-project ()
     "Add project to RTags daemon."
