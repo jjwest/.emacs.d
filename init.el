@@ -894,21 +894,11 @@ If no terminal exists, one is created."
 (use-package org-ref
   :ensure t
   :after org
-  :preface
-  (defun my/insert-space-before-cmd (&rest args)
-    (goto-char (+ (point) 1))
-    (insert " "))
   :config
   (require 'doi-utils)
-  (advice-add #'org-ref-helm-insert-cite-link :before #'my/insert-space-before-cmd)
-  (advice-add #'org-ref-helm-insert-ref-link :before #'my/insert-space-before-cmd)
-  (advice-add #'org-ref-helm-insert-label-link :before #'my/insert-space-before-cmd)
-  (general-define-key :prefix my-leader
-		      :keymaps 'org-mode-map
-		      :states 'normal
-		      "R" #'org-ref-helm-insert-ref-link
-		      "C" #'org-ref-helm-insert-cite-link
-		      "L" #'org-ref-helm-insert-label-link))
+  (general-define-key :keymaps 'org-mode-map
+		      :states '(normal insert)
+		      "M-r" #'org-ref-helm-insert-cite-link))
 
 
 (use-package darkroom
