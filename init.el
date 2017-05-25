@@ -525,13 +525,17 @@ If no terminal exists, one is created."
   :config
   (general-define-key :prefix my-leader "r" 'iedit-dwim))
 
+(use-package rg
+  :ensure t)
+
 (use-package wgrep
   :ensure t
   :defer t
   :init
-  (general-define-key :keymaps 'grep-mode-map
+  (general-define-key :prefix my-leader
+		      :keymaps 'grep-mode-map
 		      :states 'normal
-		      "W" 'wgrep-change-to-wgrep-mode))
+		      "w" 'wgrep-change-to-wgrep-mode))
 
 (use-package eldoc
   :defer t
@@ -618,9 +622,14 @@ If no terminal exists, one is created."
    "f" 'counsel-find-file
    "F" 'counsel-recentf
    "b" 'ivy-switch-buffer
-   "c" 'counsel-imenu
    "pg" 'counsel-git-grep)
   (ivy-mode 1))
+
+(use-package imenu-anywhere
+  :ensure t
+  :config
+  (general-define-key :prefix my-leader
+		      "c" #'imenu-anywhere))
 
 (use-package nlinum-relative
   :ensure t
@@ -894,10 +903,9 @@ If no terminal exists, one is created."
   (add-hook 'org-mode-hook #'org-indent-mode)
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (advice-add #'org-latex-export-to-pdf
-	      :after
+	      :before
 	      (lambda (&rest args)
 		(unless (featurep 'org-ref)
-		  (package-refresh-contents)
 		  (bootstrap-org-ref))))
   (setq org-export-async-init-file (f-join user-emacs-directory
   					   "lisp"
