@@ -266,9 +266,6 @@ Example output:
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
 
-(use-package solarized-theme
-  :ensure t)
-
 (use-package spacemacs-theme
   :ensure t
   :preface
