@@ -4,7 +4,7 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 20 1024 1024))
+(setq gc-cons-threshold (* 10 1024 1024))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -85,22 +85,9 @@
 
 ;; Set font
 (when (member "Office Code Pro" (font-family-list))
-  (if (equal (display-pixel-height) 1440)
-      (set-face-attribute 'default nil
-			  :family "Office Code Pro"
-			  :foundry 'ADBO
-			  :slant 'normal
-			  :weight 'normal
-			  :height 113
-			  :width 'normal)
-    (set-face-attribute 'default nil
-			:family "Office Code Pro"
-			:foundry 'ADBO
-			:slant 'normal
-			:weight 'normal
-			:height 98
-			:width 'normal) ))
-
+  (if (>= (display-pixel-height) 1440)
+      (set-frame-font "Office Code Pro-11" t t)
+    (set-frame-font "Office Code Pro-10" t t)))
 
 ;; Strip UI
 (scroll-bar-mode -1)
