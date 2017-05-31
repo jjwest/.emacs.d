@@ -603,8 +603,6 @@ If no terminal exists, one is created."
 	ivy-format-function #'ivy-format-function-line
 	ivy-count-format "(%d/%d) "
 	ivy-display-style 'fancy)
-  (with-eval-after-load 'magit
-    (setq magit-completing-read-function #'ivy-completing-read))
   (general-define-key :prefix my-leader
    "f" 'counsel-find-file
    "F" 'counsel-recentf
@@ -667,6 +665,9 @@ If no terminal exists, one is created."
 
 
 ;; RTAGS must be placed before irony for them to work together
+;; This is just to silence flycheck error warnings
+(eval-when-compile
+  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/")))
 (use-package rtags
   :ensure t
   :defer t
@@ -811,17 +812,6 @@ If no terminal exists, one is created."
 		      "M-," #'pop-tag-mark
 		      "M-." #'racer-find-definition)
   (add-hook 'rust-mode-hook #'racer-mode))
-
-(use-package cider
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'clojure-mode-hook #'cider-mode)
-  :config
-  (general-define-key :keymaps 'clojure-mode-map
-		      :states 'normal
-		      "C-r" #'cider-run
-		      "C-f" #'cider-eval-buffer))
 
 (use-package flycheck-rust
     :ensure t
