@@ -428,6 +428,9 @@ Example output:
   (counsel-projectile-on))
 
 
+(use-package hydra
+  :ensure t)
+
 (use-package flycheck
   :ensure t
   :defer t
@@ -435,7 +438,20 @@ Example output:
   :init
   (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
-  (general-define-key :prefix my-leader "e" 'flycheck-list-errors)
+  (defhydra hydra-flycheck ()
+    "
+ Goto error
+-------------------------------------
+_n_: next
+_p_: previous
+_N_: last
+_P_: first
+"
+    ("n" flycheck-next-error)
+    ("p" flycheck-previous-error)
+    ("N" flycheck-last-error)
+    ("P" flycheck-first-error))
+  (general-define-key :prefix my-leader "e" 'hydra-flycheck/body)
   (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq-default flycheck-gcc-language-standard "c++14")
   (setq-default flycheck-clang-language-standard "c++14"))
