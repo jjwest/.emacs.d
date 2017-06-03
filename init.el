@@ -8,7 +8,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (package-initialize)
 
 ;; Bootstrap use-package
@@ -680,14 +679,9 @@ If no terminal exists, one is created."
 	c-default-style "bsd"))
 
 
-;; RTAGS must be placed before irony for them to work together
-;; This is just to silence flycheck error warnings
-(eval-when-compile
-  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/")))
 (use-package rtags
   :ensure t
   :defer t
-  :pin melpa-stable
   :preface
   (defun rtags-add-project ()
     "Add project to RTags daemon."
@@ -826,8 +820,13 @@ If no terminal exists, one is created."
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
 		      "M-," #'pop-tag-mark
-		      "M-." #'racer-find-definition)
-  (add-hook 'rust-mode-hook #'racer-mode))
+		      "M-." #'racer-find-definition))
+
+(use-package company-racer
+  :ensure t
+  :after rust-mode
+  :config
+  (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
 
 (use-package flycheck-rust
     :ensure t
