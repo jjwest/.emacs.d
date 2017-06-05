@@ -619,9 +619,11 @@ If no terminal exists, one is created."
 	 :map ivy-mode-map
 	 ("<escape>" . minibuffer-keyboard-quit))
   :init
-  (setq projectile-completion-system 'ivy
+  (setq projectile-switch-project-action #'counsel-projectile-find-file
+	projectile-completion-system 'ivy
 	ivy-height 15
 	ivy-fixed-height-minibuffer t
+	ivy-use-virtual-buffers t
 	ivy-format-function #'ivy-format-function-line
 	ivy-count-format "(%d/%d) "
 	ivy-display-style 'fancy)
@@ -824,6 +826,7 @@ If no terminal exists, one is created."
   :ensure t
   :after rust-mode
   :config
+  (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
 		      "M-," #'pop-tag-mark
