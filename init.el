@@ -237,7 +237,7 @@ Example output:
 	  (t                :inherit linum)))
        `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
-       `(font-lock-preprocessor-face ((t (:foreground "#C8C8C8" :bold t))))
+       `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))
        `(font-lock-variable-name-face ((t (:foreground "#DFDFDF"))))))
     (when (member 'doom-tomorrow-night custom-enabled-themes)
