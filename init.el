@@ -251,9 +251,7 @@ Example output:
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   :config
-  (load-theme 'doom-one)
-  (add-hook 'find-file-hook 'doom-buffer-mode)
-  (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
+  (load-theme 'doom-one))
 
 (use-package spacemacs-theme
   :ensure t
@@ -286,6 +284,13 @@ Example output:
   (unless (file-exists-p "~/.emacs.d/lisp/doom-vcs.elc")
     (byte-compile-file "~/.emacs.d/lisp/doom-vcs.el"))
   (setq-default fringes-outside-margins t))
+
+(use-package solaire-mode
+  :ensure t
+  :config
+  (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
+  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
+  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer))
 
 (use-package evil
   :ensure t
