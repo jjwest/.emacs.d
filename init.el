@@ -849,6 +849,15 @@ If no terminal exists, one is created."
     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
 ;; Web development
+(use-package web-mode
+  :ensure t
+  :mode (("\\.tsx\\'" . web-mode)
+	 ("\\.jsx\\'" . web-mode)))
+
+(use-package typescript-mode
+  :ensure t
+  :mode ("\\.ts\\'" . typescript-mode))
+
 (use-package emmet-mode
   :ensure t
   :defer t
@@ -859,11 +868,36 @@ If no terminal exists, one is created."
 
 (use-package js2-mode
   :ensure t
-  :mode (("\\.js\\'" . js2-mode)
-	 ("\\.jsx\\'" . js2-jsx-mode))
+  :mode ("\\.js\\'" . js2-mode)
   :config
   (setq js2-strict-missing-semi-warning nil)
   (add-hook 'js2-jsx-mode-hook (lambda () (flycheck-mode -1))))
+
+(use-package tide
+  :ensure t
+  :defer t
+  :preface
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (eldoc-mode 1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled)))
+  :init
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+		(setup-tide-mode))))
+  :config
+  (general-define-key :keymaps '(web-mode-map typescript-mode-map)
+		      :states 'normal
+		      "M-." #'tide-jump-to-definition
+		      "M-," #'tide-jump-back)
+  (general-define-key :prefix my-leader
+		      :keymaps '(web-mode-map typescript-mode-map)
+		      :states 'normal
+		      "R" #'tide-rename-symbol)
+  (add-hook 'before-save-hook 'tide-format-before-save))
 
 (use-package tern
   :ensure t
