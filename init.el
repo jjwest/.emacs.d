@@ -253,21 +253,8 @@ Example output:
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   :config
-  (load-theme 'doom-one))
-
-(use-package spacemacs-theme
-  :ensure t
-  :preface
-  (defun tweak-spacemacs-theme (&rest args)
-    (when (member 'spacemacs-light custom-enabled-themes)
-      (custom-theme-set-faces
-       'spacemacs-light
-       `(nlinum-relative-current-face ((t (:foreground "#efeae9" :background "#a8a8bf" :bold t)))))
-      (with-eval-after-load 'nlinum-relative
-	(setq nlinum-format " %d "))))
-  :init
-  (advice-add #'change-theme :after #'tweak-spacemacs-theme)
-  (advice-add #'load-theme :after #'tweak-spacemacs-theme))
+  (load-theme 'doom-one)
+  (doom-themes-neotree-config))
 
 (use-package doom-modeline
   :ensure powerline
@@ -286,7 +273,6 @@ Example output:
   (unless (file-exists-p "~/.emacs.d/lisp/doom-vcs.elc")
     (byte-compile-file "~/.emacs.d/lisp/doom-vcs.el"))
   (setq-default fringes-outside-margins t))
-
 (use-package solaire-mode
   :ensure t
   :config
@@ -968,6 +954,15 @@ If no terminal exists, one is created."
   :ensure t
   :commands backup-walker-start
   :init (add-to-list 'evil-emacs-state-modes 'backup-walker-mode))
+
+(use-package neotree
+  :ensure t
+  :defer t
+  :config
+  (general-define-key :keymaps 'neotree-mode-map
+		      :states 'normal
+		      "<return>" #'neotree-enter
+		      "<tab>" #'neotree-enter))
 
 
 ;; Escape quits everything
