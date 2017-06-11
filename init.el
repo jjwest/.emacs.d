@@ -76,6 +76,9 @@
 	      fill-column 80)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+(setq-default isearch-allow-scroll t
+	      lazy-highlight-cleanup nil
+	      lazy-highlight-initial-delay 0)
 
 ;; Don't litter my init file
 (unless (file-exists-p "~/.emacs.d/local")
