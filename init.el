@@ -840,7 +840,7 @@ If no terminal exists, one is created."
 ;; Web development
 (use-package web-mode
   :ensure t
-  :mode (("\\.tsx\\'" . web-mode)
+  :mode (("\\.ts[x]?\\'" . web-mode)
 	 ("\\.jsx\\'" . web-mode)))
 
 (use-package typescript-mode
