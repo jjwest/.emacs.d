@@ -87,9 +87,7 @@
 
 ;; Set font
 (when (member "Office Code Pro" (font-family-list))
-  (if (>= (display-pixel-height) 1440)
-      (set-frame-font "Office Code Pro-11" t t)
-    (set-frame-font "Office Code Pro-10" t t)))
+  (set-frame-font "Office Code Pro-11" t t))
 
 ;; Strip UI
 (scroll-bar-mode -1)
