@@ -354,13 +354,6 @@ Example output:
   :ensure t
   :config (global-evil-visualstar-mode))
 
-(use-package evil-goggles
-  :ensure t
-  :config
-  (setq evil-goggles-duration 0.05)
-  (evil-goggles-use-diff-faces)
-  (evil-goggles-mode))
-
 (use-package yasnippet
   :ensure t
   :defer t
