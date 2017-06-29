@@ -452,49 +452,10 @@ _P_: first
   (setq flycheck-pos-tip-timeout 30)
   (flycheck-pos-tip-mode))
 
-(use-package multi-term
+(use-package terminal-here
   :ensure t
-  :preface
-  (defun buffer-is-term-p (buf)
-    (s-matches-p (rx "*terminal<" digit ">*")
-		 buf))
-
-  (defun toggle-terminal ()
-    "Toggle the last used terminal in the other window.
-If no terminal exists, one is created."
-    (interactive)
-    (if (buffer-is-term-p (buffer-name))
-	(progn
-	  (while (buffer-is-term-p (buffer-name))
-	    (switch-to-prev-buffer))
-	  (other-window 1))
-      (let* ((open-buffers (mapcar 'buffer-name (buffer-list)))
-	     (latest-term-buffer (car (cl-remove-if-not 'buffer-is-term-p open-buffers)))
-	     (buffer-window (get-buffer-window latest-term-buffer)))
-	(if latest-term-buffer
-	    (if buffer-window
-		(progn
-		  (pop-to-buffer latest-term-buffer)
-		  (while (buffer-is-term-p (buffer-name))
-		    (switch-to-prev-buffer))
-		  (other-window 1))
-	      (switch-to-buffer-other-window latest-term-buffer))
-	  (when (= (count-windows) 1)
-	    (split-window-sensibly))
-	  (other-window 1)
-	  (multi-term)))))
-  :init
-  (general-define-key :prefix my-leader
-		      "x" 'toggle-terminal
-		      "X" 'multi-term)
-  (general-define-key :keymaps 'term-raw-map
-		      :states '(normal insert)
-		      "C-n" 'multi-term-next
-		      "C-p" 'multi-term-prev
-		      "C-d" 'term-send-eof)
   :config
-  (setq multi-term-program "/bin/zsh"))
-
+  (general-define-key :prefix my-leader "x" #'terminal-here))
 
 (use-package iedit
   :ensure t
