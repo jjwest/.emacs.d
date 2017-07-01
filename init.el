@@ -738,6 +738,7 @@ _P_: first
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
+  (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
 
