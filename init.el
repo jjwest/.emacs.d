@@ -782,8 +782,7 @@ Example output:
 	 ("\\.jsx\\'" . web-mode)))
 
 (use-package typescript-mode
-  :ensure t
-  :mode ("\\.ts\\'" . typescript-mode))
+  :ensure t)
 
 (use-package emmet-mode
   :ensure t
@@ -813,18 +812,20 @@ Example output:
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
   (add-hook 'web-mode-hook
             (lambda ()
-              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (when (or (string-equal "tsx" (file-name-extension buffer-file-name))
+			(string-equal "ts" (file-name-extension buffer-file-name)))
 		(setup-tide-mode))))
-  :config
+  :init
   (general-define-key :keymaps '(web-mode-map typescript-mode-map)
 		      :states 'normal
 		      "M-." #'tide-jump-to-definition
-		      "M-," #'tide-jump-back)
+		      "M-," #'tide-jump-back
+		      "M--" #'tide-references)
   (general-define-key :prefix my-leader
 		      :keymaps '(web-mode-map typescript-mode-map)
 		      :states 'normal
 		      "R" #'tide-rename-symbol)
-  (add-hook 'before-save-hook 'tide-format-before-save))
+  (add-hook 'before-save-hook #'tide-format-before-save))
 
 (use-package tern
   :ensure t
