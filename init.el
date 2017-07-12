@@ -821,8 +821,8 @@ Example output:
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
   (add-hook 'web-mode-hook
             (lambda ()
-              (when (or (string-equal "tsx" (file-name-extension buffer-file-name))
-			(string-equal "ts" (file-name-extension buffer-file-name)))
+              (when (s-matches-p (rx "ts" (zero-or-one "x"))
+				 (file-name-extension buffer-file-name))
 		(setup-tide-mode))))
   :init
   (general-define-key :keymaps '(web-mode-map typescript-mode-map)
