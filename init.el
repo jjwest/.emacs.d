@@ -89,11 +89,13 @@
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 ;; Set font
-(add-hook 'after-make-frame-functions
-	  (lambda (frame)
-	    (select-frame frame)
-	    (when (member "Office Code Pro" (font-family-list))
-	      (set-frame-font "Office Code Pro-11" t t))))
+(defun set-font-on-start (frame)
+  (select-frame frame)
+  (when (member "Office Code Pro" (font-family-list))
+    (set-frame-font "Office Code Pro-11" t t))
+  (remove-hook 'after-make-frame-functions 'set-font-on-start))
+
+(add-hook 'after-make-frame-functions #'set-font-on-start)
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -263,15 +265,17 @@ Example output:
        'doom-tomorrow-night
        `(default ((t (:foreground "#c5c8c6" :background "#25282b"))))
        `(hl-line ((t (:background "#282c34")))))))
+
+  (defun load-doom-theme (frame)
+    (select-frame frame)
+    (load-theme 'doom-one)
+    (remove-hook 'after-make-frame-functions 'load-doom-theme))
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   :config
   (doom-themes-neotree-config)
-  (add-hook 'after-make-frame-functions
-	    (lambda (frame)
-	      (select-frame frame)
-	      (load-theme 'doom-one))))
+  (add-hook 'after-make-frame-functions #'load-doom-theme))
 
 (use-package doom-modeline
   :ensure powerline
@@ -281,13 +285,15 @@ Example output:
   :ensure projectile
   :defer t
   :load-path "~/.emacs.d/lisp"
+  :preface
+  (defun load-doom-modeline (frame)
+    (select-frame frame)
+    (require 'doom-modeline)
+    (remove-hook 'after-make-frame-functions 'load-doom-modeline))
   :init
+  (add-hook 'after-make-frame-functions #'load-doom-modeline)
   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
-    (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el"))
-  (add-hook 'after-make-frame-functions
-	    (lambda (frame)
-	      (select-frame frame)
-	      (require 'doom-modeline))))
+    (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
 
 (use-package doom-vcs
   :load-path "~/.emacs.d/lisp"
