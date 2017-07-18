@@ -15,6 +15,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(setq use-package-always-demand t)
+
 ;; Benchmark startup time
 (use-package benchmark-init
   :ensure t
@@ -87,8 +89,11 @@
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 ;; Set font
-(when (member "Office Code Pro" (font-family-list))
-  (set-frame-font "Office Code Pro-11" t t))
+(add-hook 'after-make-frame-functions
+	  (lambda (frame)
+	    (select-frame frame)
+	    (when (member "Office Code Pro" (font-family-list))
+	      (set-frame-font "Office Code Pro-11" t t))))
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -134,7 +139,18 @@
     (bury-buffer)
     nil))
 
-(add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
+;; Ugly hack to ensure the modeline loads properly
+;; for Message and scratch buffer
+(with-eval-after-load 'doom-modeline
+  (kill-buffer "*scratch*")
+  (kill-buffer "*Messages*")
+  (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
+  (switch-to-buffer "*Messages*")
+  (switch-to-buffer "*scratch*"))
+
+(add-hook 'after-make-frame-functions
+	  (lambda (frame)
+	    (select-frame-set-input-focus frame)))
 
 (defun my/save-all-buffers ()
   "Save all buffers without prompt."
@@ -239,9 +255,7 @@ Example output:
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number-current-line ((t (:foreground "#46D9FF" :bold t))))
-       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))
-      (with-eval-after-load 'linum
-	(set-face-foreground 'linum "#5B6268")))
+       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF"))))))
     (when (member 'doom-tomorrow-night custom-enabled-themes)
       (remove-hook 'find-file-hook 'doom-buffer-mode)
       (remove-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
@@ -253,8 +267,11 @@ Example output:
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   :config
-  (load-theme 'doom-one)
-  (doom-themes-neotree-config))
+  (doom-themes-neotree-config)
+  (add-hook 'after-make-frame-functions
+	    (lambda (frame)
+	      (select-frame frame)
+	      (load-theme 'doom-one))))
 
 (use-package doom-modeline
   :ensure powerline
@@ -262,10 +279,15 @@ Example output:
   :ensure f
   :ensure evil
   :ensure projectile
+  :defer t
   :load-path "~/.emacs.d/lisp"
   :init
   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
-    (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
+    (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el"))
+  (add-hook 'after-make-frame-functions
+	    (lambda (frame)
+	      (select-frame frame)
+	      (require 'doom-modeline))))
 
 (use-package doom-vcs
   :load-path "~/.emacs.d/lisp"
@@ -273,6 +295,7 @@ Example output:
   (unless (file-exists-p "~/.emacs.d/lisp/doom-vcs.elc")
     (byte-compile-file "~/.emacs.d/lisp/doom-vcs.el"))
   (setq-default fringes-outside-margins t))
+
 (use-package solaire-mode
   :ensure t
   :config
@@ -341,7 +364,6 @@ Example output:
 
 (use-package evil-cleverparens
   :ensure t
-  :defer t
   :init
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   :config
@@ -358,7 +380,6 @@ Example output:
 
 (use-package yasnippet
   :ensure t
-  :defer t
   :diminish yas-minor-mode
   :init
   (add-hook 'prog-mode-hook #'yas-minor-mode)
@@ -397,7 +418,6 @@ Example output:
 (use-package counsel-projectile
   :ensure t
   :diminish projectile-mode
-  :defer t
   :init
   (setq projectile-other-file-alist '(("c" "h")
 				      ("h" "c" "cc" "cpp")
@@ -422,7 +442,6 @@ Example output:
 
 (use-package flycheck
   :ensure t
-  :defer t
   :diminish flycheck-mode
   :init
   (add-hook 'prog-mode-hook #'flycheck-mode)
@@ -471,7 +490,6 @@ Example output:
 
 (use-package wgrep
   :ensure t
-  :defer t
   :init
   (general-define-key :prefix my-leader
 		      :keymaps 'grep-mode-map
@@ -479,7 +497,6 @@ Example output:
 		      "w" 'wgrep-change-to-wgrep-mode))
 
 (use-package eldoc
-  :defer t
   :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook #'eldoc-mode))
 
@@ -603,7 +620,6 @@ Example output:
 
 (use-package transpose-frame
   :ensure t
-  :defer t
   :init
   (general-define-key :prefix my-leader "T" 'transpose-frame))
 
@@ -623,7 +639,6 @@ Example output:
 
 (use-package rtags
   :ensure t
-  :defer t
   :preface
   (defun rtags-add-project ()
     "Add project to RTags daemon."
@@ -650,7 +665,6 @@ Example output:
 
 (use-package irony
   :ensure t
-  :defer t
   :diminish irony-mode
   :preface
   (defun my/irony-mode-hook ()
@@ -681,35 +695,30 @@ Example output:
 
 (use-package company-irony
   :ensure t
-  :defer t
   :init
   (with-eval-after-load 'irony
     (add-to-list 'company-backends 'company-irony)))
 
 (use-package flycheck-irony
   :ensure t
-  :defer t
   :init
   (with-eval-after-load 'irony
     (flycheck-irony-setup)))
 
 (use-package company-irony-c-headers
   :ensure t
-  :defer t
   :init
   (with-eval-after-load 'irony
     (add-to-list 'company-backends 'company-irony-c-headers)))
 
 (use-package irony-eldoc
   :ensure t
-  :defer t
   :init
   (with-eval-after-load 'irony
     (add-hook 'irony-mode-hook #'irony-eldoc)))
 
 (use-package company-jedi
   :ensure t
-  :defer t
   :preface
   (defun my/init-python-hook ()
     (add-to-list 'company-backends 'company-jedi)
@@ -774,7 +783,6 @@ Example output:
 
 (use-package flycheck-rust
     :ensure t
-    :defer t
     :init
     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
@@ -789,7 +797,6 @@ Example output:
 
 (use-package emmet-mode
   :ensure t
-  :defer t
   :init
   (add-hook 'html-mode-hook #'emmet-mode)
   (add-hook 'js2-mode-hook #'emmet-mode)
@@ -804,7 +811,6 @@ Example output:
 
 (use-package tide
   :ensure t
-  :defer t
   :preface
   (defun setup-tide-mode ()
     (interactive)
@@ -834,7 +840,6 @@ Example output:
   :ensure t
   :ensure company-tern
   :diminish tern-mode
-  :defer t
   :init
   (add-hook 'js2-mode-hook #'tern-mode)
   (add-hook 'js2-mode-hook (lambda ()
@@ -871,14 +876,15 @@ Example output:
   (general-define-key :keymaps 'org-mode-map
 		      "M-l" 'my/org-latex-export))
 
-;; (use-package org-ref
-;;       :ensure t
-;;       :after org
-;;       :config
-;;       (require 'doi-utils)
-;;       (general-define-key :keymaps 'org-mode-map
-;; 			  :states '(normal insert)
-;; 			  "M-r" #'org-ref-helm-insert-cite-link))
+(use-package org-ref
+      :defer-install t
+      :after org
+      :init
+      (general-define-key :keymaps 'org-mode-map
+			  :states '(normal insert)
+			  "M-r" #'org-ref-helm-insert-cite-link)
+      :config
+      (require 'doi-utils))
 
 (use-package darkroom
   :ensure t
@@ -888,7 +894,6 @@ Example output:
 	darkroom-text-scale-increase 1))
 
 (use-package tramp
-  :defer t
   :config
   (setq tramp-verbose 2))
 
@@ -899,7 +904,6 @@ Example output:
 
 (use-package neotree
   :ensure t
-  :defer t
   :config
   (general-define-key :keymaps 'neotree-mode-map
 		      :states 'normal
