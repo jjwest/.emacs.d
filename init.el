@@ -113,8 +113,9 @@
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
-(add-hook 'prog-mode-hook (lambda () (setq-local display-line-numbers 'relative)))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-hook 'prog-mode-hook (lambda () (setq-local display-line-numbers 'relative)))
+(set-face-foreground 'line-number "#5B6268")
 
 ;; Convenience functions
 (defun my/split-line ()
