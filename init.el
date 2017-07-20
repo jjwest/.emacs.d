@@ -155,8 +155,7 @@
 	   (window-system))
   (add-hook 'after-make-frame-functions
 	    (lambda (frame)
-	      (raise-frame)
-	      (x-focus-frame (select-frame)))))
+	      (select-frame-set-input-focus frame))))
 
 (defun my/save-all-buffers ()
   "Save all buffers without prompt."
