@@ -115,7 +115,6 @@
 (add-hook 'prog-mode-hook #'subword-mode)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'prog-mode-hook (lambda () (setq-local display-line-numbers 'relative)))
-(set-face-foreground 'line-number "#5B6268")
 
 ;; Convenience functions
 (defun my/split-line ()
@@ -153,11 +152,11 @@
   (switch-to-buffer "*scratch*"))
 
 ;; Always give new frames focus
-(when (and (daemonp)
-	   (window-system))
-  (add-hook 'after-make-frame-functions
-	    (lambda (frame)
-	      (select-frame-set-input-focus frame))))
+;; (when (and (daemonp)
+;; 	   (window-system))
+;;   (add-hook 'after-make-frame-functions
+;; 	    (lambda (frame)
+;; 	      (select-frame-set-input-focus frame))))
 
 (defun my/save-all-buffers ()
   "Save all buffers without prompt."
@@ -274,6 +273,7 @@ Example output:
   (defun load-doom-theme (frame)
     (select-frame frame)
     (load-theme 'doom-one)
+    (set-face-foreground 'line-number "#5B6268")
     (remove-hook 'after-make-frame-functions 'load-doom-theme))
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
