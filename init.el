@@ -82,6 +82,7 @@
 	      lazy-highlight-cleanup nil
 	      lazy-highlight-initial-delay 0)
 
+
 ;; Don't litter my init file
 (unless (file-exists-p "~/.emacs.d/local")
   (mkdir "~/.emacs.d/local"))
@@ -112,6 +113,8 @@
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-hook 'prog-mode-hook (lambda () (setq-local display-line-numbers 'relative)))
 
 ;; Convenience functions
 (defun my/split-line ()
@@ -257,10 +260,8 @@ Example output:
        `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
-       `(nlinum-relative-current-face ((t (:foreground "#46D9FF" :bold t))))
-       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))
-      (with-eval-after-load 'linum
-	(set-face-foreground 'linum "#5B6268")))
+       `(line-number-current-line ((t (:foreground "#46D9FF" :bold t))))
+       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF"))))))
     (when (member 'doom-tomorrow-night custom-enabled-themes)
       (remove-hook 'find-file-hook 'doom-buffer-mode)
       (remove-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
@@ -607,14 +608,6 @@ Example output:
   :config
   (general-define-key :prefix my-leader
 		      "c" #'imenu-anywhere))
-
-(use-package nlinum-relative
-  :ensure t
-  :init
-  (setq nlinum-relative-redisplay-delay 0.05
-	nlinum-format "%d ")
-  (add-hook 'html-mode-hook #'nlinum-relative-mode)
-  (add-hook 'prog-mode-hook #'nlinum-relative-mode))
 
 (use-package hl-line
   :commands hl-line-mode
