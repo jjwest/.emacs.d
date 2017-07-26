@@ -114,7 +114,7 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-hook 'prog-mode-hook (lambda () (setq-local display-line-numbers 'relative)))
+(add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative)))
 
 ;; Convenience functions
 (defun my/split-line ()
@@ -790,6 +790,7 @@ Example output:
   :ensure t
   :after rust-mode
   :config
+  (setq company-racer-annotation-format "%m")
   (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
 
 (use-package flycheck-rust
