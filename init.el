@@ -251,6 +251,10 @@ Example output:
    "vv" 'my/split-window-vertical))
 
 (use-package doom-common
+  :ensure s
+  :ensure f
+  :ensure evil
+  :ensure projectile
   :load-path "~/.emacs.d/lisp")
 
 (use-package doom-themes
@@ -289,10 +293,6 @@ Example output:
 
 (use-package doom-modeline
   :ensure powerline
-  :ensure s
-  :ensure f
-  :ensure evil
-  :ensure projectile
   :defer t
   :load-path "~/.emacs.d/lisp"
   :preface
