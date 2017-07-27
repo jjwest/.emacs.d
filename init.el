@@ -239,20 +239,21 @@ Example output:
 		      :keymaps '(normal visual)
 		      "n" 'narrow-or-widen-dwim)
   (general-define-key :prefix my-leader
-   "dw" 'delete-window
-   "do" 'delete-other-windows
-   "sf" 'save-buffer
-   "sa" 'my/save-all-buffers
-   "k" 'kill-this-buffer
-   "B" 'ibuffer
-   "P" 'proced
-   "W" 'winner-undo
-   "ss" 'my/split-window-horizontal
-   "vv" 'my/split-window-vertical))
+		      "dw" 'delete-window
+		      "do" 'delete-other-windows
+		      "sf" 'save-buffer
+		      "sa" 'my/save-all-buffers
+		      "k" 'kill-this-buffer
+		      "B" 'ibuffer
+		      "P" 'proced
+		      "W" 'winner-undo
+		      "ss" 'my/split-window-horizontal
+		      "vv" 'my/split-window-vertical))
 
 (use-package doom-common
   :ensure s
   :ensure f
+  :ensure all-the-icons
   :ensure evil
   :ensure projectile
   :load-path "~/.emacs.d/lisp")
