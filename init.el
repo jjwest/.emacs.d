@@ -250,6 +250,9 @@ Example output:
    "ss" 'my/split-window-horizontal
    "vv" 'my/split-window-vertical))
 
+(use-package doom-common
+  :load-path "~/.emacs.d/lisp")
+
 (use-package doom-themes
   :ensure t
   :preface
@@ -281,6 +284,8 @@ Example output:
   :config
   (doom-themes-neotree-config)
   (add-hook 'after-make-frame-functions #'load-doom-theme))
+
+
 
 (use-package doom-modeline
   :ensure powerline

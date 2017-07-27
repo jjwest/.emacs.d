@@ -27,22 +27,7 @@
           ("*vc-change-log*"   :align below :size 15  :select t)
           (vc-annotate-mode    :same t)))
 
-(defmacro def-popup! (&rest params)
-  `(push ',params shackle-rules))
-(defmacro after! (feature &rest forms)
 
-  "A smart wrapper around `with-eval-after-load', that supresses warnings
-during compilation."
-  (declare (indent defun) (debug t))
-  `(,(if (or (not (boundp 'byte-compile-current-file))
-             (not byte-compile-current-file)
-             (if (symbolp feature)
-                 (require feature nil :no-error)
-               (load feature :no-message :no-error)))
-         'progn
-       (message "after: cannot find %s" feature)
-       'with-no-warnings)
-    (with-eval-after-load ',feature ,@forms)))
 
 (use-package git-gutter
   :ensure t
