@@ -3,7 +3,8 @@
 (package-initialize)
 
 (require 'org)
-(require 'org-ref)
+(when (package-installed-p 'org-ref)
+  (require 'org-ref))
 (require 'ox)
 (require 'ox-latex)
 
