@@ -786,18 +786,11 @@ Example output:
   :ensure t
   :after rust-mode
   :config
-  (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
+  (add-hook 'rust-mode-hook #'racer-mode)
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
 		      "M-," #'pop-tag-mark
 		      "M-." #'racer-find-definition))
-
-(use-package company-racer
-  :ensure t
-  :after rust-mode
-  :config
-  (setq company-racer-annotation-format "%m")
-  (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
 
 (use-package flycheck-rust
     :ensure t
