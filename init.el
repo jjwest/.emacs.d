@@ -23,8 +23,7 @@
   :config (benchmark-init/activate))
 
 ;; General settings and better defaults
-(setq initial-major-mode 'fundamental-mode
-      custom-safe-themes t
+(setq custom-safe-themes t
       scroll-margin 5
       scroll-conservatively 9999
       scroll-step 1
@@ -835,7 +834,6 @@ Example output:
               (when (s-matches-p (rx "ts" (zero-or-one "x"))
 				 (file-name-extension buffer-file-name))
 		(setup-tide-mode))))
-  :init
   (general-define-key :keymaps '(web-mode-map typescript-mode-map)
 		      :states 'normal
 		      "M-." #'tide-jump-to-definition
@@ -845,6 +843,7 @@ Example output:
 		      :keymaps '(web-mode-map typescript-mode-map)
 		      :states 'normal
 		      "R" #'tide-rename-symbol)
+  :config
   (add-hook 'before-save-hook #'tide-format-before-save))
 
 (use-package tern
