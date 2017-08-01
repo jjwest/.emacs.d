@@ -87,15 +87,15 @@
   (mkdir "~/.emacs.d/local"))
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
-;; Set font
-(if (daemonp)
-    (progn
-      (defun set-font-on-start (frame)
+(defun set-font-on-start (frame)
 	(select-frame frame)
 	(when (member "Office Code Pro" (font-family-list))
 	  (set-frame-font "Office Code Pro-11" t t))
-	(remove-hook 'after-make-frame-functions 'set-font-on-start)
-	(add-hook 'after-make-frame-functions #'set-font-on-start)))
+	(remove-hook 'after-make-frame-functions 'set-font-on-start))
+
+;; Set font
+(if (daemonp)
+    (add-hook 'after-make-frame-functions #'set-font-on-start)
   (set-frame-font "Office Code Pro-11" t t))
 
 
