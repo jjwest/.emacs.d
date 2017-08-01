@@ -115,6 +115,13 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative)))
 
+(defun maybe-kill-buffers (frame)
+  "Kill all live buffers when the last frame is closed."
+  (when (<= (length (frame-list)) 2)
+    (mapc #'kill-buffer (buffer-list))))
+
+(add-hook 'delete-frame-functions #'maybe-kill-buffers)
+
 ;; Convenience functions
 (defun my/split-line ()
   "Split line at point."
