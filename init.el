@@ -88,13 +88,16 @@
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 ;; Set font
-(defun set-font-on-start (frame)
-  (select-frame frame)
-  (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro-11" t t))
-  (remove-hook 'after-make-frame-functions 'set-font-on-start))
+(if (daemonp)
+    (progn
+      (defun set-font-on-start (frame)
+	(select-frame frame)
+	(when (member "Office Code Pro" (font-family-list))
+	  (set-frame-font "Office Code Pro-11" t t))
+	(remove-hook 'after-make-frame-functions 'set-font-on-start)
+	(add-hook 'after-make-frame-functions #'set-font-on-start)))
+  (set-frame-font "Office Code Pro-11" t t))
 
-(add-hook 'after-make-frame-functions #'set-font-on-start)
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -275,6 +278,7 @@ Example output:
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number-current-line ((t (:foreground "#46D9FF" :bold t))))
+       `(line-number ((t (:foreground "#5B6268"))))
        `(font-lock-variable-name-face ((t (:foreground "#DFDFDF"))))))
     (when (member 'doom-tomorrow-night custom-enabled-themes)
       (remove-hook 'find-file-hook 'doom-buffer-mode)
@@ -287,14 +291,15 @@ Example output:
   (defun load-doom-theme (frame)
     (select-frame frame)
     (load-theme 'doom-one)
-    (set-face-foreground 'line-number "#5B6268")
     (remove-hook 'after-make-frame-functions 'load-doom-theme))
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   :config
   (doom-themes-neotree-config)
-  (add-hook 'after-make-frame-functions #'load-doom-theme))
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions #'load-doom-theme)
+    (load-theme 'doom-one)))
 
 
 
@@ -308,7 +313,9 @@ Example output:
     (require 'doom-modeline)
     (remove-hook 'after-make-frame-functions 'load-doom-modeline))
   :init
-  (add-hook 'after-make-frame-functions #'load-doom-modeline)
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions #'load-doom-modeline)
+    (require 'doom-modeline))
   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
     (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
 
