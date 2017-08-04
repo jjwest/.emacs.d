@@ -666,6 +666,10 @@ Example output:
 	gdb-many-windows t
 	c-default-style "bsd"))
 
+(use-package cmake-mode
+  :ensure t
+  :mode ("CMakeLists.txt" "\\.cmake\\'"))
+
 (use-package cmake-ide
   :ensure t
   :config
