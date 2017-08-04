@@ -666,6 +666,10 @@ Example output:
 	gdb-many-windows t
 	c-default-style "bsd"))
 
+(use-package cmake-ide
+  :ensure t
+  :config
+  (cmake-ide-setup))
 
 (use-package rtags
   :ensure t
