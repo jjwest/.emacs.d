@@ -618,8 +618,10 @@ Example output:
   (general-define-key :prefix my-leader
    "f" 'counsel-find-file
    "F" 'counsel-recentf
-   "b" 'ivy-switch-buffer
-   "pg" 'counsel-git-grep)
+   "b" 'ivy-switch-buffer)
+  (if (executable-find "rg")
+      (general-define-key :prefix my-leader "pg" 'counsel-rg)
+    (general-define-key :prefix my-leader "pg" 'counsel-git-grep))
   (ivy-mode 1))
 
 (use-package imenu-anywhere
