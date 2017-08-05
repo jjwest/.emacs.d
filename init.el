@@ -161,11 +161,11 @@
   (switch-to-buffer "*scratch*"))
 
 ;; Always give new frames focus
-;; (when (and (daemonp)
-;; 	   (window-system))
-;;   (add-hook 'after-make-frame-functions
-;; 	    (lambda (frame)
-;; 	      (select-frame-set-input-focus frame))))
+(when (and (daemonp)
+	   (window-system))
+  (add-hook 'after-make-frame-functions
+	    (lambda (frame)
+	      (select-frame-set-input-focus frame))))
 
 (defun my/save-all-buffers ()
   "Save all buffers without prompt."
