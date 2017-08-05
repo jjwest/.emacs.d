@@ -252,7 +252,7 @@ Example output:
 		      "do" 'delete-other-windows
 		      "sf" 'save-buffer
 		      "sa" 'my/save-all-buffers
-		      "k" 'kill-this-buffer
+		      "k" 'kill-current-buffer
 		      "B" 'ibuffer
 		      "P" 'proced
 		      "W" 'winner-undo
@@ -547,7 +547,7 @@ Example output:
 	      ("RET" . dired-find-alternate-file)
 	      ("<return>" . dired-find-alternate-file)
 	      ("a" . dired-find-file)
-	      ("q" . kill-this-buffer)
+	      ("q" . kill-current-buffer)
 	      ("n" . evil-search-next)
 	      ("N" . evil-search-previous)
 	      ("W" . wdired-change-to-wdired-mode)
@@ -570,7 +570,7 @@ Example output:
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
 	      ("k" . ibuffer-backward-line)
-	      ("q" . kill-this-buffer)))
+	      ("q" . kill-current-buffer)))
 
 (use-package ibuffer-vc
   :ensure t
@@ -589,7 +589,7 @@ Example output:
 (use-package magit
   :ensure t
   :bind (:map magit-status-mode-map
-	      ("q" . kill-this-buffer)
+	      ("q" . kill-current-buffer)
 	      ("j" . next-line)
 	      ("k" . previous-line)
 	      ("K" . magit-discard))
@@ -698,7 +698,7 @@ Example output:
   (general-define-key :keymaps 'rtags-mode-map
 		      :states 'normal
 		      "<return>" 'rtags-select-other-window
-		      "q" 'kill-this-buffer))
+		      "q" 'kill-current-buffer))
 
 
 (use-package irony
