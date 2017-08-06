@@ -624,12 +624,6 @@ Example output:
     (general-define-key :prefix my-leader "pg" 'counsel-git-grep))
   (ivy-mode 1))
 
-(use-package imenu-anywhere
-  :ensure t
-  :config
-  (general-define-key :prefix my-leader
-		      "c" #'imenu-anywhere))
-
 (use-package hl-line
   :commands hl-line-mode
   :init
