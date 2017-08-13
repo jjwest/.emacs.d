@@ -777,7 +777,6 @@ Example output:
 
 ;; (use-package lsp-mode
 ;;   :ensure t
-;;   :after rust-mode
 ;;   :config
 ;;   (setq lsp-enable-flycheck nil)
 ;;   (if (executable-find "rustc")
@@ -794,11 +793,10 @@ Example output:
 ;; 		      :states 'normal
 ;; 		      :prefix my-leader
 ;; 		      "R" 'lsp-rename)
-;;   (add-hook 'prog-major-mode #'lsp-mode))
+;;   (add-hook 'prog-mode-hook #'lsp-mode))
 
 
 ;; (use-package lsp-rust
-;;   :after lsp-mode
 ;;   :ensure t)
 
 (use-package racer
