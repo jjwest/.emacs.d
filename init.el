@@ -272,6 +272,7 @@ Example output:
   :preface
   (defun tweak-doom-theme (&rest args)
     (when (member 'doom-one custom-enabled-themes)
+      (solaire-mode-swap-bg)
       (custom-theme-set-faces
        'doom-one
        `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
@@ -279,16 +280,8 @@ Example output:
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number-current-line ((t (:foreground "#46D9FF" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
-       `(vertical-bar ((t (:foreground "#202328"))))
-       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))
-      (solaire-mode-swap-bg))
-    (when (member 'doom-tomorrow-night custom-enabled-themes)
-      (remove-hook 'find-file-hook 'doom-buffer-mode)
-      (remove-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
-      (custom-theme-set-faces
-       'doom-tomorrow-night
-       `(default ((t (:foreground "#c5c8c6" :background "#25282b"))))
-       `(hl-line ((t (:background "#282c34")))))))
+       `(fringe ((t (:inherit solaire-default-face))))
+       `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
 
   (defun load-doom-theme (frame)
     (select-frame frame)
@@ -297,7 +290,6 @@ Example output:
   :init
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
-  :config
   (doom-themes-neotree-config)
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'load-doom-theme)
@@ -333,7 +325,12 @@ Example output:
   :config
   (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
   (add-hook 'after-revert-hook #'turn-on-solaire-mode)
-  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer))
+  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+  (advice-add #'solaire-mode :after
+	      (lambda (&rest args)
+		(custom-theme-set-faces
+		 'doom-one
+		 `(fringe ((t (:inherit solaire-default-face))))))))
 
 (use-package evil
   :ensure t
