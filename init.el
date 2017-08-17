@@ -525,6 +525,10 @@ Example output:
 		      :states 'normal
 		      "w" 'wgrep-change-to-wgrep-mode))
 
+(use-package imenu
+  :config
+  (general-define-key :prefix my-leader "c" #'imenu))
+
 (use-package eldoc
   :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook #'eldoc-mode))
