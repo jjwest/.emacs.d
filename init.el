@@ -620,7 +620,6 @@ Example output:
 	ivy-display-style 'fancy)
   (general-define-key :prefix my-leader
    "f" 'counsel-find-file
-   "F" 'counsel-recentf
    "b" 'ivy-switch-buffer)
   (if (executable-find "rg")
       (general-define-key :prefix my-leader "pg" 'counsel-rg)
