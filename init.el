@@ -4,7 +4,18 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 10 1024 1024))
+(setq gc-cons-threshold (* 20 1024 1024))
+
+(defun inhibit-gc ()
+  "Disable garbage collection when minibuffer is active."
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun resume-gc ()
+  "Resume garbage collection when minibuffer is closed."
+  (setq gc-cons-threshold (* 20 1024 1024)))
+
+(add-hook 'minibuffer-setup-hook #'inhibit-gc)
+(add-hook 'minibuffer-exit-hook #'resume-gc)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -281,6 +292,7 @@ Example output:
        `(line-number-current-line ((t (:foreground "#46D9FF" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
        `(fringe ((t (:inherit solaire-default-face))))
+       `(solaire-line-number-face ((t (:foreground "#5B6268" :background "#282c34"))))
        `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
 
   (defun load-doom-theme (frame)
