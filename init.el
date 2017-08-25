@@ -290,10 +290,9 @@ Example output:
        `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
-       `(line-number-current-line ((t (:foreground "#46D9FF" :bold t))))
+       `(line-number-current-line ((t (:foreground "#46D9FF" :background "#21242b" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
        `(fringe ((t (:inherit solaire-default-face))))
-       `(solaire-line-number-face ((t (:foreground "#5B6268" :background "#282c34"))))
        `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
 
   (defun load-doom-theme (frame)
@@ -336,6 +335,7 @@ Example output:
 (use-package solaire-mode
   :ensure t
   :config
+  (setq solaire-mode-remap-line-numbers t)
   (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
   (add-hook 'after-revert-hook #'turn-on-solaire-mode)
   (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
