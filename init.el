@@ -47,7 +47,6 @@
       uniquify-buffer-name-style 'forward
       message-log-max 200
       bidi-paragraph-direction 'left-to-right
-      require-final-newline t
       auto-revert-check-vc-info t
       show-paren-delay 0
       save-interprogram-paste-before-kill t
@@ -108,7 +107,8 @@
 ;; Set font
 (if (daemonp)
     (add-hook 'after-make-frame-functions #'set-font-on-start)
-  (set-frame-font "Office Code Pro-11" t t))
+  (when (member "Office Code Pro" (font-family-list))
+    (set-frame-font "Office Code Pro-11" t t)))
 
 
 ;; Strip UI
@@ -238,17 +238,6 @@ is already narrowed."
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme))
 
-(defun align-values (start end)
-  "Vertically aligns region based on lengths of the first value of each line.
-Example output:
-
-    foo        bar
-    foofoo     bar
-    foofoofoo  bar"
-  (interactive "r")
-  (align-regexp start end
-                "\\S-+\\(\\s-+\\)"
-                1 1 nil))
 ;; Packages
 (use-package general
   :ensure t
@@ -502,8 +491,7 @@ Example output:
 
 (use-package terminal-here
   :ensure t
-  :config
-  (general-define-key :prefix my-leader "x" #'terminal-here))
+  :config (general-define-key :prefix my-leader "x" #'terminal-here))
 
 (use-package iedit
   :ensure t
@@ -661,13 +649,11 @@ Example output:
 
 (use-package transpose-frame
   :ensure t
-  :init
-  (general-define-key :prefix my-leader "T" 'transpose-frame))
+  :init (general-define-key :prefix my-leader "T" 'transpose-frame))
 
 (use-package rainbow-delimiters
   :ensure t
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+  :config (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 ;; C/C++ SETTINGS
 (use-package c++-mode
@@ -683,8 +669,7 @@ Example output:
 
 (use-package cmake-ide
   :ensure t
-  :config
-  (cmake-ide-setup))
+  :config (cmake-ide-setup))
 
 (use-package rtags
   :ensure t
@@ -795,9 +780,8 @@ Example output:
 ;;   (if (executable-find "rustc")
 ;;       (let* ((sysroot (s-trim-right
 ;; 		       (shell-command-to-string "rustc --print sysroot")))
-;; 	     (lib (f-join sysroot
-;; 			  "lib")))
-;; 	(setenv "LD_LIBRARY_PATH" lib))
+;; 	     (lib-path (f-join sysroot "lib")))
+;; 	(setenv "LD_LIBRARY_PATH" lib-path))
 ;;     (error "Could not find rustc"))
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
