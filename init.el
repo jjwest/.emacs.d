@@ -128,7 +128,9 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative)))
+
+(when (>= emacs-major-version 26)
+  (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative))))
 
 (defun maybe-kill-buffers (frame)
   "Kill all live buffers when the last frame is closed."
@@ -483,11 +485,9 @@ is already narrowed."
   (setq-default flycheck-gcc-language-standard "c++14")
   (setq-default flycheck-clang-language-standard "c++14"))
 
-(use-package flycheck-pos-tip
+(use-package flycheck-popup-tip
   :ensure t
-  :init
-  (setq flycheck-pos-tip-timeout 30)
-  (flycheck-pos-tip-mode))
+  :config (flycheck-popup-tip-mode))
 
 (use-package terminal-here
   :ensure t
