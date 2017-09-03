@@ -487,7 +487,9 @@ is already narrowed."
 
 (use-package flycheck-popup-tip
   :ensure t
-  :config (flycheck-popup-tip-mode))
+  :config
+  (set-face-attribute 'popup-tip-face nil :background "#fefdd5" :foreground "black")
+  (flycheck-popup-tip-mode))
 
 (use-package terminal-here
   :ensure t
@@ -567,7 +569,6 @@ is already narrowed."
   	dired-recursive-copies 'always
         dired-recursive-deletes 'always
   	delete-by-moving-to-trash t)
-  (add-hook 'dired-mode-hook #'dired-hide-details-mode)
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package ibuffer
@@ -769,6 +770,7 @@ is already narrowed."
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
+  (setenv "LD_LIBRARY_PATH" (f-join (s-trim-right (shell-command-to-string "rustc --print sysroot")) "lib"))
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
