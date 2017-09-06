@@ -99,10 +99,10 @@
 (setq custom-file "~/.emacs.d/local/custom-set.el")
 
 (defun set-font-on-start (frame)
-	(select-frame frame)
-	(when (member "Office Code Pro" (font-family-list))
-	  (set-frame-font "Office Code Pro-11" t t))
-	(remove-hook 'after-make-frame-functions 'set-font-on-start))
+  (select-frame frame)
+  (when (member "Office Code Pro" (font-family-list))
+    (set-frame-font "Office Code Pro-11" t t))
+  (remove-hook 'after-make-frame-functions 'set-font-on-start))
 
 ;; Set font
 (if (daemonp)
@@ -282,7 +282,6 @@ is already narrowed."
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
        `(popup-tip-face ((t (:background "#fed7d7" :foreground "black"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
-       `(line-number-current-line ((t (:foreground "#46D9FF" :background "#21242b" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
        `(fringe ((t (:inherit solaire-default-face))))
        `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
