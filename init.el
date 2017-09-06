@@ -280,6 +280,7 @@ is already narrowed."
        'doom-one
        `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
+       `(popup-tip-face ((t (:background "#fed7d7" :foreground "black"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number-current-line ((t (:foreground "#46D9FF" :background "#21242b" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
@@ -481,15 +482,12 @@ is already narrowed."
   :config
   (general-define-key "M-n" #'flycheck-next-error
 		      "M-p" #'flycheck-previous-error)
-  (setq flycheck-c/c++-gcc-executable "gcc-5")
   (setq-default flycheck-gcc-language-standard "c++14")
   (setq-default flycheck-clang-language-standard "c++14"))
 
 (use-package flycheck-popup-tip
   :ensure t
-  :config
-  (set-face-attribute 'popup-tip-face nil :background "#fefdd5" :foreground "black")
-  (flycheck-popup-tip-mode))
+  :config (flycheck-popup-tip-mode))
 
 (use-package terminal-here
   :ensure t
@@ -770,7 +768,10 @@ is already narrowed."
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
-  (setenv "LD_LIBRARY_PATH" (f-join (s-trim-right (shell-command-to-string "rustc --print sysroot")) "lib"))
+  (when (executable-find "rustc")
+    (setenv "LD_LIBRARY_PATH" (f-join
+			       (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+			       "lib")))
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
@@ -778,13 +779,6 @@ is already narrowed."
 ;; (use-package lsp-mode
 ;;   :ensure t
 ;;   :config
-;;   (setq lsp-enable-flycheck nil)
-;;   (if (executable-find "rustc")
-;;       (let* ((sysroot (s-trim-right
-;; 		       (shell-command-to-string "rustc --print sysroot")))
-;; 	     (lib-path (f-join sysroot "lib")))
-;; 	(setenv "LD_LIBRARY_PATH" lib-path))
-;;     (error "Could not find rustc"))
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
 ;; 		      "C-." 'company-complete)
