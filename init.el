@@ -7,11 +7,9 @@
 (setq gc-cons-threshold (* 20 1024 1024))
 
 (defun inhibit-gc ()
-  "Disable garbage collection when minibuffer is active."
   (setq gc-cons-threshold most-positive-fixnum))
 
 (defun resume-gc ()
-  "Resume garbage collection when minibuffer is closed."
   (setq gc-cons-threshold (* 20 1024 1024)))
 
 (add-hook 'minibuffer-setup-hook #'inhibit-gc)
