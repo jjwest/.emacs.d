@@ -445,6 +445,8 @@ is already narrowed."
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
 	company-tooltip-align-annotations t
+	company-dabbrev-ignore-case nil
+	company-dabbrev-downcase nil
 	company-require-match nil))
 
 
@@ -930,6 +932,12 @@ is already narrowed."
 		      "<return>" #'neotree-enter
 		      "<tab>" #'neotree-enter))
 
+(use-package refine
+  :ensure t)
+
+(use-package restclient
+  :ensure t
+  :mode ("\\.http\\'" . restclient-mode))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
