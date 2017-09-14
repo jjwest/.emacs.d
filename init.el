@@ -292,6 +292,7 @@ is already narrowed."
   (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   (doom-themes-neotree-config)
+  (doom-themes-org-config)
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'load-doom-theme)
     (load-theme 'doom-one)))
