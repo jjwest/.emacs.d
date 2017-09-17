@@ -569,6 +569,12 @@ is already narrowed."
   	delete-by-moving-to-trash t)
   (put 'dired-find-alternate-file 'disabled nil))
 
+(use-package dired-details
+  :ensure t
+  :config
+  (setq-default dired-details-hidden-string "--- ")
+  (dired-details-install))
+
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
 	      ("j" . ibuffer-forward-line)
@@ -769,9 +775,11 @@ is already narrowed."
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (when (executable-find "rustc")
-    (setenv "LD_LIBRARY_PATH" (f-join
-			       (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-			       "lib")))
+    (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH")
+				      ":"
+				      (f-join
+				       (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+				       "lib"))))
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
@@ -898,14 +906,14 @@ is already narrowed."
 		      "M-l" 'my/org-latex-export))
 
 (use-package org-ref
-      :defer-install t
-      :after org
-      :init
-      (general-define-key :keymaps 'org-mode-map
-			  :states '(normal insert)
-			  "M-r" #'org-ref-helm-insert-cite-link)
-      :config
-      (require 'doi-utils))
+  :defer-install t
+  :after org
+  :init
+  (general-define-key :keymaps 'org-mode-map
+		      :states '(normal insert)
+		      "M-r" #'org-ref-helm-insert-cite-link)
+  :config
+  (require 'doi-utils))
 
 (use-package darkroom
   :ensure t
