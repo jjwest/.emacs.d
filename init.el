@@ -787,14 +787,15 @@ is already narrowed."
 ;; (use-package lsp-mode
 ;;   :ensure t
 ;;   :config
+;;   (require 'lsp-flycheck)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
-;; 		      "C-." 'company-complete)
+;; 		      "c-." 'company-complete)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states 'normal
 ;; 		      :prefix my-leader
-;; 		      "R" 'lsp-rename)
-;;   (add-hook 'prog-mode-hook #'lsp-mode))
+;; 		      "r" 'lsp-rename)
+;;   (add-hook 'rust-mode-hook #'lsp-mode))
 
 
 ;; (use-package lsp-rust
@@ -802,13 +803,16 @@ is already narrowed."
 
 (use-package racer
   :ensure t
-  :after rust-mode
   :config
-  (add-hook 'rust-mode-hook #'racer-mode)
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
 		      "M-," #'pop-tag-mark
 		      "M-." #'racer-find-definition))
+
+(use-package company-racer
+  :ensure t
+  :config
+  (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
 
 (use-package flycheck-rust
     :ensure t
@@ -907,7 +911,6 @@ is already narrowed."
 
 (use-package org-ref
   :defer-install t
-  :after org
   :init
   (general-define-key :keymaps 'org-mode-map
 		      :states '(normal insert)
@@ -917,7 +920,6 @@ is already narrowed."
 
 (use-package darkroom
   :ensure t
-  :after org
   :config
   (setq darkroom-margins 0.25
 	darkroom-text-scale-increase 1))
