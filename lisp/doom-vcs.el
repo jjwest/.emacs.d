@@ -58,6 +58,14 @@
   (advice-add 'evil-force-normal-state :after 'git-gutter)
   (add-hook 'focus-in-hook 'git-gutter:update-all-windows)
 
+  (defadvice git-gutter:update-all-windows (around ignore-remote first activate)
+    (unless (file-remote-p default-directory)
+      ad-do-it))
+
+  (defadvice git-gutter (around ignore-remote first activate)
+    (unless (file-remote-p default-directory)
+      ad-do-it))
+
   (defalias 'doom/vcs-next-hunk    'git-gutter:next-hunk)
   (defalias 'doom/vcs-prev-hunk    'git-gutter:previous-hunk)
   (defalias 'doom/vcs-show-hunk    'git-gutter:popup-hunk)

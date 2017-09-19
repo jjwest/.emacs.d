@@ -312,6 +312,15 @@ is already narrowed."
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'load-doom-modeline)
     (require 'doom-modeline))
+
+  (with-eval-after-load 'doom-modeline
+    (defadvice doom-buffer-path (around ignore-remote first activate)
+      (if (file-remote-p default-directory)
+	  (if buffer-file-name
+	      (setq ad-return-value (file-name-nondirectory (buffer-file-name)))
+	    (setq ad-return-value "%b"))
+	ad-do-it)))
+
   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
     (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
 
@@ -947,6 +956,21 @@ is already narrowed."
 (use-package restclient
   :ensure t
   :mode ("\\.http\\'" . restclient-mode))
+
+(use-package pdf-tools
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  (general-define-key :keymaps 'pdf-view-mode-map
+		      :states 'normal
+		      "C-h" #'windmove-left
+		      "C-j" #'windmove-down
+		      "C-k" #'windmove-up
+		      "C-l" #'windmove-right
+		      "j" #'pdf-view-next-line-or-next-page
+		      "k" #'pdf-view-prveious-line-or-previous-page
+		      "M-j" #'pdf-view-next-page
+		      "M-k" #'pdf-view-previous-page))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
