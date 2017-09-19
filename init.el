@@ -578,7 +578,7 @@ is already narrowed."
   	delete-by-moving-to-trash t)
   (put 'dired-find-alternate-file 'disabled nil))
 
-(use-package dired-details
+(use-package dired-details+
   :ensure t
   :config
   (setq-default dired-details-hidden-string "--- ")
