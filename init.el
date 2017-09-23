@@ -813,6 +813,7 @@ is already narrowed."
 (use-package racer
   :ensure t
   :config
+  (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
 		      "M-," #'pop-tag-mark
