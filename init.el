@@ -973,6 +973,10 @@ is already narrowed."
 		      "M-j" #'pdf-view-next-page
 		      "M-k" #'pdf-view-previous-page))
 
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . markdown-mode))
+
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
