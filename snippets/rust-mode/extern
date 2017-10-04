@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: extern
+# key: extern
+# --
+#[no_mangle]
+pub extern "C" fn $0
