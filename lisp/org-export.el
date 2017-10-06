@@ -16,7 +16,7 @@
 	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
 	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
+(setq org-latex-prefer-user-labels t)
 (setq org-export-async-debug t)
 (setq org-latex-pdf-process
       '("xelatex -bibtex -shell-escape -interaction nonstopmode %f"
