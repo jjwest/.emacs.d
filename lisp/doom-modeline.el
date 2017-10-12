@@ -466,6 +466,7 @@ lines are selected, or the NxM dimensions of a block selection."
                               '(list (*buffer-info)
                                      "  %l:%c %p  "
                                      (*selection-info)
+				     (concat "[" (projectile-project-name) "]")
                                      )))
                           (*flycheck)
 		      ))
