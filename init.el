@@ -173,8 +173,7 @@
   (switch-to-buffer "*scratch*"))
 
 ;; Always give new frames focus
-(when (and (daemonp)
-	   (window-system))
+(when (daemonp)
   (add-hook 'after-make-frame-functions
 	    (lambda (frame)
 	      (select-frame-set-input-focus frame))))
@@ -289,7 +288,6 @@ is already narrowed."
     (load-theme 'doom-one)
     (remove-hook 'after-make-frame-functions 'load-doom-theme))
   :init
-  (advice-add #'change-theme :after #'tweak-doom-theme)
   (advice-add #'load-theme :after #'tweak-doom-theme)
   (doom-themes-neotree-config)
   (doom-themes-org-config)
