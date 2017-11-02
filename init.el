@@ -801,13 +801,17 @@ is already narrowed."
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states 'normal
 ;; 		      :prefix my-leader
-;; 		      "r" 'lsp-rename))
+;; 		      "R" 'lsp-rename))
 
 
 ;; (use-package lsp-rust
 ;;   :ensure t
 ;;   :config
 ;;   (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+;;   (when (executable-find "rustc")
+;;     (setenv "RUST_SRC_PATH" (concat (f-join
+;; 				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+;; 				     "lib/rustlib/src/rust/src/"))))
 ;;   (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
 ;; (use-package company-lsp
