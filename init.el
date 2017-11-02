@@ -797,16 +797,23 @@ is already narrowed."
 ;;   (require 'lsp-flycheck)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states '(normal insert)
-;; 		      "c-." 'company-complete)
+;; 		      "C-." 'company-complete)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states 'normal
 ;; 		      :prefix my-leader
-;; 		      "r" 'lsp-rename)
-;;   (add-hook 'rust-mode-hook #'lsp-mode))
+;; 		      "r" 'lsp-rename))
 
 
 ;; (use-package lsp-rust
-;;   :ensure t)
+;;   :ensure t
+;;   :config
+;;   (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+;;   (add-hook 'rust-mode-hook #'lsp-rust-enable))
+
+;; (use-package company-lsp
+;;   :ensure t
+;;   :config
+;;   (add-to-list 'company-backends #'company-lsp))
 
 (use-package racer
   :ensure t
