@@ -277,7 +277,6 @@ is already narrowed."
        'doom-one
        `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
        `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
-       `(popup-tip-face ((t (:background "#fed7d7" :foreground "black"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
        `(fringe ((t (:inherit solaire-default-face))))
@@ -492,9 +491,9 @@ is already narrowed."
   (setq-default flycheck-gcc-language-standard "c++14")
   (setq-default flycheck-clang-language-standard "c++14"))
 
-(use-package flycheck-popup-tip
+(use-package flycheck-pos-tip
   :ensure t
-  :config (flycheck-popup-tip-mode))
+  :config (flycheck-pos-tip-mode))
 
 (use-package terminal-here
   :ensure t
