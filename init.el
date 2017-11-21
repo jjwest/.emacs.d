@@ -493,7 +493,9 @@ is already narrowed."
 
 (use-package flycheck-pos-tip
   :ensure t
-  :config (flycheck-pos-tip-mode))
+  :config
+  (setq flycheck-pos-tip-timeout 30)
+  (flycheck-pos-tip-mode))
 
 (use-package terminal-here
   :ensure t
