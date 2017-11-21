@@ -620,6 +620,12 @@ is already narrowed."
   :ensure smex
   :ensure counsel
   :diminish ivy-mode
+  :preface
+  (defun counsel-rg-dwim ()
+    (interactive)
+    (if (equal (projectile-project-name) "-")
+	(counsel-rg)
+      (counsel-projectile-rg)))
   :bind (("M-x" . counsel-M-x)
 	 :map ivy-mode-map
 	 ("<escape>" . minibuffer-keyboard-quit))
@@ -636,7 +642,7 @@ is already narrowed."
    "f" 'counsel-find-file
    "b" 'ivy-switch-buffer)
   (if (executable-find "rg")
-      (general-define-key :prefix my-leader "pg" 'counsel-rg)
+      (general-define-key :prefix my-leader "pg" #'counsel-rg-dwim)
     (general-define-key :prefix my-leader "pg" 'counsel-git-grep))
   (ivy-mode 1))
 
