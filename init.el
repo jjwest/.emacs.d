@@ -122,6 +122,7 @@
 (global-auto-revert-mode t)
 (winner-mode 1)
 (save-place-mode 1)
+(visual-line-mode 1)
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
@@ -345,23 +346,23 @@ is already narrowed."
   :ensure t
   :config
   (general-define-key
-   "j" 'evil-next-visual-line
-   "k" 'evil-previous-visual-line
-   "TAB" 'indent-for-tab-command
-   "C-h" 'evil-window-left
-   "C-j" 'evil-window-down
-   "C-k" 'evil-window-up
-   "C-l" 'evil-window-right
-   "M-k" 'evil-scroll-up
-   "M-j" 'evil-scroll-down
-   "C-a" 'beginning-of-line
-   "C-q" 'evil-scroll-line-up
-   "C-e" 'evil-scroll-line-down
-   "S" 'my/split-line
-   "U" 'redo
-   "M-." 'xref-find-definitions
-   "M-," 'xref-pop-marker-stack
-   "M--" 'xref-find-references
+   "j" #'evil-next-visual-line
+   "k" #'evil-previous-visual-line
+   "TAB" #'indent-for-tab-command
+   "C-h" #'evil-window-left
+   "C-j" #'evil-window-down
+   "C-k" #'evil-window-up
+   "C-l" #'evil-window-right
+   "M-k" #'evil-scroll-up
+   "M-j" #'evil-scroll-down
+   "C-a" #'beginning-of-line
+   "C-q" #'evil-scroll-line-up
+   "C-e" #'evil-scroll-line-down
+   "S" #'my/split-line
+   "U" #'redo
+   "M-." #'xref-find-definitions
+   "M-," #'xref-pop-marker-stack
+   "M--" #'xref-find-references
    "Q" "@q"
    "Y" "y$")
   (general-define-key :keymaps 'global
@@ -370,10 +371,12 @@ is already narrowed."
 		      "C-k" #'windmove-up
 		      "C-l" #'windmove-right)
   (general-define-key :keymaps 'evil-visual-state-map
-  		      "TAB" 'indent-for-tab-command)
+		      "j" #'evil-next-visual-line
+		      "k" #'evil-previous-visual-line
+  		      "TAB" #'indent-for-tab-command)
   (general-define-key :keymaps 'package-menu-mode-map
-		      "j" 'evil-next-visual-line
-		      "k" 'evil-previous-visual-line)
+		      "j" #'evil-next-visual-line
+		      "k" #'evil-previous-visual-line)
   (evil-mode 1))
 
 (use-package evil-surround
@@ -790,60 +793,61 @@ is already narrowed."
   :config
   (when (executable-find "rustc")
     (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH")
-				      ":"
 				      (f-join
 				       (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-				       "lib"))))
+				       "lib")
+				      ":")))
+
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
 
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :config
-;;   (require 'lsp-flycheck)
-;;   (general-define-key :keymaps 'rust-mode-map
-;; 		      :states '(normal insert)
-;; 		      "C-." 'company-complete)
-;;   (general-define-key :keymaps 'rust-mode-map
-;; 		      :states 'normal
-;; 		      :prefix my-leader
-;; 		      "R" 'lsp-rename))
-
-
-;; (use-package lsp-rust
-;;   :ensure t
-;;   :config
-;;   (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-;;   (when (executable-find "rustc")
-;;     (setenv "RUST_SRC_PATH" (concat (f-join
-;; 				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-;; 				     "lib/rustlib/src/rust/src/"))))
-;;   (add-hook 'rust-mode-hook #'lsp-rust-enable))
-
-;; (use-package company-lsp
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'company-backends #'company-lsp))
-
-(use-package racer
+(use-package lsp-mode
   :ensure t
   :config
-  (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
+  (require 'lsp-flycheck)
+  (general-define-key :keymaps 'rust-mode-map
+		      :states '(normal insert)
+		      "C-." 'company-complete)
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
-		      "M-," #'pop-tag-mark
-		      "M-." #'racer-find-definition))
+		      :prefix my-leader
+		      "R" 'lsp-rename))
 
-(use-package company-racer
+
+(use-package lsp-rust
   :ensure t
   :config
-  (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
+  (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+  (when (executable-find "rustc")
+    (setenv "RUST_SRC_PATH" (concat (f-join
+				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+				     "lib/rustlib/src/rust/src/"))))
+  (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
-(use-package flycheck-rust
-    :ensure t
-    :init
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup))
+(use-package company-lsp
+  :ensure t
+  :config
+  (add-to-list 'company-backends #'company-lsp))
+
+;; (use-package racer
+;;   :ensure t
+;;   :config
+;;   (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
+;;   (general-define-key :keymaps 'rust-mode-map
+;; 		      :states 'normal
+;; 		      "M-," #'pop-tag-mark
+;; 		      "M-." #'racer-find-definition))
+
+;; (use-package company-racer
+;;   :ensure t
+;;   :config
+;;   (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
+
+;; (use-package flycheck-rust
+;;     :ensure t
+;;     :init
+;;     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
 ;; Web development
 (use-package web-mode
