@@ -122,7 +122,7 @@
 (global-auto-revert-mode t)
 (winner-mode 1)
 (save-place-mode 1)
-(visual-line-mode 1)
+(global-visual-line-mode 1)
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
