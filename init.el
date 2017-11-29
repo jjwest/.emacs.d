@@ -40,7 +40,6 @@
       initial-scratch-message ""
       load-prefer-newer t
       indent-tabs-mode nil
-      tab-width 4
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
       message-log-max 200
@@ -53,6 +52,8 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
+
+(setq-default tab-width 4)
 
 ;; I like my backups hidden and in abundance
 (unless (file-exists-p "~/.emacs.d/backups")
@@ -122,7 +123,8 @@
 (global-auto-revert-mode t)
 (winner-mode 1)
 (save-place-mode 1)
-(global-visual-line-mode 1)
+(add-hook 'prog-mode-hook #'visual-line-mode)
+(add-hook 'text-mode-hook #'visual-line-mode)
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
@@ -314,10 +316,10 @@ is already narrowed."
   (with-eval-after-load 'doom-modeline
     (defadvice doom-buffer-path (around ignore-remote first activate)
       (if (file-remote-p default-directory)
-	  (if buffer-file-name
-	      (setq ad-return-value (file-name-nondirectory (buffer-file-name)))
-	    (setq ad-return-value "%b"))
-	ad-do-it)))
+	      (if buffer-file-name
+	          (setq ad-return-value (file-name-nondirectory (buffer-file-name)))
+	        (setq ad-return-value "%b"))
+	    ad-do-it)))
 
   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
     (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
