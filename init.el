@@ -39,7 +39,6 @@
       inhibit-startup-screen t
       initial-scratch-message ""
       load-prefer-newer t
-      indent-tabs-mode nil
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
       message-log-max 200
@@ -53,7 +52,8 @@
       display-time-default-load-average nil
       locale-coding-system 'utf-8)
 
-(setq-default tab-width 4)
+(setq-default tab-width 4
+			  indent-tabs-mode nil)
 
 ;; I like my backups hidden and in abundance
 (unless (file-exists-p "~/.emacs.d/backups")
