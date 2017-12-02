@@ -776,13 +776,9 @@ is already narrowed."
   (with-eval-after-load 'irony
     (add-hook 'irony-mode-hook #'irony-eldoc)))
 
-;; (use-package cquery
-;;   :load-path "~/cquery/emacs"
-;;   :config
-;;   (setq cquery-resource-dir (expand-file-name "~/cquery/clang_resource_dir"))
-;;   (setq cquery-enable-sem-highlight nil)
-;;   (add-hook 'c-mode-hook #'lsp-cquery-enable)
-;;   (add-hook 'c++-mode-hook #'lsp-cquery-enable))
+(use-package glsl-mode
+  :ensure t
+  :mode ("\\.[fv]s\\'" . glsl-mode))
 
 (use-package company-jedi
   :ensure t
