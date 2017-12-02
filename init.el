@@ -128,6 +128,7 @@
 (display-time)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
+(add-hook 'prog-mode-hook #'visual-line-mode)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (when (>= emacs-major-version 26)
@@ -747,8 +748,8 @@ is already narrowed."
   (add-hook 'objc-mode-hook #'irony-mode)
   (add-hook 'irony-mode-hook #'my/irony-mode-hook)
   :config
-  (setq irony-additional-clang-options '("-std=c++14"))
   (add-hook 'kill-buffer-hook #'my/irony-cleanup))
+
 
 
 (use-package company-irony
@@ -774,6 +775,14 @@ is already narrowed."
   :init
   (with-eval-after-load 'irony
     (add-hook 'irony-mode-hook #'irony-eldoc)))
+
+;; (use-package cquery
+;;   :load-path "~/cquery/emacs"
+;;   :config
+;;   (setq cquery-resource-dir (expand-file-name "~/cquery/clang_resource_dir"))
+;;   (setq cquery-enable-sem-highlight nil)
+;;   (add-hook 'c-mode-hook #'lsp-cquery-enable)
+;;   (add-hook 'c++-mode-hook #'lsp-cquery-enable))
 
 (use-package company-jedi
   :ensure t
@@ -804,52 +813,52 @@ is already narrowed."
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
 
-(use-package lsp-mode
-  :ensure t
-  :config
-  (require 'lsp-flycheck)
-  (general-define-key :keymaps 'rust-mode-map
-		      :states '(normal insert)
-		      "C-." 'company-complete)
-  (general-define-key :keymaps 'rust-mode-map
-		      :states 'normal
-		      :prefix my-leader
-		      "R" 'lsp-rename))
-
-
-(use-package lsp-rust
-  :ensure t
-  :config
-  (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-  (when (executable-find "rustc")
-    (setenv "RUST_SRC_PATH" (concat (f-join
-				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-				     "lib/rustlib/src/rust/src/"))))
-  (add-hook 'rust-mode-hook #'lsp-rust-enable))
-
-(use-package company-lsp
-  :ensure t
-  :config
-  (add-to-list 'company-backends #'company-lsp))
-
-;; (use-package racer
+;; (use-package lsp-mode
 ;;   :ensure t
 ;;   :config
-;;   (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
+;;   (require 'lsp-flycheck)
+;;   (general-define-key :keymaps 'rust-mode-map
+;; 		      :states '(normal insert)
+;; 		      "C-." 'company-complete)
 ;;   (general-define-key :keymaps 'rust-mode-map
 ;; 		      :states 'normal
-;; 		      "M-," #'pop-tag-mark
-;; 		      "M-." #'racer-find-definition))
+;; 		      :prefix my-leader
+;; 		      "R" 'lsp-rename))
 
-;; (use-package company-racer
+
+;; (use-package lsp-rust
 ;;   :ensure t
 ;;   :config
-;;   (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
+;;   (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+;;   (when (executable-find "rustc")
+;;     (setenv "RUST_SRC_PATH" (concat (f-join
+;; 				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+;; 				     "lib/rustlib/src/rust/src/"))))
+;;   (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
-;; (use-package flycheck-rust
-;;     :ensure t
-;;     :init
-;;     (add-hook 'rust-mode-hook #'flycheck-rust-setup))
+;; (use-package company-lsp
+;;   :ensure t
+;;   :config
+;;   (add-to-list 'company-backends #'company-lsp))
+
+(use-package racer
+  :ensure t
+  :config
+  (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
+  (general-define-key :keymaps 'rust-mode-map
+		      :states 'normal
+		      "M-," #'pop-tag-mark
+		      "M-." #'racer-find-definition))
+
+(use-package company-racer
+  :ensure t
+  :config
+  (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
+
+(use-package flycheck-rust
+    :ensure t
+    :init
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 
 ;; Web development
 (use-package web-mode
@@ -974,7 +983,11 @@ is already narrowed."
 		      "<tab>" #'neotree-enter))
 
 (use-package refine
-  :ensure t)
+  :ensure t
+  :config
+  (general-define-key :keymaps 'refine-mode-map
+                      :states 'normal
+                      "D" #'refine-delete))
 
 (use-package restclient
   :ensure t
