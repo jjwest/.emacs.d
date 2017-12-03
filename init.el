@@ -745,7 +745,6 @@ is already narrowed."
   :init
   (add-hook 'c++-mode-hook #'irony-mode)
   (add-hook 'c-mode-hook #'irony-mode)
-  (add-hook 'objc-mode-hook #'irony-mode)
   (add-hook 'irony-mode-hook #'my/irony-mode-hook)
   :config
   (add-hook 'kill-buffer-hook #'my/irony-cleanup))
@@ -799,11 +798,9 @@ is already narrowed."
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (when (executable-find "rustc")
-    (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH")
-				      (f-join
-				       (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-				       "lib")
-				      ":")))
+    (setenv "LD_LIBRARY_PATH" (concat (f-join (s-trim-right (shell-command-to-string "rustc --print sysroot")) "lib")
+                                      ":"
+                                      (getenv "LD_LIBRARY_PATH"))))
 
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
