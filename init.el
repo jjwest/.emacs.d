@@ -168,14 +168,15 @@
     (bury-buffer)
     nil))
 
-;; Ugly hack to ensure the modeline loads properly
-;; for Message and scratch buffer
-(with-eval-after-load 'doom-modeline
-  (kill-buffer "*scratch*")
-  (kill-buffer "*Messages*")
-  (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
-  (switch-to-buffer "*Messages*")
-  (switch-to-buffer "*scratch*"))
+;; ;; Ugly hack to ensure the modeline loads properly
+;; ;; for Message and scratch buffer
+(when (daemonp)
+  (with-eval-after-load 'doom-modeline
+    (kill-buffer "*scratch*")
+    (kill-buffer "*Messages*")
+    (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
+    (switch-to-buffer "*Messages*")
+    (switch-to-buffer "*scratch*")))
 
 ;; Always give new frames focus
 (when (daemonp)
@@ -660,11 +661,16 @@ is already narrowed."
   (ivy-mode 1))
 
 (use-package hl-line
-  :commands hl-line-mode
   :init
   (add-hook 'prog-mode-hook #'hl-line-mode)
   (add-hook 'html-mode-hook #'hl-line-mode)
   :config
+  (defadvice hl-line-highlight (around ignore-remote first activate)
+    ad-do-it
+    (when (save-excursion
+              (forward-line)
+              (eobp))
+      (hl-line-unhighlight)))
   (setq hl-line-sticky-flag nil))
 
 (use-package buffer-move
@@ -951,7 +957,7 @@ is already narrowed."
 		      "M-l" 'my/org-latex-export))
 
 (use-package org-ref
-  :defer-install t
+  :defer t
   :init
   (general-define-key :keymaps 'org-mode-map
 		      :states '(normal insert)
