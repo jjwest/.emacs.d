@@ -44,6 +44,7 @@
       message-log-max 200
       bidi-paragraph-direction 'left-to-right
       auto-revert-check-vc-info t
+      require-final-newline nil
       show-paren-delay 0
       save-interprogram-paste-before-kill t
       select-enable-clipboard t
@@ -619,7 +620,13 @@ is already narrowed."
   :diminish auto-revert-mode
   :init
   (general-define-key :prefix my-leader
-		      "g" 'magit-status))
+		              "g" 'magit-status)
+  (general-define-key :keymaps 'smerge-mode-map
+                      :states 'normal
+                      "n" #'smerge-next
+                      "p" #'smerge-prev
+                      "M-l" #'smerge-keep-lower
+                      "M-u" #'smerge-keep-upper))
 
 (use-package ivy
   :ensure t
