@@ -24,6 +24,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(require 'use-package)
 (setq use-package-always-demand t)
 
 ;; Benchmark startup time
