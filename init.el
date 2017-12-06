@@ -760,6 +760,7 @@ is already narrowed."
   (add-hook 'c++-mode-hook #'irony-mode)
   (add-hook 'c-mode-hook #'irony-mode)
   (add-hook 'irony-mode-hook #'my/irony-mode-hook)
+  (setq irony-additional-clang-options '("-std=c++14"))
   :config
   (add-hook 'kill-buffer-hook #'my/irony-cleanup))
 
