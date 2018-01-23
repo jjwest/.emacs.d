@@ -415,11 +415,11 @@ is already narrowed."
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   :config
   (general-define-key :keymaps 'evil-cleverparens-mode-map
-		      :states 'normal
-		      "S" nil
-		      "M-j" nil
-		      "M-k" nil
-		      "d" nil))
+		              :states 'normal
+		              "S" nil
+		              "M-j" nil
+		              "M-k" nil
+		              "d" nil))
 
 (use-package evil-visualstar
   :ensure t
@@ -666,13 +666,13 @@ is already narrowed."
   (add-hook 'prog-mode-hook #'hl-line-mode)
   (add-hook 'html-mode-hook #'hl-line-mode)
   :config
+  (setq hl-line-sticky-flag nil)
   (defadvice hl-line-highlight (around ignore-remote first activate)
     ad-do-it
     (when (save-excursion
               (forward-line)
               (eobp))
-      (hl-line-unhighlight)))
-  (setq hl-line-sticky-flag nil))
+      (hl-line-unhighlight))))
 
 (use-package buffer-move
   :ensure t
@@ -699,8 +699,8 @@ is already narrowed."
   :mode (("\\.h\\'" . c++-mode))
   :init
   (setq c-basic-offset 4
-	gdb-many-windows t
-	c-default-style "bsd"))
+	    gdb-many-windows t
+	    c-default-style "bsd"))
 
 (use-package cmake-mode
   :ensure t
@@ -790,6 +790,15 @@ is already narrowed."
   (with-eval-after-load 'irony
     (add-hook 'irony-mode-hook #'irony-eldoc)))
 
+;; (use-package cquery
+;;   :ensure t
+;;   :config
+;;   (setq cquery-resource-dir "~/cquery/clang_resource_dir"
+;;         cquery-enable-sem-highlight nil
+;;         cquery-executable "~/cquery/build/release/bin/cquery"
+;;         cquery-cache-dir "/tmp/cquery")
+;;   (add-hook 'c++-mode-hook #'lsp-cquery-enable))
+
 (use-package glsl-mode
   :ensure t
   :mode ("\\.[fv]s\\'" . glsl-mode))
@@ -833,6 +842,11 @@ is already narrowed."
 ;; 		      :prefix my-leader
 ;; 		      "R" 'lsp-rename))
 
+;; (use-package company-lsp
+;;   :ensure t
+;;   :config
+;;   (add-to-list 'company-backends #'company-lsp))
+
 
 ;; (use-package lsp-rust
 ;;   :ensure t
@@ -843,11 +857,6 @@ is already narrowed."
 ;; 				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
 ;; 				     "lib/rustlib/src/rust/src/"))))
 ;;   (add-hook 'rust-mode-hook #'lsp-rust-enable))
-
-;; (use-package company-lsp
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'company-backends #'company-lsp))
 
 (use-package racer
   :ensure t
