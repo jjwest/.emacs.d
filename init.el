@@ -45,7 +45,6 @@
       message-log-max 200
       bidi-paragraph-direction 'left-to-right
       auto-revert-check-vc-info t
-      require-final-newline nil
       show-paren-delay 0
       save-interprogram-paste-before-kill t
       select-enable-clipboard t
@@ -55,6 +54,7 @@
       locale-coding-system 'utf-8)
 
 (setq-default tab-width 4
+              require-final-newline nil
 			  indent-tabs-mode nil)
 
 ;; I like my backups hidden and in abundance
@@ -295,6 +295,7 @@ is already narrowed."
     (remove-hook 'after-make-frame-functions 'load-doom-theme))
   :init
   (advice-add #'load-theme :after #'tweak-doom-theme)
+  (setq doom-themes-enable-italic nil)
   (doom-themes-neotree-config)
   (doom-themes-org-config)
   (if (daemonp)
