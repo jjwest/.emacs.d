@@ -11,5 +11,6 @@
 #+LATEX_HEADER: \usepackage{libertine}
 #+LATEX_HEADER: \usepackage{unicode-math}
 #+LATEX_HEADER: \setmathfont{TeX Gyre Pagella Math}
+#+LATEX_HEADER: \setlength\parindent{0pt}
 
 $0
