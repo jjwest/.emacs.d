@@ -588,7 +588,7 @@ is already narrowed."
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package dired-details+
-  :ensure t
+  :load-path "~/.emacs.d/lisp"
   :config
   (setq-default dired-details-hidden-string "--- ")
   (dired-details-install))
@@ -707,98 +707,16 @@ is already narrowed."
   :ensure t
   :mode ("CMakeLists.txt" "\\.cmake\\'"))
 
-(use-package cmake-ide
+
+(use-package cquery
   :ensure t
-  :config (cmake-ide-setup))
-
-(use-package rtags
-  :ensure t
-  :preface
-  (defun rtags-add-project ()
-    "Add project to RTags daemon."
-    (interactive)
-    (shell-command (concat "rc -J " (projectile-project-root))))
-  :init
-  (add-hook 'c-mode-hook #'rtags-start-process-unless-running)
-  (add-hook 'c++-mode-hook #'rtags-start-process-unless-running)
-  (general-define-key :keymaps '(c-mode-map c++-mode-map)
-		      :states 'normal
-		      "M-." 'rtags-find-symbol-at-point
-		      "M-," 'rtags-location-stack-back
-		      "M--" 'rtags-find-all-references-at-point
-		      "R" 'rtags-rename-symbol)
-  (general-define-key :keymaps '(c-mode-map c++-mode-map)
-		      :states 'normal
-		      :prefix my-leader
-		      "R" 'rtags-rename-symbol)
-  (general-define-key :keymaps 'rtags-mode-map
-		      :states 'normal
-		      "<return>" 'rtags-select-other-window
-		      "q" 'kill-current-buffer))
-
-
-(use-package irony
-  :ensure t
-  :diminish irony-mode
-  :preface
-  (defun my/irony-mode-hook ()
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async)
-    (irony-cdb-autosetup-compile-options))
-
-  (defun my/irony-cleanup ()
-    (when (get-process "Irony")
-      (let ((c-cpp-buffers (--filter
-			    (with-current-buffer it
-			      (or (eq major-mode 'c-mode)
-				  (eq major-mode 'c++-mode)))
-			    (buffer-list))))
-	(unless c-cpp-buffers
-	  (irony-server-kill)))))
-  :init
-  (add-hook 'c++-mode-hook #'irony-mode)
-  (add-hook 'c-mode-hook #'irony-mode)
-  (add-hook 'irony-mode-hook #'my/irony-mode-hook)
-  (setq irony-additional-clang-options '("-std=c++14"))
+  :after lsp-mode
   :config
-  (add-hook 'kill-buffer-hook #'my/irony-cleanup))
-
-
-
-(use-package company-irony
-  :ensure t
-  :init
-  (with-eval-after-load 'irony
-    (add-to-list 'company-backends 'company-irony)))
-
-(use-package flycheck-irony
-  :ensure t
-  :init
-  (with-eval-after-load 'irony
-    (flycheck-irony-setup)))
-
-(use-package company-irony-c-headers
-  :ensure t
-  :init
-  (with-eval-after-load 'irony
-    (add-to-list 'company-backends 'company-irony-c-headers)))
-
-(use-package irony-eldoc
-  :ensure t
-  :init
-  (with-eval-after-load 'irony
-    (add-hook 'irony-mode-hook #'irony-eldoc)))
-
-;; (use-package cquery
-;;   :ensure t
-;;   :config
-;;   (setq cquery-resource-dir "~/cquery/clang_resource_dir"
-;;         cquery-enable-sem-highlight nil
-;;         cquery-executable "~/cquery/build/release/bin/cquery"
-;;         cquery-cache-dir "/tmp/cquery")
-;;   (add-hook 'c++-mode-hook #'lsp-cquery-enable))
+  (setq cquery-resource-dir "~/cquery/clang_resource_dir"
+        cquery-enable-sem-highlight nil
+        cquery-executable "~/cquery/build/release/bin/cquery"
+        cquery-cache-dir "/tmp/cquery")
+  (add-hook 'c++-mode-hook #'lsp-cquery-enable))
 
 (use-package glsl-mode
   :ensure t
@@ -831,52 +749,36 @@ is already narrowed."
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
 
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :config
-;;   (require 'lsp-flycheck)
-;;   (general-define-key :keymaps 'rust-mode-map
-;; 		      :states '(normal insert)
-;; 		      "C-." 'company-complete)
-;;   (general-define-key :keymaps 'rust-mode-map
-;; 		      :states 'normal
-;; 		      :prefix my-leader
-;; 		      "R" 'lsp-rename))
-
-;; (use-package company-lsp
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'company-backends #'company-lsp))
-
-
-;; (use-package lsp-rust
-;;   :ensure t
-;;   :config
-;;   (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-;;   (when (executable-find "rustc")
-;;     (setenv "RUST_SRC_PATH" (concat (f-join
-;; 				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-;; 				     "lib/rustlib/src/rust/src/"))))
-;;   (add-hook 'rust-mode-hook #'lsp-rust-enable))
-
-(use-package racer
+(use-package lsp-mode
   :ensure t
   :config
-  (add-hook 'rust-mode-hook (lambda () (setq-local eldoc-documentation-function #'racer-eldoc)))
+  (require 'lsp-flycheck)
+  (setq lsp-highlight-symbol-at-point nil)
+  (general-define-key :keymaps 'rust-mode-map
+		      :states '(normal insert)
+		      "C-." 'company-complete)
   (general-define-key :keymaps 'rust-mode-map
 		      :states 'normal
-		      "M-," #'pop-tag-mark
-		      "M-." #'racer-find-definition))
+		      :prefix my-leader
+		      "R" 'lsp-rename))
 
-(use-package company-racer
+(use-package company-lsp
   :ensure t
   :config
-  (add-hook 'rust-mode-hook (lambda () (add-to-list 'company-backends 'company-racer))))
+  (setq company-lsp-async t)
+  (add-to-list 'company-backends #'company-lsp))
 
-(use-package flycheck-rust
-    :ensure t
-    :init
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup))
+
+(use-package lsp-rust
+  :ensure t
+  :config
+  (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+  (when (executable-find "rustc")
+    (setenv "RUST_SRC_PATH" (concat (f-join
+				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+				     "lib/rustlib/src/rust/src/"))))
+  (add-hook 'rust-mode-hook #'lsp-rust-enable))
+
 
 ;; Web development
 (use-package web-mode
