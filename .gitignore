@@ -1,6 +1,6 @@
 *
 !snippets
 !themes
-!lisp/*.el
+!lisp
 !init.el
 !.gitignore
