@@ -51,6 +51,7 @@
       display-time-24hr-format t
       display-time-day-and-date t
       display-time-default-load-average nil
+      auto-window-vscroll nil
       locale-coding-system 'utf-8)
 
 (setq-default tab-width 4
@@ -486,8 +487,7 @@ is already narrowed."
     (unless (file-remote-p default-directory)
       ad-do-it))
   :config
-  (projectile-mode)
-  (counsel-projectile-on))
+  (projectile-mode))
 
 
 (use-package flycheck
@@ -714,8 +714,11 @@ is already narrowed."
   :config
   (setq cquery-resource-dir "~/cquery/clang_resource_dir"
         cquery-enable-sem-highlight nil
-        cquery-executable "~/cquery/build/release/bin/cquery"
-        cquery-cache-dir "/tmp/cquery")
+        cquery-executable "~/cquery/build/release/bin/cquery")
+  (general-define-key :keymaps '(c-mode-map c++-mode-map)
+                      :states 'normal
+                      :prefix my-leader
+                      "R" #'lsp-rename)
   (add-hook 'c++-mode-hook #'lsp-cquery-enable))
 
 (use-package glsl-mode
@@ -737,7 +740,8 @@ is already narrowed."
 
 ;; RUST SETTINGS
 (use-package rust-mode
-  :ensure t
+  ;; :ensure t
+  :load-path "~/rust-mode"
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (when (executable-find "rustc")
@@ -745,6 +749,7 @@ is already narrowed."
                                       ":"
                                       (getenv "LD_LIBRARY_PATH"))))
 
+  (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
@@ -752,8 +757,10 @@ is already narrowed."
 (use-package lsp-mode
   :ensure t
   :config
-  (require 'lsp-flycheck)
   (setq lsp-highlight-symbol-at-point nil)
+  (defadvice lsp-rename (around ignore-remote first activate)
+    (projectile-save-project-buffers)
+    ad-do-it)
   (general-define-key :keymaps 'rust-mode-map
 		      :states '(normal insert)
 		      "C-." 'company-complete)
@@ -762,10 +769,18 @@ is already narrowed."
 		      :prefix my-leader
 		      "R" 'lsp-rename))
 
+(use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-peek-enable nil
+        lsp-ui-sideline-enable nil)
+
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode))
+
 (use-package company-lsp
   :ensure t
   :config
-  (setq company-lsp-async t)
   (add-to-list 'company-backends #'company-lsp))
 
 
