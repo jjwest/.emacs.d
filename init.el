@@ -4,13 +4,19 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(setq gc-cons-threshold (* 20 1024 1024))
+(defvar preferred-gc-threshold (* 20 1024 1024))
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+
+(add-hook 'emacs-startup-hook (lambda ()
+  (setq gc-cons-threshold preferred-gc-threshold
+        gc-cons-percentage 0.1)))
 
 (defun inhibit-gc ()
   (setq gc-cons-threshold most-positive-fixnum))
 
 (defun resume-gc ()
-  (setq gc-cons-threshold (* 20 1024 1024)))
+  (setq gc-cons-threshold preferred-gc-threshold))
 
 (add-hook 'minibuffer-setup-hook #'inhibit-gc)
 (add-hook 'minibuffer-exit-hook #'resume-gc)
@@ -253,19 +259,20 @@ is already narrowed."
   (setq general-default-keymaps 'normal)
   (setq my-leader ",")
   (general-define-key :prefix my-leader
-		      :keymaps '(normal visual)
-		      "n" 'narrow-or-widen-dwim)
+		              :keymaps '(normal visual)
+		              "n" #'narrow-or-widen-dwim)
   (general-define-key :prefix my-leader
-		      "dw" 'delete-window
-		      "do" 'delete-other-windows
-		      "sf" 'save-buffer
-		      "sa" 'my/save-all-buffers
-		      "k" 'kill-current-buffer
-		      "B" 'ibuffer
-		      "P" 'proced
-		      "W" 'winner-undo
-		      "ss" 'my/split-window-horizontal
-		      "vv" 'my/split-window-vertical))
+		              "dw" #'delete-window
+		              "do" #'delete-other-windows
+		              "sf" #'save-buffer
+		              "sa" #'my/save-all-buffers
+		              "k" #'kill-current-buffer
+		              "B" #'ibuffer
+                      "c" #'compile
+		              "P" #'proced
+		              "W" #'winner-undo
+		              "ss" #'my/split-window-horizontal
+		              "vv" #'my/split-window-vertical))
 
 (use-package doom-common
   :ensure s
@@ -341,9 +348,17 @@ is already narrowed."
   :ensure t
   :config
   (setq solaire-mode-remap-line-numbers t)
-  (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
-  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
-  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+  (defcustom use-solaire-mode t
+    "Use solaire mode"
+    :type 'boolean)
+
+  (defun maybe-use-solaire ()
+    (when use-solaire-mode
+      (turn-on-solaire-mode)))
+
+  (add-hook 'after-change-major-mode-hook #'maybe-use-solaire)
+  (add-hook 'after-revert-hook #'maybe-use-solaire)
+  (add-hook 'minibuffer-setup-hook #'maybe-use-solaire)
   (advice-add #'solaire-mode :after
 	      (lambda (&rest args)
 		(custom-theme-set-faces
@@ -498,8 +513,12 @@ is already narrowed."
   :config
   (general-define-key "M-n" #'flycheck-next-error
 		      "M-p" #'flycheck-previous-error)
-  (setq-default flycheck-gcc-language-standard "c++14")
-  (setq-default flycheck-clang-language-standard "c++14"))
+  (add-hook! 'c-mode-hook
+    (setq flycheck-gcc-language-standard "c11")
+    (setq flycheck-clang-language-standard "c11"))
+  (add-hook! 'c++-mode-hook
+    (setq flycheck-gcc-language-standard "c++14")
+    (setq flycheck-clang-language-standard "c++14")))
 
 (use-package flycheck-pos-tip
   :ensure t
@@ -543,10 +562,6 @@ is already narrowed."
 		      :keymaps 'grep-mode-map
 		      :states 'normal
 		      "w" 'wgrep-change-to-wgrep-mode))
-
-(use-package imenu
-  :config
-  (general-define-key :prefix my-leader "c" #'imenu))
 
 (use-package eldoc
   :diminish eldoc-mode
@@ -775,7 +790,6 @@ is already narrowed."
   (setq lsp-ui-doc-enable nil
         lsp-ui-peek-enable nil
         lsp-ui-sideline-enable nil)
-
   (add-hook 'lsp-mode-hook #'lsp-ui-mode))
 
 (use-package company-lsp
@@ -897,7 +911,7 @@ is already narrowed."
 (use-package darkroom
   :ensure t
   :config
-  (setq darkroom-margins 0.25
+  (setq darkroom-margins 0.15
 	darkroom-text-scale-increase 1))
 
 (use-package tramp
