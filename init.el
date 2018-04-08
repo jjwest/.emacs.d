@@ -1,4 +1,4 @@
-; init.el --- My Emacs config
+;;; init.el --- My Emacs config
 ;;; Commentary:
 ;;; Nothing here
 ;;; Code:
@@ -8,9 +8,10 @@
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
 
-(add-hook 'emacs-startup-hook (lambda ()
-  (setq gc-cons-threshold preferred-gc-threshold
-        gc-cons-percentage 0.1)))
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold preferred-gc-threshold
+                  gc-cons-percentage 0.1)))
 
 (defun inhibit-gc ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -23,7 +24,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
 
 ;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
@@ -69,14 +69,14 @@
   (mkdir "~/.emacs.d/backups/per-save" t)
   (mkdir "~/.emacs.d/backups/per-session" t))
 
- (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
-       backup-by-copying t
-       delete-old-versions t
-       kept-new-versions 20
-       kept-old-versions 0
-       auto-save-default nil
-       vc-make-backup-files t
-       version-control t)
+(setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 20
+      kept-old-versions 0
+      auto-save-default nil
+      vc-make-backup-files t
+      version-control t)
 
 (defun force-backup-of-buffer ()
   "Always save file backups on save."
@@ -93,12 +93,12 @@
 (prefer-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
-	      fill-column 80)
+	          fill-column 80)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default isearch-allow-scroll t
-	      lazy-highlight-cleanup nil
-	      lazy-highlight-initial-delay 0)
+	          lazy-highlight-cleanup nil
+	          lazy-highlight-initial-delay 0)
 
 
 ;; Don't litter my init file
@@ -189,8 +189,8 @@
 ;; Always give new frames focus
 (when (daemonp)
   (add-hook 'after-make-frame-functions
-	    (lambda (frame)
-	      (select-frame-set-input-focus frame))))
+	        (lambda (frame)
+	          (select-frame-set-input-focus frame))))
 
 (defun my/save-all-buffers ()
   "Save all buffers without prompt."
@@ -246,8 +246,8 @@ is already narrowed."
   (interactive
    (list
     (intern (completing-read "Change to theme: "
-			     (mapcar 'symbol-name
-				     (custom-available-themes))))))
+			                 (mapcar 'symbol-name
+				                     (custom-available-themes))))))
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme))
 
@@ -256,12 +256,12 @@ is already narrowed."
   :ensure t
   :defines my-leader
   :config
-  (setq general-default-keymaps 'normal)
-  (setq my-leader ",")
+  (defconst my-leader ",")
   (general-define-key :prefix my-leader
 		              :keymaps '(normal visual)
 		              "n" #'narrow-or-widen-dwim)
   (general-define-key :prefix my-leader
+                      :states 'normal
 		              "dw" #'delete-window
 		              "do" #'delete-other-windows
 		              "sf" #'save-buffer
@@ -304,8 +304,8 @@ is already narrowed."
   :init
   (advice-add #'load-theme :after #'tweak-doom-theme)
   (setq doom-themes-enable-italic nil)
-  (doom-themes-neotree-config)
   (doom-themes-org-config)
+  (doom-themes-neotree-config)
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'load-doom-theme)
     (load-theme 'doom-one)))
@@ -360,51 +360,51 @@ is already narrowed."
   (add-hook 'after-revert-hook #'maybe-use-solaire)
   (add-hook 'minibuffer-setup-hook #'maybe-use-solaire)
   (advice-add #'solaire-mode :after
-	      (lambda (&rest args)
-		(custom-theme-set-faces
-		 'doom-one
-		 `(fringe ((t (:inherit solaire-default-face))))))))
+	          (lambda (&rest args)
+		        (custom-theme-set-faces
+		         'doom-one
+		         `(fringe ((t (:inherit solaire-default-face))))))))
 
 (use-package evil
   :ensure t
   :config
-  (general-define-key
-   "j" #'evil-next-visual-line
-   "k" #'evil-previous-visual-line
-   "TAB" #'indent-for-tab-command
-   "C-h" #'evil-window-left
-   "C-j" #'evil-window-down
-   "C-k" #'evil-window-up
-   "C-l" #'evil-window-right
-   "M-k" #'evil-scroll-up
-   "M-j" #'evil-scroll-down
-   "C-a" #'beginning-of-line
-   "C-q" #'evil-scroll-line-up
-   "C-e" #'evil-scroll-line-down
-   "S" #'my/split-line
-   "U" #'redo
-   "M-." #'xref-find-definitions
-   "M-," #'xref-pop-marker-stack
-   "M--" #'xref-find-references
-   "Q" "@q"
-   "Y" "y$")
+  (general-define-key :states 'normal
+                      "j" #'evil-next-line
+                      "k" #'evil-previous-line
+                      "TAB" #'indent-for-tab-command
+                      "C-h" #'evil-window-left
+                      "C-j" #'evil-window-down
+                      "C-k" #'evil-window-up
+                      "C-l" #'evil-window-right
+                      "M-k" #'evil-scroll-up
+                      "M-j" #'evil-scroll-down
+                      "C-a" #'beginning-of-line
+                      "C-q" #'evil-scroll-line-up
+                      "C-e" #'evil-scroll-line-down
+                      "S" #'my/split-line
+                      "U" #'redo
+                      "M-." #'xref-find-definitions
+                      "M-," #'xref-pop-marker-stack
+                      "M--" #'xref-find-references
+                      "Q" "@q"
+                      "Y" "y$")
   (general-define-key :keymaps 'global
-		      "C-h" #'windmove-left
-		      "C-j" #'windmove-down
-		      "C-k" #'windmove-up
-		      "C-l" #'windmove-right)
+		              "C-h" #'windmove-left
+		              "C-j" #'windmove-down
+		              "C-k" #'windmove-up
+		              "C-l" #'windmove-right)
   (general-define-key :keymaps 'evil-visual-state-map
-		      "j" #'evil-next-visual-line
-		      "k" #'evil-previous-visual-line
-  		      "TAB" #'indent-for-tab-command)
+		              "j" #'evil-next-visual-line
+		              "k" #'evil-previous-visual-line
+  		              "TAB" #'indent-for-tab-command)
   (general-define-key :keymaps 'package-menu-mode-map
-		      "j" #'evil-next-visual-line
-		      "k" #'evil-previous-visual-line)
+		              "j" #'evil-next-visual-line
+		              "k" #'evil-previous-visual-line)
   (evil-mode 1))
 
 (use-package evil-surround
-    :ensure t
-    :config (global-evil-surround-mode))
+  :ensure t
+  :config (global-evil-surround-mode))
 
 (use-package evil-exchange
   :ensure t
@@ -464,21 +464,21 @@ is already narrowed."
     (company-abort)
     (newline-and-indent))
   :bind (("C-." . company-complete)
-	 :map company-active-map
-	 ("<C-return>" . my/company-abort-and-newline)
-	 ("<tab>" . nil))
+	     :map company-active-map
+	     ("<C-return>" . my/company-abort-and-newline)
+	     ("<tab>" . nil))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
   (general-define-key "C-." 'company-complete)
   (general-define-key :states '(normal insert)
-		      "C-." 'company-complete)
+		              "C-." 'company-complete)
   (setq company-idle-delay 0
-	company-minimum-prefix-length 2
-	company-tooltip-align-annotations t
-	company-dabbrev-ignore-case nil
-	company-dabbrev-downcase nil
-	company-require-match nil))
+	    company-minimum-prefix-length 2
+	    company-tooltip-align-annotations t
+	    company-dabbrev-ignore-case nil
+	    company-dabbrev-downcase nil
+	    company-require-match nil))
 
 
 (use-package counsel-projectile
@@ -486,16 +486,17 @@ is already narrowed."
   :diminish projectile-mode
   :init
   (setq projectile-other-file-alist '(("c" "h")
-				      ("h" "c" "cc" "cpp")
-				      ("cc" "h")
-				      ("cpp" "h")))
+				                      ("h" "c" "cc" "cpp")
+				                      ("cc" "h")
+				                      ("cpp" "h")))
   (general-define-key :prefix my-leader
-  		      "pp" 'counsel-projectile-switch-project
-  		      "pf" 'counsel-projectile-find-file
-  		      "pd" 'counsel-projectile-find-dir
-  		      "pk" 'projectile-kill-buffers
-  		      "pt" 'projectile-find-other-file
-		      "pT" 'projectile-find-other-file-other-window)
+                      :states 'normal
+  		              "pp" 'counsel-projectile-switch-project
+  		              "pf" 'counsel-projectile-find-file
+  		              "pd" 'counsel-projectile-find-dir
+  		              "pk" 'projectile-kill-buffers
+  		              "pt" 'projectile-find-other-file
+		              "pT" 'projectile-find-other-file-other-window)
 
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
@@ -508,17 +509,17 @@ is already narrowed."
 (use-package flycheck
   :ensure t
   :diminish flycheck-mode
-  :init
-  (add-hook 'prog-mode-hook #'flycheck-mode)
   :config
   (general-define-key "M-n" #'flycheck-next-error
-		      "M-p" #'flycheck-previous-error)
+		              "M-p" #'flycheck-previous-error)
   (add-hook! 'c-mode-hook
-    (setq flycheck-gcc-language-standard "c11")
-    (setq flycheck-clang-language-standard "c11"))
+    (setq flycheck-gcc-language-standard "c11"
+          flycheck-clang-language-standard "c11"))
   (add-hook! 'c++-mode-hook
-    (setq flycheck-gcc-language-standard "c++14")
-    (setq flycheck-clang-language-standard "c++14")))
+    (setq flycheck-gcc-language-standard "c++14"
+          flycheck-clang-language-standard "c++14"))
+
+  (add-hook 'prog-mode-hook #'flycheck-mode))
 
 (use-package flycheck-pos-tip
   :ensure t
@@ -528,7 +529,7 @@ is already narrowed."
 
 (use-package terminal-here
   :ensure t
-  :config (general-define-key :prefix my-leader "x" #'terminal-here))
+  :config (general-define-key :prefix my-leader :states 'normal "x" #'terminal-here))
 
 (use-package iedit
   :ensure t
@@ -537,20 +538,20 @@ is already narrowed."
     "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
     (interactive "P")
     (if (or arg
-	    (buffer-narrowed-p))
-	(iedit-mode)
+	        (buffer-narrowed-p))
+	    (iedit-mode)
       (save-excursion
-	(save-restriction
-	  (widen)
-	  ;; this function determines the scope of `iedit-start'.
-	  (if iedit-mode
-	      (iedit-done)
-	    ;; `current-word' can of course be replaced by other
-	    ;; functions.
-	    (narrow-to-defun)
-	    (iedit-start (iedit-regexp-quote (current-word)) (point-min) (point-max)))))))
+	    (save-restriction
+	      (widen)
+	      ;; this function determines the scope of `iedit-start'.
+	      (if iedit-mode
+	          (iedit-done)
+	        ;; `current-word' can of course be replaced by other
+	        ;; functions.
+	        (narrow-to-defun)
+	        (iedit-start (iedit-regexp-quote (current-word)) (point-min) (point-max)))))))
   :config
-  (general-define-key :prefix my-leader "r" 'iedit-dwim))
+  (general-define-key :prefix my-leader :states 'normal "r" 'iedit-dwim))
 
 (use-package rg
   :ensure t)
@@ -559,9 +560,9 @@ is already narrowed."
   :ensure t
   :init
   (general-define-key :prefix my-leader
-		      :keymaps 'grep-mode-map
-		      :states 'normal
-		      "w" 'wgrep-change-to-wgrep-mode))
+		              :keymaps 'grep-mode-map
+		              :states 'normal
+		              "w" 'wgrep-change-to-wgrep-mode))
 
 (use-package eldoc
   :diminish eldoc-mode
@@ -581,25 +582,25 @@ is already narrowed."
     (find-alternate-file ".."))
   :defines (dired-omit-files dired-omit-files-p)
   :bind (:map dired-mode-map
-	      ("RET" . dired-find-alternate-file)
-	      ("<return>" . dired-find-alternate-file)
-	      ("a" . dired-find-file)
-	      ("q" . kill-current-buffer)
-	      ("n" . evil-search-next)
-	      ("N" . evil-search-previous)
-	      ("W" . wdired-change-to-wdired-mode)
-	      ("<backspace>" . my/dired-parent-dir)
-	      ("?" . evil-search-backward))
+	          ("RET" . dired-find-alternate-file)
+	          ("<return>" . dired-find-alternate-file)
+	          ("a" . dired-find-file)
+	          ("q" . kill-current-buffer)
+	          ("n" . evil-search-next)
+	          ("N" . evil-search-previous)
+	          ("W" . wdired-change-to-wdired-mode)
+	          ("<backspace>" . my/dired-parent-dir)
+	          ("?" . evil-search-backward))
   :config
   (require 'dired-x)
   (setq dired-omit-files
-	"^\\..*\\|^\\.?#\\|^\\.$\\|^\\.\\.$")
+	    "^\\..*\\|^\\.?#\\|^\\.$\\|^\\.\\.$")
   (setq dired-omit-files-p t)
   (add-hook 'dired-mode-hook #'dired-omit-mode)
   (setq dired-dwim-target t
-  	dired-recursive-copies 'always
+  	    dired-recursive-copies 'always
         dired-recursive-deletes 'always
-  	delete-by-moving-to-trash t)
+  	    delete-by-moving-to-trash t)
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package dired-details+
@@ -610,34 +611,35 @@ is already narrowed."
 
 (use-package ibuffer
   :bind (:map ibuffer-mode-map
-	      ("j" . ibuffer-forward-line)
-	      ("k" . ibuffer-backward-line)
-	      ("q" . kill-current-buffer)))
+	          ("j" . ibuffer-forward-line)
+	          ("k" . ibuffer-backward-line)
+	          ("q" . kill-current-buffer)))
 
 (use-package ibuffer-vc
   :ensure t
   :config
   (add-hook 'ibuffer-hook
-	    (lambda ()
-	      (ibuffer-vc-set-filter-groups-by-vc-root)
-	      (unless (eq ibuffer-sorting-mode 'alphabetic)
-		(ibuffer-do-sort-by-alphabetic)))))
+	        (lambda ()
+	          (ibuffer-vc-set-filter-groups-by-vc-root)
+	          (unless (eq ibuffer-sorting-mode 'alphabetic)
+		        (ibuffer-do-sort-by-alphabetic)))))
 
 (use-package proced
   :bind (:map proced-mode-map
-	      ("j" . next-line)
-	      ("k" . previous-line)))
+	          ("j" . next-line)
+	          ("k" . previous-line)))
 
 (use-package magit
   :ensure t
   :bind (:map magit-status-mode-map
-	      ("q" . kill-current-buffer)
-	      ("j" . next-line)
-	      ("k" . previous-line)
-	      ("K" . magit-discard))
+	          ("q" . kill-current-buffer)
+	          ("j" . next-line)
+	          ("k" . previous-line)
+	          ("K" . magit-discard))
   :diminish auto-revert-mode
   :init
   (general-define-key :prefix my-leader
+                      :states 'normal
 		              "g" 'magit-status)
   (general-define-key :keymaps 'smerge-mode-map
                       :states 'normal
@@ -655,26 +657,27 @@ is already narrowed."
   (defun counsel-rg-dwim ()
     (interactive)
     (if (equal (projectile-project-name) "-")
-	(counsel-rg)
+	    (counsel-rg)
       (counsel-projectile-rg)))
   :bind (("M-x" . counsel-M-x)
-	 :map ivy-mode-map
-	 ("<escape>" . minibuffer-keyboard-quit))
+	     :map ivy-mode-map
+	     ("<escape>" . minibuffer-keyboard-quit))
   :init
   (setq projectile-switch-project-action #'counsel-projectile-find-file
-	projectile-completion-system 'ivy
-	ivy-height 15
-	ivy-fixed-height-minibuffer t
-	ivy-use-virtual-buffers t
-	ivy-format-function #'ivy-format-function-line
-	ivy-count-format "(%d/%d) "
-	ivy-display-style 'fancy)
+	    projectile-completion-system 'ivy
+	    ivy-height 15
+	    ivy-fixed-height-minibuffer t
+	    ivy-use-virtual-buffers t
+	    ivy-format-function #'ivy-format-function-line
+	    ivy-count-format "(%d/%d) "
+	    ivy-display-style 'fancy)
   (general-define-key :prefix my-leader
-   "f" 'counsel-find-file
-   "b" 'ivy-switch-buffer)
+                      :states 'normal
+                      "f" 'counsel-find-file
+                      "b" 'ivy-switch-buffer)
   (if (executable-find "rg")
-      (general-define-key :prefix my-leader "pg" #'counsel-rg-dwim)
-    (general-define-key :prefix my-leader "pg" 'counsel-git-grep))
+      (general-define-key :prefix my-leader :states 'normal "pg" #'counsel-rg-dwim)
+    (general-define-key :prefix my-leader :states 'normal "pg" 'counsel-git-grep))
   (ivy-mode 1))
 
 (use-package hl-line
@@ -686,25 +689,25 @@ is already narrowed."
   (defadvice hl-line-highlight (around ignore-remote first activate)
     ad-do-it
     (when (save-excursion
-              (forward-line)
-              (eobp))
+            (forward-line)
+            (eobp))
       (hl-line-unhighlight))))
 
 (use-package buffer-move
   :ensure t
   :bind (:map evil-normal-state-map
-	      ("C-S-h" . buf-move-left)
-	      ("C-S-j" . buf-move-down)
-	      ("C-S-k" . buf-move-up)
-	      ("C-S-l" . buf-move-right)
-	      ("C-M-S-h" . shrink-window-horizontally)
-	      ("C-M-S-j" . shrink-window)
-	      ("C-M-S-k" . enlarge-window)
-	      ("C-M-S-l" . enlarge-window-horizontally)))
+	          ("C-S-h" . buf-move-left)
+	          ("C-S-j" . buf-move-down)
+	          ("C-S-k" . buf-move-up)
+	          ("C-S-l" . buf-move-right)
+	          ("C-M-S-h" . shrink-window-horizontally)
+	          ("C-M-S-j" . shrink-window)
+	          ("C-M-S-k" . enlarge-window)
+	          ("C-M-S-l" . enlarge-window-horizontally)))
 
 (use-package transpose-frame
   :ensure t
-  :init (general-define-key :prefix my-leader "T" 'transpose-frame))
+  :init (general-define-key :prefix my-leader :states 'normal "T" 'transpose-frame))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -744,14 +747,15 @@ is already narrowed."
   :ensure t
   :preface
   (defun my/init-python-hook ()
+    (auto-virtualenvwrapper-activate)
     (add-to-list 'company-backends 'company-jedi)
     (jedi:setup))
   :init
   (add-hook 'python-mode-hook #'my/init-python-hook)
   (general-define-key :keymaps 'python-mode-map
-		      :states 'normal
-		      "M-." 'jedi:goto-definition
-		      "M-," 'jedi:goto-definition-pop-marker))
+		              :states 'normal
+		              "M-." 'jedi:goto-definition
+		              "M-," 'jedi:goto-definition-pop-marker))
 
 ;; RUST SETTINGS
 (use-package rust-mode
@@ -775,14 +779,15 @@ is already narrowed."
   (setq lsp-highlight-symbol-at-point nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
-    ad-do-it)
+    ad-do-it
+    (projectile-save-project-buffers))
   (general-define-key :keymaps 'rust-mode-map
-		      :states '(normal insert)
-		      "C-." 'company-complete)
+		              :states '(normal insert)
+		              "C-." 'company-complete)
   (general-define-key :keymaps 'rust-mode-map
-		      :states 'normal
-		      :prefix my-leader
-		      "R" 'lsp-rename))
+		              :states 'normal
+		              :prefix my-leader
+		              "R" 'lsp-rename))
 
 (use-package lsp-ui
   :ensure t
@@ -804,8 +809,8 @@ is already narrowed."
   (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
   (when (executable-find "rustc")
     (setenv "RUST_SRC_PATH" (concat (f-join
-				     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-				     "lib/rustlib/src/rust/src/"))))
+				                     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
+				                     "lib/rustlib/src/rust/src/"))))
   (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
 
@@ -813,7 +818,7 @@ is already narrowed."
 (use-package web-mode
   :ensure t
   :mode (("\\.ts[x]?\\'" . web-mode)
-	 ("\\.jsx\\'" . web-mode)))
+	     ("\\.jsx\\'" . web-mode)))
 
 (use-package typescript-mode
   :ensure t)
@@ -845,17 +850,17 @@ is already narrowed."
   (add-hook 'web-mode-hook
             (lambda ()
               (when (s-matches-p (rx "ts" (zero-or-one "x"))
-				 (file-name-extension buffer-file-name))
-		(setup-tide-mode))))
+				                 (file-name-extension buffer-file-name))
+		        (setup-tide-mode))))
   (general-define-key :keymaps '(web-mode-map typescript-mode-map)
-		      :states 'normal
-		      "M-." #'tide-jump-to-definition
-		      "M-," #'tide-jump-back
-		      "M--" #'tide-references)
+		              :states 'normal
+		              "M-." #'tide-jump-to-definition
+		              "M-," #'tide-jump-back
+		              "M--" #'tide-references)
   (general-define-key :prefix my-leader
-		      :keymaps '(web-mode-map typescript-mode-map)
-		      :states 'normal
-		      "R" #'tide-rename-symbol)
+		              :keymaps '(web-mode-map typescript-mode-map)
+		              :states 'normal
+		              "R" #'tide-rename-symbol)
   :config
   (add-hook 'before-save-hook #'tide-format-before-save))
 
@@ -866,16 +871,16 @@ is already narrowed."
   :init
   (add-hook 'js2-mode-hook #'tern-mode)
   (add-hook 'js2-mode-hook (lambda ()
-			     (interactive)
-			     (add-to-list 'company-backends 'company-tern)))
+			                 (interactive)
+			                 (add-to-list 'company-backends 'company-tern)))
   (general-define-key :keymaps '(js2-mode-map js2-jsx-mode-map)
-		      :states 'normal
-		      "M-." 'tern-find-definition
-		      "M-," 'tern-pop-find-definition)
+		              :states 'normal
+		              "M-." 'tern-find-definition
+		              "M-," 'tern-pop-find-definition)
   (general-define-key :prefix my-leader
-		      :keymaps '(js2-mode-map js2-jsx-mode-map)
-		      :states 'normal
-		      "R" 'tern-rename-variable)
+		              :keymaps '(js2-mode-map js2-jsx-mode-map)
+		              :states 'normal
+		              "R" 'tern-rename-variable)
   :config
   (setq tern-command (append tern-command '("--no-port-file"))))
 
@@ -891,20 +896,21 @@ is already narrowed."
   (add-hook 'org-mode-hook #'org-indent-mode)
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (setq org-export-async-init-file (f-join user-emacs-directory
-  					   "lisp"
-  					   "org-export.el"))
+  					                       "lisp"
+  					                       "org-export.el"))
   (setq org-src-preserve-indentation t)
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)))
   (general-define-key :keymaps 'org-mode-map
-		      "M-l" 'my/org-latex-export))
+                      :states 'normal
+		              "M-l" 'my/org-latex-export))
 
 (use-package org-ref
   :defer t
   :init
   (general-define-key :keymaps 'org-mode-map
-		      :states '(normal insert)
-		      "M-r" #'org-ref-helm-insert-cite-link)
+		              :states '(normal insert)
+		              "M-r" #'org-ref-helm-insert-cite-link)
   :config
   (require 'doi-utils))
 
@@ -912,7 +918,7 @@ is already narrowed."
   :ensure t
   :config
   (setq darkroom-margins 0.15
-	darkroom-text-scale-increase 1))
+	    darkroom-text-scale-increase 1))
 
 (use-package tramp
   :config
@@ -927,9 +933,9 @@ is already narrowed."
   :ensure t
   :config
   (general-define-key :keymaps 'neotree-mode-map
-		      :states 'normal
-		      "<return>" #'neotree-enter
-		      "<tab>" #'neotree-enter))
+		              :states 'normal
+		              "<return>" #'neotree-enter
+		              "<tab>" #'neotree-enter))
 
 (use-package refine
   :ensure t
@@ -947,15 +953,15 @@ is already narrowed."
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
   (general-define-key :keymaps 'pdf-view-mode-map
-		      :states 'normal
-		      "C-h" #'windmove-left
-		      "C-j" #'windmove-down
-		      "C-k" #'windmove-up
-		      "C-l" #'windmove-right
-		      "j" #'pdf-view-next-line-or-next-page
-		      "k" #'pdf-view-prveious-line-or-previous-page
-		      "M-j" #'pdf-view-next-page
-		      "M-k" #'pdf-view-previous-page))
+		              :states 'normal
+		              "C-h" #'windmove-left
+		              "C-j" #'windmove-down
+		              "C-k" #'windmove-up
+		              "C-l" #'windmove-right
+		              "j" #'pdf-view-next-line-or-next-page
+		              "k" #'pdf-view-prveious-line-or-previous-page
+		              "M-j" #'pdf-view-next-page
+		              "M-k" #'pdf-view-previous-page))
 
 (use-package markdown-mode
   :ensure t
