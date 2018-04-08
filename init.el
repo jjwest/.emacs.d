@@ -261,7 +261,7 @@ is already narrowed."
 		              :keymaps '(normal visual)
 		              "n" #'narrow-or-widen-dwim)
   (general-define-key :prefix my-leader
-                      :states 'normal
+                      :keymaps'normal
 		              "dw" #'delete-window
 		              "do" #'delete-other-windows
 		              "sf" #'save-buffer
