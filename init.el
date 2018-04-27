@@ -401,6 +401,10 @@ is already narrowed."
   (general-define-key :keymaps 'package-menu-mode-map
 		              "j" #'evil-next-visual-line
 		              "k" #'evil-previous-visual-line)
+
+  (setq evil-normal-state-cursor '("#51afef" box)
+        evil-insert-state-cursor '("#98be65" box))
+
   (evil-mode 1))
 
 (use-package evil-surround
