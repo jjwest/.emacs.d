@@ -366,12 +366,13 @@ is already narrowed."
 		         'doom-one
 		         `(fringe ((t (:inherit solaire-default-face))))))))
 
+
 (use-package evil
   :ensure t
   :config
   (general-define-key :states 'normal
-                      "j" #'evil-next-line
-                      "k" #'evil-previous-line
+                      "j" #'evil-next-visual-line
+                      "k" #'evil-previous-visual-line
                       "TAB" #'indent-for-tab-command
                       "C-h" #'evil-window-left
                       "C-j" #'evil-window-down
@@ -752,7 +753,6 @@ is already narrowed."
   :ensure t
   :preface
   (defun my/init-python-hook ()
-    (auto-virtualenvwrapper-activate)
     (add-to-list 'company-backends 'company-jedi)
     (jedi:setup))
   :init
