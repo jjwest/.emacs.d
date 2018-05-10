@@ -61,9 +61,44 @@
       auto-window-vscroll nil
       locale-coding-system 'utf-8)
 
-(setq-default tab-width 4
-              require-final-newline nil
-			  indent-tabs-mode nil)
+(setq-default
+ bidi-display-reordering nil ; disable bidirectional text for tiny performance boost
+ blink-matching-paren nil    ; don't blink--too distracting
+ cursor-in-non-selected-windows nil     ; hide cursors in other windows
+ display-line-numbers-width 3
+ frame-inhibit-implied-resize t
+ ;; remove continuation arrow on right fringe
+ fringe-indicator-alist (delq (assq 'continuation fringe-indicator-alist)
+                              fringe-indicator-alist)
+ highlight-nonselected-windows nil
+ image-animate-loop t
+ indicate-buffer-boundaries nil
+ indicate-empty-lines nil
+ max-mini-window-height 0.3
+ mode-line-default-help-echo nil     ; disable mode-line mouseovers
+ mouse-yank-at-point t               ; middle-click paste at point, not at click
+ ibuffer-use-other-window t
+ resize-mini-windows 'grow-only         ; Minibuffer resizing
+ show-help-function nil                 ; hide :help-echo text
+ split-width-threshold 160              ; favor horizontal splits
+ uniquify-buffer-name-style 'forward
+ use-dialog-box nil                     ; always avoid GUI
+ visible-cursor nil
+ x-stretch-cursor nil
+ ;; defer jit font locking slightly to [try to] improve Emacs performance
+ jit-lock-defer-time nil
+ jit-lock-stealth-nice 0.1
+ jit-lock-stealth-time 0.2
+ jit-lock-stealth-verbose nil
+ ;; `pos-tip' defaults
+ pos-tip-internal-border-width 6
+ pos-tip-border-width 1
+ ;; no beeping or blinking please
+ ring-bell-function #'ignore
+ visible-bell nil
+ tab-width 4
+ require-final-newline nil
+ indent-tabs-mode nil)
 
 ;; I like my backups hidden and in abundance
 (unless (file-exists-p "~/.emacs.d/backups")
@@ -176,16 +211,6 @@
       t
     (bury-buffer)
     nil))
-
-;; ;; Ugly hack to ensure the modeline loads properly
-;; ;; for Message and scratch buffer
-(when (daemonp)
-  (with-eval-after-load 'doom-modeline
-    (kill-buffer "*scratch*")
-    (kill-buffer "*Messages*")
-    (add-hook 'kill-buffer-query-functions #'my/dont-kill-scratch)
-    (switch-to-buffer "*Messages*")
-    (switch-to-buffer "*scratch*")))
 
 ;; Always give new frames focus
 (when (daemonp)
@@ -311,32 +336,47 @@ is already narrowed."
       (add-hook 'after-make-frame-functions #'load-doom-theme)
     (load-theme 'doom-one)))
 
-
-
 (use-package doom-modeline
-  :ensure powerline
-  :defer t
   :load-path "~/.emacs.d/lisp"
   :preface
-  (defun load-doom-modeline (frame)
-    (select-frame frame)
-    (require 'doom-modeline)
-    (remove-hook 'after-make-frame-functions 'load-doom-modeline))
-  :init
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions #'load-doom-modeline)
-    (require 'doom-modeline))
+  (unless (file-exists-p (f-join user-emacs-directory "lisp" "doom-modeline.elc"))
+    (let ((files (f-entries (f-join user-emacs-directory "lisp"))))
+      (dolist (file files)
+        (unless (s-ends-with? ".elc" file)
+          (byte-compile-file file)))))
+  :config
+  (defun +doom-modeline|init ()
+    "Set the default modeline."
+    (doom-set-modeline 'main t)
+    (with-current-buffer "*scratch*"
+      (doom-set-modeline 'main))
+    (remove-hook 'after-init-hook #'+doom-modeline|init))
+  (add-hook 'after-init-hook #'+doom-modeline|init))
 
-  (with-eval-after-load 'doom-modeline
-    (defadvice doom-buffer-path (around ignore-remote first activate)
-      (if (file-remote-p default-directory)
-	      (if buffer-file-name
-	          (setq ad-return-value (file-name-nondirectory (buffer-file-name)))
-	        (setq ad-return-value "%b"))
-	    ad-do-it)))
+;; (use-package doom-modeline
+;;   :ensure powerline
+;;   :defer t
+;;   :load-path "~/.emacs.d/lisp"
+;;   :preface
+;;   (defun load-doom-modeline (frame)
+;;     (select-frame frame)
+;;     (require 'doom-modeline)
+;;     (remove-hook 'after-make-frame-functions 'load-doom-modeline))
+;;   :init
+;;   (if (daemonp)
+;;       (add-hook 'after-make-frame-functions #'load-doom-modeline)
+;;     (require 'doom-modeline))
 
-  (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
-    (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
+;;   (with-eval-after-load 'doom-modeline
+;;     (defadvice doom-buffer-path (around ignore-remote first activate)
+;;       (if (file-remote-p default-directory)
+;; 	      (if buffer-file-name
+;; 	          (setq ad-return-value (file-name-nondirectory (buffer-file-name)))
+;; 	        (setq ad-return-value "%b"))
+;; 	    ad-do-it)))
+
+;;   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
+;;     (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
 
 (use-package doom-vcs
   :load-path "~/.emacs.d/lisp"
@@ -402,9 +442,6 @@ is already narrowed."
   (general-define-key :keymaps 'package-menu-mode-map
 		              "j" #'evil-next-visual-line
 		              "k" #'evil-previous-visual-line)
-
-  (setq evil-normal-state-cursor '("#51afef" box)
-        evil-insert-state-cursor '("#98be65" box))
 
   (evil-mode 1))
 
@@ -743,7 +780,8 @@ is already narrowed."
                       :states 'normal
                       :prefix my-leader
                       "R" #'lsp-rename)
-  (add-hook 'c++-mode-hook #'lsp-cquery-enable))
+  (add-hook 'c++-mode-hook #'lsp-cquery-enable)
+  (add-hook 'c-mode-hook #'lsp-cquery-enable))
 
 (use-package glsl-mode
   :ensure t

@@ -59,6 +59,49 @@ Examples:
           (-list hook)))) funcs)
     `(progn ,@forms)))
 
+(defvar doom--transient-counter 0)
+
+(defmacro add-transient-hook! (hook &rest forms)
+  "Attaches transient forms to a HOOK.
+
+HOOK can be a quoted hook or a sharp-quoted function (which will be advised).
+
+These forms will be evaluated once when that function/hook is first invoked,
+then it detaches itself."
+  (declare (indent 1))
+  (let ((append (eq (car forms) :after))
+        (fn (intern (format "doom-transient-hook-%s" (cl-incf doom--transient-counter)))))
+    `(when ,hook
+       (fset ',fn
+             (lambda (&rest _)
+               ,@forms
+               (cond ((functionp ,hook) (advice-remove ,hook #',fn))
+                     ((symbolp ,hook)   (remove-hook ,hook #',fn)))
+               (unintern ',fn nil)))
+       (cond ((functionp ,hook)
+              (advice-add ,hook ,(if append :after :before) #',fn))
+             ((symbolp ,hook)
+              (add-hook ,hook #',fn ,append))))))
+
+
+
+(defvar doom-disabled-packages ()
+  "A list of packages that should be ignored by `def-package!'.")
+
+(defmacro def-package! (name &rest plist)
+  "A thin wrapper around `use-package'."
+  ;; Ignore package if NAME is in `doom-disabled-packages'
+  (when (and (memq name doom-disabled-packages)
+             (not (memq :disabled plist)))
+    (setq plist `(:disabled t ,@plist)))
+  ;; If byte-compiling, ignore this package if it doesn't meet the condition.
+  ;; This avoids false-positive load errors.
+  (unless (and (bound-and-true-p byte-compile-current-file)
+               (or (and (plist-member plist :if)     (not (eval (plist-get plist :if))))
+                   (and (plist-member plist :when)   (not (eval (plist-get plist :when))))
+                   (and (plist-member plist :unless) (eval (plist-get plist :unless)))))
+    `(use-package ,name ,@plist)))
+
 
 (provide 'doom-common)
 ;;; doom-common.el ends here
