@@ -757,7 +757,7 @@ is already narrowed."
   :config (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 ;; C/C++ SETTINGS
-(use-package c++-mode
+(use-package cc-mode
   :mode (("\\.h\\'" . c++-mode))
   :init
   (setq c-basic-offset 4

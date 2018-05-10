@@ -77,6 +77,7 @@
   (evil-set-initial-state 'vc-git-log-view-mode 'normal))
 
 (use-package browse-at-remote
+  :ensure t
   :commands (browse-at-remote/browse browse-at-remote/get-url))
 
 ;; Ediff
