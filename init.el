@@ -212,6 +212,8 @@
     (bury-buffer)
     nil))
 
+(add-hook 'kill-buffer-hook #'my/dont-kill-scratch)
+
 ;; Always give new frames focus
 (when (daemonp)
   (add-hook 'after-make-frame-functions
@@ -352,31 +354,6 @@ is already narrowed."
       (doom-set-modeline 'main))
     (remove-hook 'after-init-hook #'+doom-modeline|init))
   (add-hook 'after-init-hook #'+doom-modeline|init))
-
-;; (use-package doom-modeline
-;;   :ensure powerline
-;;   :defer t
-;;   :load-path "~/.emacs.d/lisp"
-;;   :preface
-;;   (defun load-doom-modeline (frame)
-;;     (select-frame frame)
-;;     (require 'doom-modeline)
-;;     (remove-hook 'after-make-frame-functions 'load-doom-modeline))
-;;   :init
-;;   (if (daemonp)
-;;       (add-hook 'after-make-frame-functions #'load-doom-modeline)
-;;     (require 'doom-modeline))
-
-;;   (with-eval-after-load 'doom-modeline
-;;     (defadvice doom-buffer-path (around ignore-remote first activate)
-;;       (if (file-remote-p default-directory)
-;; 	      (if buffer-file-name
-;; 	          (setq ad-return-value (file-name-nondirectory (buffer-file-name)))
-;; 	        (setq ad-return-value "%b"))
-;; 	    ad-do-it)))
-
-;;   (unless (file-exists-p "~/.emacs.d/lisp/doom-modeline.elc")
-;;     (byte-compile-file "~/.emacs.d/lisp/doom-modeline.el")))
 
 (use-package doom-vcs
   :load-path "~/.emacs.d/lisp"
@@ -532,6 +509,7 @@ is already narrowed."
 				                      ("h" "c" "cc" "cpp")
 				                      ("cc" "h")
 				                      ("cpp" "h")))
+  (setq projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
