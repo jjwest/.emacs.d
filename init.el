@@ -34,11 +34,6 @@
 (require 'use-package)
 (setq use-package-always-demand t)
 
-;; Benchmark startup time
-(use-package benchmark-init
-  :ensure t
-  :config (benchmark-init/activate))
-
 ;; General settings and better defaults
 (setq custom-safe-themes t
       scroll-margin 5
@@ -86,10 +81,8 @@
  visible-cursor nil
  x-stretch-cursor nil
  ;; defer jit font locking slightly to [try to] improve Emacs performance
- jit-lock-defer-time nil
  jit-lock-stealth-nice 0.1
  jit-lock-stealth-time 0.2
- jit-lock-stealth-verbose nil
  ;; `pos-tip' defaults
  pos-tip-internal-border-width 6
  pos-tip-border-width 1
@@ -182,7 +175,8 @@
 (defun maybe-kill-buffers (frame)
   "Kill all live buffers when the last frame is closed."
   (when (<= (length (frame-list)) 2)
-    (mapc #'kill-buffer (buffer-list))))
+    (mapc #'kill-buffer (buffer-list))
+    (cd (expand-file-name "~/"))))
 
 (add-hook 'delete-frame-functions #'maybe-kill-buffers)
 
@@ -351,8 +345,7 @@ is already narrowed."
     "Set the default modeline."
     (doom-set-modeline 'main t)
     (with-current-buffer "*scratch*"
-      (doom-set-modeline 'main))
-    (remove-hook 'after-init-hook #'+doom-modeline|init))
+      (doom-set-modeline 'main)))
   (add-hook 'after-init-hook #'+doom-modeline|init))
 
 (use-package doom-vcs
@@ -509,7 +502,6 @@ is already narrowed."
 				                      ("h" "c" "cc" "cpp")
 				                      ("cc" "h")
 				                      ("cpp" "h")))
-  (setq projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -706,13 +698,18 @@ is already narrowed."
   (add-hook 'prog-mode-hook #'hl-line-mode)
   (add-hook 'html-mode-hook #'hl-line-mode)
   :config
-  (setq hl-line-sticky-flag nil)
-  (defadvice hl-line-highlight (around ignore-remote first activate)
-    ad-do-it
-    (when (save-excursion
-            (forward-line)
-            (eobp))
-      (hl-line-unhighlight))))
+  (defun hl-line-range ()
+    (cons (line-beginning-position)
+          (cond ((save-excursion
+                   (goto-char (line-end-position))
+                   (and (eobp) (not (bolp))))
+                 (1- (line-end-position)))
+                ((or (eobp) (save-excursion (forward-line) (eobp)))
+                 (line-end-position))
+                (t
+                 (line-beginning-position 2)))))
+  (setq hl-line-range-function #'hl-line-range)
+  (setq hl-line-sticky-flag nil))
 
 (use-package buffer-move
   :ensure t
@@ -747,41 +744,31 @@ is already narrowed."
   :mode ("CMakeLists.txt" "\\.cmake\\'"))
 
 
-(use-package cquery
+(use-package ccls
   :ensure t
   :after lsp-mode
   :config
-  (setq cquery-resource-dir "~/cquery/clang_resource_dir"
-        cquery-enable-sem-highlight nil
-        cquery-executable "~/cquery/build/release/bin/cquery")
+  (setq ccls-executable "~/ccls/Release/ccls")
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
                       :states 'normal
                       :prefix my-leader
                       "R" #'lsp-rename)
-  (add-hook 'c++-mode-hook #'lsp-cquery-enable)
-  (add-hook 'c-mode-hook #'lsp-cquery-enable))
+  (add-hook 'c++-mode-hook #'lsp-ccls-enable)
+  (add-hook 'c-mode-hook #'lsp-ccls-enable))
 
 (use-package glsl-mode
   :ensure t
   :mode ("\\.[fv]s\\'" . glsl-mode))
 
-(use-package company-jedi
+(use-package elpy
   :ensure t
-  :preface
-  (defun my/init-python-hook ()
-    (add-to-list 'company-backends 'company-jedi)
-    (jedi:setup))
-  :init
-  (add-hook 'python-mode-hook #'my/init-python-hook)
-  (general-define-key :keymaps 'python-mode-map
-		              :states 'normal
-		              "M-." 'jedi:goto-definition
-		              "M-," 'jedi:goto-definition-pop-marker))
+  :config
+  (elpy-enable))
 
 ;; RUST SETTINGS
 (use-package rust-mode
-  ;; :ensure t
-  :load-path "~/rust-mode"
+  :ensure t
+  ;; :load-path "~/rust-mode"
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (when (executable-find "rustc")
@@ -843,13 +830,6 @@ is already narrowed."
 
 (use-package typescript-mode
   :ensure t)
-
-(use-package emmet-mode
-  :ensure t
-  :init
-  (add-hook 'html-mode-hook #'emmet-mode)
-  (add-hook 'js2-mode-hook #'emmet-mode)
-  (add-hook 'js2-jsx-mode-hook #'emmet-mode))
 
 (use-package js2-mode
   :ensure t
@@ -935,12 +915,6 @@ is already narrowed."
   :config
   (require 'doi-utils))
 
-(use-package darkroom
-  :ensure t
-  :config
-  (setq darkroom-margins 0.15
-	    darkroom-text-scale-increase 1))
-
 (use-package tramp
   :config
   (setq tramp-verbose 2))
@@ -968,21 +942,6 @@ is already narrowed."
 (use-package restclient
   :ensure t
   :mode ("\\.http\\'" . restclient-mode))
-
-(use-package pdf-tools
-  :ensure t
-  :mode ("\\.pdf\\'" . pdf-view-mode)
-  :config
-  (general-define-key :keymaps 'pdf-view-mode-map
-		              :states 'normal
-		              "C-h" #'windmove-left
-		              "C-j" #'windmove-down
-		              "C-k" #'windmove-up
-		              "C-l" #'windmove-right
-		              "j" #'pdf-view-next-line-or-next-page
-		              "k" #'pdf-view-prveious-line-or-previous-page
-		              "M-j" #'pdf-view-next-page
-		              "M-k" #'pdf-view-previous-page))
 
 (use-package markdown-mode
   :ensure t
