@@ -36,9 +36,6 @@
 
 ;; General settings and better defaults
 (setq custom-safe-themes t
-      scroll-margin 5
-      scroll-conservatively 9999
-      scroll-step 1
       inhibit-startup-screen t
       initial-scratch-message ""
       load-prefer-newer t
@@ -312,8 +309,6 @@ is already narrowed."
       (solaire-mode-swap-bg)
       (custom-theme-set-faces
        'doom-one
-       `(git-gutter:modified ((t (:foreground "#ECBE7B"))))
-       `(git-gutter-fr:modified ((t (:foreground "#ECBE7B"))))
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
        `(fringe ((t (:inherit solaire-default-face))))
@@ -347,13 +342,6 @@ is already narrowed."
     (with-current-buffer "*scratch*"
       (doom-set-modeline 'main)))
   (add-hook 'after-init-hook #'+doom-modeline|init))
-
-(use-package doom-vcs
-  :load-path "~/.emacs.d/lisp"
-  :init
-  (unless (file-exists-p "~/.emacs.d/lisp/doom-vcs.elc")
-    (byte-compile-file "~/.emacs.d/lisp/doom-vcs.el"))
-  (setq-default fringes-outside-margins t))
 
 (use-package solaire-mode
   :ensure t
@@ -500,8 +488,8 @@ is already narrowed."
   :init
   (setq projectile-other-file-alist '(("c" "h")
 				                      ("h" "c" "cc" "cpp")
-				                      ("cc" "h")
-				                      ("cpp" "h")))
+				                      ("cc" "h" "hh")
+				                      ("cpp" "h" "hh")))
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -567,7 +555,11 @@ is already narrowed."
   (general-define-key :prefix my-leader :states 'normal "r" 'iedit-dwim))
 
 (use-package rg
-  :ensure t)
+  :ensure t
+  :config
+  (general-define-key :prefix my-leader
+                      :states 'normal
+                      "pG" #'rg))
 
 (use-package wgrep
   :ensure t
