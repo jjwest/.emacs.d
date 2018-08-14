@@ -488,6 +488,7 @@ is already narrowed."
   :init
   (setq projectile-other-file-alist '(("c" "h")
 				                      ("h" "c" "cc" "cpp")
+                                      ("hh" "cc")
 				                      ("cc" "h" "hh")
 				                      ("cpp" "h" "hh")))
   (general-define-key :prefix my-leader
