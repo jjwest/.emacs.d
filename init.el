@@ -424,6 +424,9 @@ is already narrowed."
   (define-key evil-motion-state-map "L" 'evil-forward-arg)
   (define-key evil-motion-state-map "H" 'evil-backward-arg))
 
+(use-package evil-anzu
+  :ensure t)
+
 (use-package evil-iedit-state
   :ensure t)
 
