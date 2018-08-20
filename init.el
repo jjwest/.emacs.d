@@ -24,7 +24,9 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
+
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 ;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
@@ -467,7 +469,7 @@ is already narrowed."
     (interactive)
     (company-abort)
     (newline-and-indent))
-  :bind (("C-." . company-complete)
+  :bind (("M-RET" . company-complete)
 	     :map company-active-map
 	     ("<C-return>" . my/company-abort-and-newline)
 	     ("<tab>" . nil))
@@ -477,8 +479,7 @@ is already narrowed."
   (general-define-key "C-." 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-." 'company-complete)
-  (setq company-idle-delay 0
-	    company-minimum-prefix-length 2
+  (setq company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
 	    company-dabbrev-downcase nil
@@ -511,26 +512,26 @@ is already narrowed."
   (projectile-mode))
 
 
-(use-package flycheck
-  :ensure t
-  :diminish flycheck-mode
-  :config
-  (general-define-key "M-n" #'flycheck-next-error
-		              "M-p" #'flycheck-previous-error)
-  (add-hook! 'c-mode-hook
-    (setq flycheck-gcc-language-standard "c11"
-          flycheck-clang-language-standard "c11"))
-  (add-hook! 'c++-mode-hook
-    (setq flycheck-gcc-language-standard "c++14"
-          flycheck-clang-language-standard "c++14"))
+;; (use-package flycheck
+;;   :ensure t
+;;   :diminish flycheck-mode
+;;   :config
+;;   (general-define-key "M-n" #'flycheck-next-error
+;; 		              "M-p" #'flycheck-previous-error)
+;;   (add-hook! 'c-mode-hook
+;;     (setq flycheck-gcc-language-standard "c11"
+;;           flycheck-clang-language-standard "c11"))
+;;   (add-hook! 'c++-mode-hook
+;;     (setq flycheck-gcc-language-standard "c++14"
+;;           flycheck-clang-language-standard "c++14"))
 
-  (add-hook 'prog-mode-hook #'flycheck-mode))
+;;   (add-hook 'prog-mode-hook #'flycheck-mode))
 
-(use-package flycheck-pos-tip
-  :ensure t
-  :config
-  (setq flycheck-pos-tip-timeout 30)
-  (flycheck-pos-tip-mode))
+;; (use-package flycheck-pos-tip
+;;   :ensure t
+;;   :config
+;;   (setq flycheck-pos-tip-timeout 30)
+;;   (flycheck-pos-tip-mode))
 
 (use-package terminal-here
   :ensure t
@@ -780,7 +781,8 @@ is already narrowed."
 (use-package lsp-mode
   :ensure t
   :config
-  (setq lsp-highlight-symbol-at-point nil)
+  (setq lsp-highlight-symbol-at-point nil
+        lsp-eldoc-render-all nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
     ad-do-it
@@ -793,13 +795,13 @@ is already narrowed."
 		              :prefix my-leader
 		              "R" 'lsp-rename))
 
-(use-package lsp-ui
-  :ensure t
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-peek-enable nil
-        lsp-ui-sideline-enable nil)
-  (add-hook 'lsp-mode-hook #'lsp-ui-mode))
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :config
+;;   (setq lsp-ui-doc-enable nil
+;;         lsp-ui-peek-enable nil
+;;         lsp-ui-sideline-enable nil)
+;;   (add-hook 'lsp-mode-hook #'lsp-ui-mode))
 
 (use-package company-lsp
   :ensure t
