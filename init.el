@@ -1,4 +1,4 @@
-;;; init.el --- My Emacs config
+;;; init.el --- My Emacs config --- -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Nothing here
 ;;; Code:
@@ -272,6 +272,13 @@ is already narrowed."
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme))
 
+(defun maybe-insert-elisp-header ()
+  (when (and (eobp)
+             (not (equal (buffer-name) "*scratch*")))
+    (insert ";;; -*- lexical-binding: t -*-\n")))
+
+(add-hook 'emacs-lisp-mode-hook #'maybe-insert-elisp-header)
+
 ;; Packages
 (use-package general
   :ensure t
@@ -322,6 +329,7 @@ is already narrowed."
     (remove-hook 'after-make-frame-functions 'load-doom-theme))
   :init
   (advice-add #'load-theme :after #'tweak-doom-theme)
+  (advice-add #'change-theme :after #'tweak-doom-theme)
   (setq doom-themes-enable-italic nil)
   (doom-themes-org-config)
   (doom-themes-neotree-config)
@@ -479,7 +487,8 @@ is already narrowed."
   (general-define-key "C-." 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-." 'company-complete)
-  (setq company-minimum-prefix-length 2
+  (setq company-idle-delay 0.2
+        ;; company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
 	    company-dabbrev-downcase nil
@@ -577,13 +586,6 @@ is already narrowed."
 (use-package eldoc
   :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook #'eldoc-mode))
-
-(use-package diminish
-  :ensure t
-  :config
-  (diminish 'visual-line-mode)
-  (with-eval-after-load 'undo-tree (diminish 'undo-tree-mode))
-  (with-eval-after-load 'abbrev (diminish 'abbrev-mode)))
 
 (use-package dired
   :preface
@@ -883,36 +885,6 @@ is already narrowed."
   :config
   (setq tern-command (append tern-command '("--no-port-file"))))
 
-(use-package org
-  :mode ("\\.org\\'" . org-mode)
-  :defines org-export-async-init-file
-  :preface
-  (defun my/org-latex-export ()
-    (interactive)
-    (save-buffer)
-    (org-latex-export-to-pdf t))
-  :config
-  (add-hook 'org-mode-hook #'org-indent-mode)
-  (add-hook 'org-mode-hook #'auto-fill-mode)
-  (setq org-export-async-init-file (f-join user-emacs-directory
-  					                       "lisp"
-  					                       "org-export.el"))
-  (setq org-src-preserve-indentation t)
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((python . t)))
-  (general-define-key :keymaps 'org-mode-map
-                      :states 'normal
-		              "M-l" 'my/org-latex-export))
-
-(use-package org-ref
-  :defer t
-  :init
-  (general-define-key :keymaps 'org-mode-map
-		              :states '(normal insert)
-		              "M-r" #'org-ref-helm-insert-cite-link)
-  :config
-  (require 'doi-utils))
-
 (use-package tramp
   :config
   (setq tramp-verbose 2))
@@ -936,10 +908,6 @@ is already narrowed."
   (general-define-key :keymaps 'refine-mode-map
                       :states 'normal
                       "D" #'refine-delete))
-
-(use-package restclient
-  :ensure t
-  :mode ("\\.http\\'" . restclient-mode))
 
 (use-package markdown-mode
   :ensure t
