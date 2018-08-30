@@ -273,7 +273,7 @@ is already narrowed."
   (load-theme theme))
 
 (defun maybe-insert-elisp-header ()
-  (when (and (eobp)
+  (when (and (= (buffer-size) 0)
              (not (equal (buffer-name) "*scratch*")))
     (insert ";;; -*- lexical-binding: t -*-\n")))
 
@@ -351,6 +351,8 @@ is already narrowed."
     (doom-set-modeline 'main t)
     (with-current-buffer "*scratch*"
       (doom-set-modeline 'main)))
+    (with-current-buffer "*Messages*"
+      (doom-set-modeline 'main))
   (add-hook 'after-init-hook #'+doom-modeline|init))
 
 (use-package solaire-mode
@@ -477,8 +479,7 @@ is already narrowed."
     (interactive)
     (company-abort)
     (newline-and-indent))
-  :bind (("M-RET" . company-complete)
-	     :map company-active-map
+  :bind (:map company-active-map
 	     ("<C-return>" . my/company-abort-and-newline)
 	     ("<tab>" . nil))
   :init
