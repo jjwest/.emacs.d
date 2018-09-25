@@ -3,6 +3,7 @@
 
 ;; anzu and evil-anzu expose current/total state that can be displayed in the
 ;; mode-line.
+
 (def-package! evil-anzu
   :requires evil
   :init
@@ -50,13 +51,6 @@ have the same meaning as in `defun'."
        'progn)
      (defun ,name ,arglist ,@body)
      (doom-memoize ',name)))
-
-(defun doom-project-root ()
-  "Get the path to the root of your project.
-If STRICT-P, return nil if no project was found, otherwise return
-`default-directory'."
-  (let (projectile-require-project-root)
-    (projectile-project-root)))
 
 ;; fish-style modeline
 (def-package! shrink-path

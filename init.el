@@ -273,6 +273,7 @@ is already narrowed."
   (load-theme theme))
 
 (defun maybe-insert-elisp-header ()
+  "Insert lexical scope header in new emacs-lisp files"
   (when (and (= (buffer-size) 0)
              (not (equal (buffer-name) "*scratch*")))
     (insert ";;; -*- lexical-binding: t -*-\n")))
@@ -351,8 +352,8 @@ is already narrowed."
     (doom-set-modeline 'main t)
     (with-current-buffer "*scratch*"
       (doom-set-modeline 'main)))
-    (with-current-buffer "*Messages*"
-      (doom-set-modeline 'main))
+  (with-current-buffer "*Messages*"
+    (doom-set-modeline 'main))
   (add-hook 'after-init-hook #'+doom-modeline|init))
 
 (use-package solaire-mode
@@ -480,8 +481,8 @@ is already narrowed."
     (company-abort)
     (newline-and-indent))
   :bind (:map company-active-map
-	     ("<C-return>" . my/company-abort-and-newline)
-	     ("<tab>" . nil))
+	          ("<C-return>" . my/company-abort-and-newline)
+	          ("<tab>" . nil))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
@@ -797,14 +798,6 @@ is already narrowed."
 		              :states 'normal
 		              :prefix my-leader
 		              "R" 'lsp-rename))
-
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :config
-;;   (setq lsp-ui-doc-enable nil
-;;         lsp-ui-peek-enable nil
-;;         lsp-ui-sideline-enable nil)
-;;   (add-hook 'lsp-mode-hook #'lsp-ui-mode))
 
 (use-package company-lsp
   :ensure t
