@@ -397,6 +397,7 @@ is already narrowed."
                       "S" #'my/split-line
                       "U" #'redo
                       "M-." #'xref-find-definitions
+                      "M-C-." #'xref-find-definitions-other-window
                       "M-," #'xref-pop-marker-stack
                       "M--" #'xref-find-references
                       "Q" "@q"
