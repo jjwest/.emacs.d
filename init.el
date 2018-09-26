@@ -907,6 +907,13 @@ is already narrowed."
   :ensure t
   :mode ("\\.md\\'" . markdown-mode))
 
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
