@@ -48,6 +48,7 @@
       auto-revert-check-vc-info t
       show-paren-delay 0
       save-interprogram-paste-before-kill t
+      make-backup-files nil
       select-enable-clipboard t
       display-time-24hr-format t
       display-time-day-and-date t
@@ -91,30 +92,6 @@
  tab-width 4
  require-final-newline nil
  indent-tabs-mode nil)
-
-;; I like my backups hidden and in abundance
-(unless (file-exists-p "~/.emacs.d/backups")
-  (mkdir "~/.emacs.d/backups/per-save" t)
-  (mkdir "~/.emacs.d/backups/per-session" t))
-
-(setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save"))
-      backup-by-copying t
-      delete-old-versions t
-      kept-new-versions 20
-      kept-old-versions 0
-      auto-save-default nil
-      vc-make-backup-files t
-      version-control t)
-
-(defun force-backup-of-buffer ()
-  "Always save file backups on save."
-  (unless buffer-backed-up
-    (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session"))))
-      (backup-buffer)))
-  (let ((buffer-backed-up nil))
-    (backup-buffer)))
-(add-hook 'before-save-hook  'force-backup-of-buffer)
-
 
 ;; Misc
 (setq frame-title-format "Emacs: %b")
@@ -524,6 +501,12 @@ is already narrowed."
   (projectile-mode))
 
 
+(use-package flymake
+  :config
+  (general-define-key :states 'normal
+                      "M-n" #'flymake-goto-next-error
+                      "M-p" #'flymake-goto-prev-error))
+
 ;; (use-package flycheck
 ;;   :ensure t
 ;;   :diminish flycheck-mode
@@ -883,11 +866,6 @@ is already narrowed."
 (use-package tramp
   :config
   (setq tramp-verbose 2))
-
-(use-package backup-walker
-  :ensure t
-  :commands backup-walker-start
-  :init (add-to-list 'evil-emacs-state-modes 'backup-walker-mode))
 
 (use-package neotree
   :ensure t
