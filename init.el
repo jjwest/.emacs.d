@@ -40,6 +40,7 @@
 (setq custom-safe-themes t
       inhibit-startup-screen t
       initial-scratch-message ""
+      initial-major-mode 'text-mode
       load-prefer-newer t
       ad-redefinition-action 'accept
       uniquify-buffer-name-style 'forward
@@ -769,7 +770,7 @@ is already narrowed."
 (use-package lsp-mode
   :ensure t
   :config
-  (setq lsp-highlight-symbol-at-point nil
+  (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
