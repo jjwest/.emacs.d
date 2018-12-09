@@ -734,13 +734,7 @@ is already narrowed."
   :ensure t
   :after lsp-mode
   :config
-  (setq ccls-executable "~/ccls/Release/ccls")
-  (general-define-key :keymaps '(c-mode-map c++-mode-map)
-                      :states 'normal
-                      :prefix my-leader
-                      "R" #'lsp-rename)
-  (add-hook 'c++-mode-hook #'lsp-ccls-enable)
-  (add-hook 'c-mode-hook #'lsp-ccls-enable))
+  (setq ccls-executable "~/ccls/Release/ccls"))
 
 (use-package glsl-mode
   :ensure t
@@ -766,20 +760,21 @@ is already narrowed."
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
 
-
 (use-package lsp-mode
   :ensure t
   :config
+  (require 'lsp-clients)
   (setq lsp-eldoc-hook '(lsp-hover)
-        lsp-eldoc-render-all nil)
+        lsp-eldoc-render-all nil
+        lsp-auto-configure nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
     ad-do-it
     (projectile-save-project-buffers))
-  (general-define-key :keymaps 'rust-mode-map
-		              :states '(normal insert)
-		              "C-." 'company-complete)
-  (general-define-key :keymaps 'rust-mode-map
+  (add-hook 'rust-mode-hook #'lsp)
+  (add-hook 'c-mode-hook #'lsp)
+  (add-hook 'c++-mode-hook #'lsp)
+  (general-define-key :keymaps '(rust-mode-map c-mode-map c++-mode-map)
 		              :states 'normal
 		              :prefix my-leader
 		              "R" 'lsp-rename))
@@ -788,17 +783,6 @@ is already narrowed."
   :ensure t
   :config
   (add-to-list 'company-backends #'company-lsp))
-
-
-(use-package lsp-rust
-  :ensure t
-  :config
-  (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-  (when (executable-find "rustc")
-    (setenv "RUST_SRC_PATH" (concat (f-join
-				                     (s-trim-right (shell-command-to-string "rustc --print sysroot"))
-				                     "lib/rustlib/src/rust/src/"))))
-  (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
 
 ;; Web development
