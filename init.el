@@ -766,7 +766,9 @@ is already narrowed."
   (require 'lsp-clients)
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
-        lsp-auto-configure nil)
+        lsp-auto-configure nil
+        lsp-auto-guess-root t
+        lsp-keep-workspace-alive nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
     ad-do-it
