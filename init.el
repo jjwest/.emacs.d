@@ -222,7 +222,7 @@ is already narrowed."
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
 
-(defvar current-brace-style 'own-line
+(defvar current-brace-style 'same-line
   "Sets the brace style for yasnippet.")
 
 (defun toggle-brace-style ()
@@ -348,12 +348,7 @@ is already narrowed."
 
   (add-hook 'after-change-major-mode-hook #'maybe-use-solaire)
   (add-hook 'after-revert-hook #'maybe-use-solaire)
-  (add-hook 'minibuffer-setup-hook #'maybe-use-solaire)
-  (advice-add #'solaire-mode :after
-	          (lambda (&rest args)
-		        (custom-theme-set-faces
-		         'doom-one
-		         `(fringe ((t (:inherit solaire-default-face))))))))
+  (add-hook 'minibuffer-setup-hook #'maybe-use-solaire))
 
 
 (use-package evil
@@ -469,7 +464,7 @@ is already narrowed."
   (general-define-key :states '(normal insert)
 		              "C-." 'company-complete)
   (setq company-idle-delay 0.2
-        ;; company-minimum-prefix-length 2
+        company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
 	    company-dabbrev-downcase nil
@@ -494,6 +489,8 @@ is already narrowed."
   		              "pt" 'projectile-find-other-file
 		              "pT" 'projectile-find-other-file-other-window)
 
+  (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
+
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
     (unless (file-remote-p default-directory)
@@ -507,27 +504,6 @@ is already narrowed."
   (general-define-key :states 'normal
                       "M-n" #'flymake-goto-next-error
                       "M-p" #'flymake-goto-prev-error))
-
-;; (use-package flycheck
-;;   :ensure t
-;;   :diminish flycheck-mode
-;;   :config
-;;   (general-define-key "M-n" #'flycheck-next-error
-;; 		              "M-p" #'flycheck-previous-error)
-;;   (add-hook! 'c-mode-hook
-;;     (setq flycheck-gcc-language-standard "c11"
-;;           flycheck-clang-language-standard "c11"))
-;;   (add-hook! 'c++-mode-hook
-;;     (setq flycheck-gcc-language-standard "c++14"
-;;           flycheck-clang-language-standard "c++14"))
-
-;;   (add-hook 'prog-mode-hook #'flycheck-mode))
-
-;; (use-package flycheck-pos-tip
-;;   :ensure t
-;;   :config
-;;   (setq flycheck-pos-tip-timeout 30)
-;;   (flycheck-pos-tip-mode))
 
 (use-package terminal-here
   :ensure t
@@ -646,6 +622,47 @@ is already narrowed."
                       "p" #'smerge-prev
                       "M-l" #'smerge-keep-lower
                       "M-u" #'smerge-keep-upper))
+
+(use-package smerge-mode
+  :ensure hydra
+  :config
+  (defhydra unpackaged/smerge-hydra
+    (:color pink :hint nil :post (smerge-auto-leave))
+    "
+^Move^       ^Keep^               ^Diff^                 ^Other^
+^^-----------^^-------------------^^---------------------^^-------
+_n_ext       _b_ase               _<_: upper/base        _C_ombine
+_p_rev       _u_pper              _=_: upper/lower       _r_esolve
+^^           _l_ower              _>_: base/lower        _k_ill current
+^^           _a_ll                _R_efine
+^^           _RET_: current       _E_diff
+"
+    ("n" smerge-next)
+    ("p" smerge-prev)
+    ("b" smerge-keep-base)
+    ("u" smerge-keep-upper)
+    ("l" smerge-keep-lower)
+    ("a" smerge-keep-all)
+    ("RET" smerge-keep-current)
+    ("\C-m" smerge-keep-current)
+    ("<" smerge-diff-base-upper)
+    ("=" smerge-diff-upper-lower)
+    (">" smerge-diff-base-lower)
+    ("R" smerge-refine)
+    ("E" smerge-ediff)
+    ("C" smerge-combine-with-next)
+    ("r" smerge-resolve)
+    ("k" smerge-kill-current)
+    ("ZZ" (lambda ()
+            (interactive)
+            (save-buffer)
+            (bury-buffer))
+     "Save and bury buffer" :color blue)
+    ("q" nil "cancel" :color blue))
+  :hook (magit-diff-visit-file . (lambda ()
+                                   (when smerge-mode
+                                     (unpackaged/smerge-hydra/body)))))
+
 
 (use-package ivy
   :ensure t
@@ -768,7 +785,9 @@ is already narrowed."
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
         lsp-auto-guess-root t
-        lsp-keep-workspace-alive nil)
+        lsp-keep-workspace-alive nil
+        lsp-enable-on-type-formatting nil
+        lsp-enable-indentation nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
     ad-do-it
