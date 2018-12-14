@@ -1,5 +1,7 @@
 ;;; doom-modeline.el -*- lexical-binding: t; -*-
 
+(require 'subr-x)
+
 
 ;; anzu and evil-anzu expose current/total state that can be displayed in the
 ;; mode-line.
