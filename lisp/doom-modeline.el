@@ -8,6 +8,7 @@
 
 (def-package! evil-anzu
   :requires evil
+  :ensure t
   :init
   (add-transient-hook! #'evil-ex-start-search (require 'evil-anzu))
   (add-transient-hook! #'evil-ex-start-word-search (require 'evil-anzu))
