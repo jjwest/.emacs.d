@@ -38,6 +38,7 @@
 
 ;; General settings and better defaults
 (setq custom-safe-themes t
+      custom--inhibit-theme-enable nil
       inhibit-startup-screen t
       initial-scratch-message ""
       initial-major-mode 'text-mode
@@ -765,14 +766,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ;; RUST SETTINGS
 (use-package rust-mode
   :ensure t
-  ;; :load-path "~/rust-mode"
   :mode ("\\.rs\\'" . rust-mode)
-  :config
-  (when (executable-find "rustc")
-    (setenv "LD_LIBRARY_PATH" (concat (f-join (s-trim-right (shell-command-to-string "rustc --print sysroot")) "lib")
-                                      ":"
-                                      (getenv "LD_LIBRARY_PATH"))))
-
   (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
@@ -805,12 +799,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :config
   (add-to-list 'company-backends #'company-lsp))
 
-
-;; Web development
-(use-package web-mode
-  :ensure t
-  :mode (("\\.ts[x]?\\'" . web-mode)
-	     ("\\.jsx\\'" . web-mode)))
 
 (use-package typescript-mode
   :ensure t)
