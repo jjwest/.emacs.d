@@ -125,7 +125,6 @@
   (when (member "Office Code Pro" (font-family-list))
     (set-frame-font "Office Code Pro-11" t t)))
 
-
 ;; Strip UI
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -461,9 +460,9 @@ is already narrowed."
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
-  (general-define-key "C-." 'company-complete)
+  (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
-		              "C-." 'company-complete)
+		              "C-SPC" 'company-complete)
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
@@ -767,6 +766,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
+  :config
   (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'eldoc-mode)
   (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
