@@ -481,8 +481,8 @@ is already narrowed."
   		              "pf" 'counsel-projectile-find-file
   		              "pd" 'counsel-projectile-find-dir
   		              "pk" 'projectile-kill-buffers
-  		              "pt" 'projectile-find-other-file
-		              "pT" 'projectile-find-other-file-other-window)
+  		              "t" 'projectile-find-other-file
+		              "T" 'projectile-find-other-file-other-window)
 
   (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
 
