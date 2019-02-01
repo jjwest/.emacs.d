@@ -723,7 +723,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package transpose-frame
   :ensure t
-  :init (general-define-key :prefix my-leader :states 'normal "T" 'transpose-frame))
+  :init (general-define-key :prefix my-leader :states 'normal "wt" 'transpose-frame))
 
 (use-package rainbow-delimiters
   :ensure t
