@@ -51,6 +51,7 @@
       show-paren-delay 0
       save-interprogram-paste-before-kill t
       make-backup-files nil
+      compilation-scroll-output t
       select-enable-clipboard t
       display-time-24hr-format t
       display-time-day-and-date t
