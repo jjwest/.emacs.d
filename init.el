@@ -771,6 +771,10 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :config
   (require 'lsp-clients)
+
+  ;; Don't show RLS status in minibuffer
+  (defadvice lsp-clients--rust-window-progress (around ignore-remote first activate))
+
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
