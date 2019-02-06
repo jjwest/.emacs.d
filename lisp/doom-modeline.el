@@ -517,6 +517,9 @@ icons."
       ('interrupted (+doom-ml-icon "pause" "Interrupted" 'font-lock-doc-face)))))
       ;; ('interrupted (+doom-ml-icon "x" "Interrupted" 'font-lock-doc-face)))))
 
+(def-modeline-segment! compilation
+  mode-line-process)
+
 ;;
 (defsubst doom-column (pos)
   (save-excursion (goto-char pos)
@@ -668,6 +671,11 @@ Returns \"\" to not break --no-window-system."
   (bar buffer-default-directory)
   (major-mode))
 
+(def-modeline! compilation
+  (bar " " compilation)
+  (major-mode))
+
+
 (def-modeline! media
   (bar " %b  ")
   (media-info major-mode))
@@ -695,6 +703,8 @@ Returns \"\" to not break --no-window-system."
 (defun +doom-modeline|set-project-modeline ()
   (doom-set-modeline 'project))
 
+(defun +doom-modeline|set-compilation-modeline ()
+  (doom-set-modeline 'compilation))
 
 ;;
 ;; Bootstrap
@@ -703,6 +713,7 @@ Returns \"\" to not break --no-window-system."
 (add-hook 'doom-init-ui-hook #'+doom-modeline|init)
 (add-hook 'doom-scratch-buffer-hook #'+doom-modeline|set-special-modeline)
 (add-hook '+doom-dashboard-mode-hook #'+doom-modeline|set-project-modeline)
+(add-hook 'compilation-mode-hook #'+doom-modeline|set-compilation-modeline)
 
 (add-hook 'image-mode-hook   #'+doom-modeline|set-media-modeline)
 (add-hook 'org-src-mode-hook #'+doom-modeline|set-special-modeline)
