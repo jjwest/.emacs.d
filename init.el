@@ -616,7 +616,10 @@ is already narrowed."
                       "n" #'smerge-next
                       "p" #'smerge-prev
                       "M-l" #'smerge-keep-lower
-                      "M-u" #'smerge-keep-upper))
+                      "M-u" #'smerge-keep-upper)
+  (define-key transient-map        "q" 'transient-quit-one)
+  (define-key transient-edit-map   "q" 'transient-quit-one)
+  (define-key transient-sticky-map "q" 'transient-quit-seq) )
 
 (use-package smerge-mode
   :ensure hydra
