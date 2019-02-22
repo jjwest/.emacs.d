@@ -116,14 +116,14 @@
 (defun set-font-on-start (frame)
   (select-frame frame)
   (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro-11" t t))
+    (set-frame-font "Office Code Pro-10" t t))
   (remove-hook 'after-make-frame-functions 'set-font-on-start))
 
 ;; Set font
 (if (daemonp)
     (add-hook 'after-make-frame-functions #'set-font-on-start)
   (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro-11" t t)))
+    (set-frame-font "Office Code Pro-10" t t)))
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -141,7 +141,6 @@
 (add-hook 'prog-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'visual-line-mode)
 (display-time)
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'subword-mode)
 (add-hook 'prog-mode-hook #'visual-line-mode)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -222,7 +221,7 @@ is already narrowed."
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
 
-(defvar current-brace-style 'same-line
+(defvar current-brace-style 'own-line
   "Sets the brace style for yasnippet.")
 
 (defun toggle-brace-style ()
@@ -433,6 +432,14 @@ is already narrowed."
   :ensure t
   :config (global-evil-visualstar-mode))
 
+
+(use-package evil-numbers
+  :ensure t
+  :config
+  (general-define-key :states 'normal
+                      "M-<up>" #'evil-numbers/inc-at-pt
+                      "M-<down>" #'evil-numbers/dec-at-pt))
+
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
@@ -475,6 +482,7 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
+  (setq projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -688,7 +696,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (general-define-key :prefix my-leader
                       :states 'normal
                       "f" 'counsel-find-file
-                      "b" 'ivy-switch-buffer)
+                      "b" 'ivy-switch-buffer
+                      "v" #'imenu)
   (if (executable-find "rg")
       (general-define-key :prefix my-leader :states 'normal "pg" #'counsel-rg-dwim)
     (general-define-key :prefix my-leader :states 'normal "pg" 'counsel-git-grep))
@@ -780,7 +789,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
-        lsp-auto-guess-root t
+        lsp-auto-guess-root nil
         lsp-keep-workspace-alive nil
         lsp-enable-on-type-formatting nil
         lsp-enable-indentation nil)
