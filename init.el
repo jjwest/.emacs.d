@@ -318,11 +318,7 @@ is already narrowed."
 (use-package doom-modeline
   :load-path "~/.emacs.d/lisp"
   :preface
-  (unless (file-exists-p (f-join user-emacs-directory "lisp" "doom-modeline.elc"))
-    (let ((files (f-entries (f-join user-emacs-directory "lisp"))))
-      (dolist (file files)
-        (unless (s-ends-with? ".elc" file)
-          (byte-compile-file file)))))
+  (byte-recompile-directory "~/.emacs.d/lisp" 0)
   :config
   (defun +doom-modeline|init ()
     "Set the default modeline."
@@ -625,6 +621,7 @@ is already narrowed."
                       "p" #'smerge-prev
                       "M-l" #'smerge-keep-lower
                       "M-u" #'smerge-keep-upper)
+  (require 'transient)
   (define-key transient-map        "q" 'transient-quit-one)
   (define-key transient-edit-map   "q" 'transient-quit-one)
   (define-key transient-sticky-map "q" 'transient-quit-seq) )
