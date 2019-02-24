@@ -789,7 +789,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
-        lsp-auto-guess-root nil
+        lsp-auto-guess-root t
+        lsp-enable-links nil
         lsp-keep-workspace-alive nil
         lsp-enable-on-type-formatting nil
         lsp-enable-indentation nil)
