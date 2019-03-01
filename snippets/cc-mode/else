@@ -2,6 +2,6 @@
 # name : else { ... }
 # key: else
 # --
-else `(insert-brace)`
+else`(insert-brace)`
     $0
 }

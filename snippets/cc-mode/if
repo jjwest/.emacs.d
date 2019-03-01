@@ -2,6 +2,6 @@
 # name : if (...) { ... }
 # key: if
 # --
-if (${1:condition}) `(insert-brace)`
+if (${1:condition})`(insert-brace)`
     $0
 }

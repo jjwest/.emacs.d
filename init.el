@@ -237,7 +237,7 @@ is already narrowed."
   (interactive)
   (if (eq current-brace-style 'own-line)
       (insert "\n{")
-    (insert "{")))
+    (insert " {")))
 
 (defun change-theme (theme)
   "Change theme to THEME, disabling all current themes first."
