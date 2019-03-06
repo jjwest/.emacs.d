@@ -533,11 +533,22 @@ is already narrowed."
 (use-package rg
   :ensure t
   :config
-  (rg-define-search my/rg-search
-    "My own dwim rg-search"
+  (rg-define-search my/rg-search-project
     :query ask
     :dir project
     :files "all")
+
+  (rg-define-search my/rg-search-dir
+    :query ask
+    :dir current
+    :files "all")
+
+  (defun my/rg-search (arg)
+    (interactive "P")
+    (if arg
+        (call-interactively #'my/rg-search-project)
+      (call-interactively #'my/rg-search-dir)))
+
   (general-define-key :prefix my-leader
                       :states 'normal
                       "g" #'my/rg-search))
