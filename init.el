@@ -533,9 +533,14 @@ is already narrowed."
 (use-package rg
   :ensure t
   :config
+  (rg-define-search my/rg-search
+    "My own dwim rg-search"
+    :query ask
+    :dir project
+    :files "all")
   (general-define-key :prefix my-leader
                       :states 'normal
-                      "pG" #'rg))
+                      "g" #'my/rg-search))
 
 (use-package wgrep
   :ensure t
@@ -614,7 +619,7 @@ is already narrowed."
   :init
   (general-define-key :prefix my-leader
                       :states 'normal
-		              "g" 'magit-status)
+		              "G" 'magit-status)
   (general-define-key :keymaps 'smerge-mode-map
                       :states 'normal
                       "n" #'smerge-next
