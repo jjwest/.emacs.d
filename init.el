@@ -628,6 +628,7 @@ is already narrowed."
 	          ("K" . magit-discard))
   :diminish auto-revert-mode
   :init
+  (setq magit-section-visibility-indicator nil)
   (general-define-key :prefix my-leader
                       :states 'normal
 		              "G" 'magit-status)
