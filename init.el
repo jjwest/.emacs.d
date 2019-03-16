@@ -221,7 +221,7 @@ is already narrowed."
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
 
-(defvar current-brace-style 'own-line
+(defvar current-brace-style 'same-line
   "Sets the brace style for yasnippet.")
 
 (defun toggle-brace-style ()
