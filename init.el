@@ -770,9 +770,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package ccls
   :ensure t
-  :after lsp-mode
-  :config
-  (setq ccls-executable "~/ccls/Release/ccls"))
+  :after lsp-mode)
 
 (use-package glsl-mode
   :ensure t
