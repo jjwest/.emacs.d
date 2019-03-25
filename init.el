@@ -805,6 +805,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-enable-links nil
         lsp-keep-workspace-alive nil
         lsp-enable-on-type-formatting nil
+        lsp-enable-symbol-highlighting nil
         lsp-enable-indentation nil)
   (defadvice lsp-rename (around ignore-remote first activate)
     (projectile-save-project-buffers)
