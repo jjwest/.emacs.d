@@ -278,7 +278,7 @@ is already narrowed."
 		              "P" #'proced
 		              "W" #'winner-undo
 		              "ss" #'my/split-window-horizontal
-		              "vv" #'my/split-window-vertical))
+		              "sv" #'my/split-window-vertical))
 
 (use-package doom-common
   :ensure s
