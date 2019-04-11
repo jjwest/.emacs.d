@@ -101,6 +101,7 @@
 (set-buffer-file-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	          fill-column 80)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default isearch-allow-scroll t
