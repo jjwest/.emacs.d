@@ -771,7 +771,30 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package ccls
   :ensure t
-  :after lsp-mode)
+  :after lsp-mode
+  :config
+  (setq projectile-other-file-alist
+        '(("cpp" "h" "hpp" "ipp" "hh")
+         ("ipp" "h" "hpp" "cpp")
+         ("hpp" "h" "ipp" "cpp" "cc")
+         ("cxx" "h" "hxx" "ixx")
+         ("ixx" "h" "hxx" "cxx")
+         ("hxx" "h" "ixx" "cxx")
+         ("c" "h")
+         ("m" "h")
+         ("mm" "h")
+         ("h" "c" "cc" "cpp" "ipp" "hpp" "cxx" "ixx" "hxx" "m" "mm")
+         ("cc" "h" "hh" "hpp")
+         ("hh" "cc" "cpp")
+         ("vert" "frag")
+         ("frag" "vert")
+         (nil "lock" "gpg")
+         ("lock" "")
+         ("gpg" "")))
+  ;; (setq ccls-executable "~/ccls/Release/ccls")
+  (general-define-key :keymaps '(c-mode-map c++-mode-map)
+                      :states 'normal
+                      "M--" #'lsp-find-references))
 
 (use-package glsl-mode
   :ensure t
