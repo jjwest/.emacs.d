@@ -467,7 +467,7 @@ is already narrowed."
   (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
-  (setq company-idle-delay 0.2
+  (setq company-idle-delay 0.1
         company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
@@ -479,7 +479,7 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
-  (setq projectile-enable-caching t)
+  (setq projectile-enable-caching nil)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -762,7 +762,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :init
   (setq c-basic-offset 4
 	    gdb-many-windows t
-	    c-default-style "bsd"))
+	    c-default-style "bsd")
+  (c-set-offset 'case-label '+))
 
 (use-package cmake-mode
   :ensure t
@@ -811,8 +812,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (setq rust-match-angle-brackets nil)
-  (add-hook 'rust-mode-hook #'eldoc-mode)
-  (add-hook 'rust-mode-hook #'rust-enable-format-on-save))
+  (add-hook 'rust-mode-hook #'eldoc-mode))
 
 (use-package lsp-mode
   :ensure t
@@ -856,8 +856,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :mode ("\\.js\\'" . js2-mode)
   :config
-  (setq js2-strict-missing-semi-warning nil)
-  (add-hook 'js2-jsx-mode-hook (lambda () (flycheck-mode -1))))
+  (setq js2-strict-missing-semi-warning nil))
 
 (use-package tide
   :ensure t
