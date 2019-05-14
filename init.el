@@ -358,8 +358,8 @@ is already narrowed."
                       "C-j" #'evil-window-down
                       "C-k" #'evil-window-up
                       "C-l" #'evil-window-right
-                      "M-k" #'evil-scroll-up
-                      "M-j" #'evil-scroll-down
+                      "M-j" #'scroll-down-command
+                      "M-k" #'scroll-up-command
                       "C-a" #'beginning-of-line
                       "C-q" #'evil-scroll-line-up
                       "C-e" #'evil-scroll-line-down
@@ -467,7 +467,7 @@ is already narrowed."
   (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
-  (setq company-idle-delay 0.1
+  (setq company-idle-delay 0.2
         company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
