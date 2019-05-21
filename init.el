@@ -712,7 +712,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                       :states 'normal
                       "f" 'counsel-find-file
                       "b" 'ivy-switch-buffer
-                      "v" #'imenu)
+                      "v" #'counsel-imenu)
   (if (executable-find "rg")
       (general-define-key :prefix my-leader :states 'normal "pg" #'counsel-rg-dwim)
     (general-define-key :prefix my-leader :states 'normal "pg" 'counsel-git-grep))
