@@ -358,8 +358,8 @@ is already narrowed."
                       "C-j" #'evil-window-down
                       "C-k" #'evil-window-up
                       "C-l" #'evil-window-right
-                      "M-j" #'scroll-down-command
-                      "M-k" #'scroll-up-command
+                      "M-j" #'evil-scroll-down
+                      "M-k" #'evil-scroll-up
                       "C-a" #'beginning-of-line
                       "C-q" #'evil-scroll-line-up
                       "C-e" #'evil-scroll-line-down
@@ -467,7 +467,7 @@ is already narrowed."
   (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
-  (setq company-idle-delay 0.2
+  (setq company-idle-delay 0.0
         company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
@@ -488,6 +488,25 @@ is already narrowed."
   		              "pk" 'projectile-kill-buffers
   		              "t" 'projectile-find-other-file
 		              "T" 'projectile-find-other-file-other-window)
+
+  (setq projectile-other-file-alist
+        '(("cpp" "h" "hpp" "ipp" "hh")
+          ("ipp" "h" "hpp" "cpp")
+          ("hpp" "h" "ipp" "cpp" "cc")
+          ("cxx" "h" "hxx" "ixx")
+          ("ixx" "h" "hxx" "cxx")
+          ("hxx" "h" "ixx" "cxx")
+          ("c" "h")
+          ("m" "h")
+          ("mm" "h")
+          ("h" "c" "cc" "cpp" "ipp" "hpp" "cxx" "ixx" "hxx" "m" "mm")
+          ("cc" "h" "hh" "hpp")
+          ("hh" "cc" "cpp")
+          ("vert" "frag")
+          ("frag" "vert")
+          (nil "lock" "gpg")
+          ("lock" "")
+          ("gpg" "")))
 
   (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
 
@@ -774,24 +793,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :after lsp-mode
   :config
-  (setq projectile-other-file-alist
-        '(("cpp" "h" "hpp" "ipp" "hh")
-         ("ipp" "h" "hpp" "cpp")
-         ("hpp" "h" "ipp" "cpp" "cc")
-         ("cxx" "h" "hxx" "ixx")
-         ("ixx" "h" "hxx" "cxx")
-         ("hxx" "h" "ixx" "cxx")
-         ("c" "h")
-         ("m" "h")
-         ("mm" "h")
-         ("h" "c" "cc" "cpp" "ipp" "hpp" "cxx" "ixx" "hxx" "m" "mm")
-         ("cc" "h" "hh" "hpp")
-         ("hh" "cc" "cpp")
-         ("vert" "frag")
-         ("frag" "vert")
-         (nil "lock" "gpg")
-         ("lock" "")
-         ("gpg" "")))
+  
   ;; (setq ccls-executable "~/ccls/Release/ccls")
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
                       :states 'normal
@@ -846,6 +848,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package company-lsp
   :ensure t
   :config
+  (setq company-lsp-cache-candidates 'auto)
   (add-to-list 'company-backends #'company-lsp))
 
 
