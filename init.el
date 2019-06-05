@@ -724,9 +724,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 	    ivy-height 15
 	    ivy-fixed-height-minibuffer t
 	    ivy-use-virtual-buffers t
-	    ivy-format-function #'ivy-format-function-line
-	    ivy-count-format "(%d/%d) "
-	    ivy-display-style 'fancy)
+	    ivy-format-functions-alist '((t . ivy-format-function-line))
+	    ivy-count-format "(%d/%d) ")
+
   (general-define-key :prefix my-leader
                       :states 'normal
                       "f" 'counsel-find-file
