@@ -5,13 +5,11 @@
 
 ;; Better garbage collection settings
 (defvar preferred-gc-threshold (* 20 1024 1024))
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6)
+(setq gc-cons-threshold most-positive-fixnum)
 
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold preferred-gc-threshold
-                  gc-cons-percentage 0.1)))
+            (setq gc-cons-threshold preferred-gc-threshold)))
 
 (defun inhibit-gc ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -460,7 +458,7 @@ is already narrowed."
     (newline-and-indent))
   :bind (:map company-active-map
 	          ("<C-return>" . my/company-abort-and-newline)
-	          ("<tab>" . nil))
+	          ("<tab>" . 'yas-next-field-or-maybe-expand))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
@@ -468,7 +466,6 @@ is already narrowed."
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
   (setq company-idle-delay 0.0
-        company-minimum-prefix-length 2
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
 	    company-dabbrev-downcase nil
@@ -793,8 +790,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :after lsp-mode
   :config
-  
-  ;; (setq ccls-executable "~/ccls/Release/ccls")
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
                       :states 'normal
                       "M--" #'lsp-find-references))
