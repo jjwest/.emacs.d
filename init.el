@@ -779,7 +779,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq c-basic-offset 4
 	    gdb-many-windows t
 	    c-default-style "bsd")
-  (c-set-offset 'case-label '+))
+  (c-set-offset 'case-label '+)
+  (c-set-offset 'innamespace 0))
 
 (use-package cmake-mode
   :ensure t
@@ -821,16 +822,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
-        lsp-auto-guess-root t
         lsp-enable-links nil
         lsp-keep-workspace-alive nil
         lsp-enable-on-type-formatting nil
         lsp-enable-symbol-highlighting nil
         lsp-enable-indentation nil)
-  (defadvice lsp-rename (around ignore-remote first activate)
-    (projectile-save-project-buffers)
-    ad-do-it
-    (projectile-save-project-buffers))
   (add-hook 'rust-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
