@@ -705,7 +705,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :config
   (general-define-key :keymap 'prog-mode-map
-                      :state 'normal
+                      :state 'insert
                       "<backspace>" #'smart-hungry-delete-backward-char))
 
 
