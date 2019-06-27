@@ -701,6 +701,13 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                                    (when smerge-mode
                                      (unpackaged/smerge-hydra/body)))))
 
+(use-package smart-hungry-delete
+  :ensure t
+  :config
+  (general-define-key :keymap 'prog-mode-map
+                      :state 'normal
+                      "<backspace>" #'smart-hungry-delete-backward-char))
+
 
 (use-package ivy
   :ensure t
