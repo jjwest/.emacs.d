@@ -476,7 +476,7 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
-  (setq projectile-enable-caching nil)
+  (setq projectile-indexing-method 'hybrid)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
