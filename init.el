@@ -458,7 +458,8 @@ is already narrowed."
     (newline-and-indent))
   :bind (:map company-active-map
 	          ("<C-return>" . my/company-abort-and-newline)
-	          ("<tab>" . 'yas-next-field-or-maybe-expand))
+              ("<tab>" . 'yas-expand)
+	          ("<C-tab>" . 'yas-next-field))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
