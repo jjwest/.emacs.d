@@ -843,6 +843,21 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 		              :prefix my-leader
 		              "R" 'lsp-rename))
 
+(use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-flycheck-enable nil
+        lsp-ui-imenu-enable nil
+        lsp-ui-sideline-enable nil)
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+  (general-define-key :keymaps 'lsp-ui-peek-mode-map
+                      :states 'normal
+                      "j" #'lsp-ui-peek-jump-forward
+                      "k" #'lsp-ui-peek-jump-backward)
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode))
+
 (use-package company-lsp
   :ensure t
   :config
