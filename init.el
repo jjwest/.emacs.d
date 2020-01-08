@@ -144,8 +144,11 @@
 (add-hook 'prog-mode-hook #'visual-line-mode)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(when (>= emacs-major-version 26)
-  (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative))))
+(when (>= emacs-major-version 27)
+  (global-so-long-mode t))
+
+;; (when (>= emacs-major-version 26)
+;;   (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative))))
 
 (defun maybe-kill-buffers (frame)
   "Kill all live buffers when the last frame is closed."
@@ -458,8 +461,9 @@ is already narrowed."
     (newline-and-indent))
   :bind (:map company-active-map
 	          ("<C-return>" . my/company-abort-and-newline)
-              ("<tab>" . 'yas-expand)
-	          ("<C-tab>" . 'yas-next-field))
+              ("<tab>" . 'yas-next-field-or-maybe-expand)
+              ("M-n" . 'company-select-next-or-abort)
+              ("M-p" . 'company-select-previous-or-abort))
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
@@ -507,6 +511,8 @@ is already narrowed."
           ("gpg" "")))
 
   (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
+  (add-to-list 'projectile-globally-ignored-directories ".rustup")
+  (add-to-list 'projectile-globally-ignored-directories ".cargo")
 
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
@@ -787,7 +793,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq c-basic-offset 4
 	    gdb-many-windows t
 	    c-default-style "bsd")
-  (c-set-offset 'case-label '+)
   (c-set-offset 'innamespace 0))
 
 (use-package cmake-mode
@@ -819,10 +824,13 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'eldoc-mode))
 
+(use-package ra-emacs-lsp
+  :load-path "~/rust-analyzer/editors/emacs")
+
 (use-package lsp-mode
   :ensure t
   :config
-  (require 'lsp-clients)
+  ;; (require 'lsp-clients)
 
   ;; Don't show RLS status in minibuffer
   (defadvice lsp-clients--rust-window-progress (around ignore-remote first activate))
@@ -830,6 +838,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
+        lsp-signature-auto-activate nil
         lsp-enable-links nil
         lsp-keep-workspace-alive nil
         lsp-enable-on-type-formatting nil
@@ -843,83 +852,15 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 		              :prefix my-leader
 		              "R" 'lsp-rename))
 
-(use-package lsp-ui
-  :ensure t
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-flycheck-enable nil
-        lsp-ui-imenu-enable nil
-        lsp-ui-sideline-enable nil)
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (general-define-key :keymaps 'lsp-ui-peek-mode-map
-                      :states 'normal
-                      "j" #'lsp-ui-peek-jump-forward
-                      "k" #'lsp-ui-peek-jump-backward)
-  (add-hook 'lsp-mode-hook #'lsp-ui-mode))
-
 (use-package company-lsp
   :ensure t
   :config
-  (setq company-lsp-cache-candidates 'auto)
+  (setq company-lsp-cache-candidates nil)
   (add-to-list 'company-backends #'company-lsp))
 
 
 (use-package typescript-mode
   :ensure t)
-
-(use-package js2-mode
-  :ensure t
-  :mode ("\\.js\\'" . js2-mode)
-  :config
-  (setq js2-strict-missing-semi-warning nil))
-
-(use-package tide
-  :ensure t
-  :preface
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (eldoc-mode 1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled)))
-  :init
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (s-matches-p (rx "ts" (zero-or-one "x"))
-				                 (file-name-extension buffer-file-name))
-		        (setup-tide-mode))))
-  (general-define-key :keymaps '(web-mode-map typescript-mode-map)
-		              :states 'normal
-		              "M-." #'tide-jump-to-definition
-		              "M-," #'tide-jump-back
-		              "M--" #'tide-references)
-  (general-define-key :prefix my-leader
-		              :keymaps '(web-mode-map typescript-mode-map)
-		              :states 'normal
-		              "R" #'tide-rename-symbol)
-  :config
-  (add-hook 'before-save-hook #'tide-format-before-save))
-
-(use-package tern
-  :ensure t
-  :ensure company-tern
-  :diminish tern-mode
-  :init
-  (add-hook 'js2-mode-hook #'tern-mode)
-  (add-hook 'js2-mode-hook (lambda ()
-			                 (interactive)
-			                 (add-to-list 'company-backends 'company-tern)))
-  (general-define-key :keymaps '(js2-mode-map js2-jsx-mode-map)
-		              :states 'normal
-		              "M-." 'tern-find-definition
-		              "M-," 'tern-pop-find-definition)
-  (general-define-key :prefix my-leader
-		              :keymaps '(js2-mode-map js2-jsx-mode-map)
-		              :states 'normal
-		              "R" 'tern-rename-variable)
-  :config
-  (setq tern-command (append tern-command '("--no-port-file"))))
 
 (use-package tramp
   :config
