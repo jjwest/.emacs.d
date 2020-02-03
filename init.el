@@ -824,8 +824,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'eldoc-mode))
 
-(use-package ra-emacs-lsp
-  :load-path "~/rust-analyzer/editors/emacs")
+(use-package rust-analyzer
+  :load-path "~/.emacs.d/lisp")
 
 (use-package lsp-mode
   :ensure t
