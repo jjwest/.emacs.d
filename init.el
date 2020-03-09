@@ -824,14 +824,10 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq rust-match-angle-brackets nil)
   (add-hook 'rust-mode-hook #'eldoc-mode))
 
-(use-package rust-analyzer
-  :load-path "~/.emacs.d/lisp")
-
 (use-package lsp-mode
   :ensure t
   :config
-  ;; (require 'lsp-clients)
-
+  (require 'lsp-rust)
   ;; Don't show RLS status in minibuffer
   (defadvice lsp-clients--rust-window-progress (around ignore-remote first activate))
 
@@ -843,7 +839,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-keep-workspace-alive nil
         lsp-enable-on-type-formatting nil
         lsp-enable-symbol-highlighting nil
-        lsp-enable-indentation nil)
+        lsp-enable-indentation nil
+        lsp-rust-server 'rust-analyzer)
   (add-hook 'rust-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
