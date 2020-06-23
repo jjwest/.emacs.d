@@ -819,6 +819,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 ;; RUST SETTINGS
 (use-package rust-mode
+  :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (setq rust-match-angle-brackets nil)
