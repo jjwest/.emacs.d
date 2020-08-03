@@ -99,7 +99,7 @@
 (set-buffer-file-coding-system 'utf-8)
 (setq-default cursor-in-non-selected-windows nil
 	          fill-column 80)
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
+
 (put 'narrow-to-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default isearch-allow-scroll t
@@ -147,8 +147,8 @@
 (when (>= emacs-major-version 27)
   (global-so-long-mode t))
 
-;; (when (>= emacs-major-version 26)
-;;   (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative))))
+(when (>= emacs-major-version 26)
+  (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative))))
 
 (defun maybe-kill-buffers (frame)
   "Kill all live buffers when the last frame is closed."
@@ -196,6 +196,15 @@
   "Save all buffers without prompt."
   (interactive)
   (save-some-buffers t))
+
+(defvar delete-trailing-whitespace-on-save t
+  "Sets if trailing whitespace should be deleted one saving file")
+
+(defun my/maybe-delete-trailing-whitespace ()
+  (when delete-trailing-whitespace-on-save
+    (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook #'my/maybe-delete-trailing-whitespace)
 
 (defun narrow-or-widen-dwim (p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
@@ -828,10 +837,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package lsp-mode
   :ensure t
   :config
-  (require 'lsp-rust)
-  ;; Don't show RLS status in minibuffer
-  (defadvice lsp-clients--rust-window-progress (around ignore-remote first activate))
-
   (setq lsp-eldoc-hook '(lsp-hover)
         lsp-eldoc-render-all nil
         lsp-auto-configure nil
@@ -842,6 +847,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-enable-symbol-highlighting nil
         lsp-enable-indentation nil
         lsp-rust-server 'rust-analyzer)
+  (require 'lsp-rust)
   (add-hook 'rust-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
