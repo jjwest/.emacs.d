@@ -411,6 +411,9 @@ is already narrowed."
 		              "j" #'evil-next-visual-line
 		              "k" #'evil-previous-visual-line
   		              "TAB" #'indent-for-tab-command)
+  (general-define-key :keymaps 'xref--button-map
+                      "RET" #'xref-goto-xref
+                      "q" #'quit-window)
   (general-define-key :keymaps 'package-menu-mode-map
 		              "j" #'evil-next-visual-line
 		              "k" #'evil-previous-visual-line)
