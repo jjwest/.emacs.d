@@ -291,24 +291,6 @@ is already narrowed."
 		              "ss" #'my/split-window-horizontal
 		              "sv" #'my/split-window-vertical))
 
-
-(defun my/new-tab ()
-  (interactive)
-  (tab-bar-mode 1)
-  (tab-bar-new-tab))
-
-(defun my/close-tab ()
-  (interactive)
-  (tab-bar-close-tab)
-  (when (eq 1 (length (tab-bar-tabs)))
-    (tab-bar-mode -1)))
-
-(general-define-key :keymaps 'normal "M-1" (lambda () (interactive) (tab-bar-select-tab 1)))
-(general-define-key :keymaps 'normal "M-2" (lambda () (interactive) (tab-bar-select-tab 2)))
-(general-define-key :keymaps 'normal "M-3" (lambda () (interactive) (tab-bar-select-tab 3)))
-(general-define-key :keymaps 'normal "C-t" #'my/new-tab)
-(general-define-key :keymaps 'normal "C-w" #'my/close-tab)
-
 (use-package doom-common
   :ensure s
   :ensure f
@@ -910,6 +892,25 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
+
+
+(defun my/new-tab ()
+  (interactive)
+  (tab-bar-mode 1)
+  (tab-bar-new-tab))
+
+(defun my/close-tab ()
+  (interactive)
+  (tab-bar-close-tab)
+  (when (eq 1 (length (tab-bar-tabs)))
+    (tab-bar-mode -1)))
+
+(general-define-key :keymaps 'normal "M-1" (lambda () (interactive) (tab-bar-select-tab 1)))
+(general-define-key :keymaps 'normal "M-2" (lambda () (interactive) (tab-bar-select-tab 2)))
+(general-define-key :keymaps 'normal "M-3" (lambda () (interactive) (tab-bar-select-tab 3)))
+(general-define-key :keymaps 'normal "M-r" (lambda () (interactive) (call-interactively #'tab-bar-rename-tab)))
+(general-define-key :keymaps 'normal "C-t" #'my/new-tab)
+(general-define-key :keymaps 'normal "C-w" #'my/close-tab)
 
 
 ;; Escape quits everything
