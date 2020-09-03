@@ -875,13 +875,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 		              "<return>" #'neotree-enter
 		              "<tab>" #'neotree-enter))
 
-(use-package refine
-  :ensure t
-  :config
-  (general-define-key :keymaps 'refine-mode-map
-                      :states 'normal
-                      "D" #'refine-delete))
-
 (use-package markdown-mode
   :ensure t
   :mode ("\\.md\\'" . markdown-mode))
