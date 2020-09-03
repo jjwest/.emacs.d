@@ -847,8 +847,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-enable-symbol-highlighting nil
         lsp-enable-indentation nil
         lsp-diagnostic-package :none
-        lsp-rust-server 'rust-analyzer)
-  (lsp-rust-switch-server)
+        lsp-rust-server 'rust-analyzer
+        lsp-rust-analyzer-completion-postfix-enable nil)
   (add-hook 'rust-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
