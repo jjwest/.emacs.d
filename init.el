@@ -330,8 +330,6 @@ is already narrowed."
 
 (use-package doom-modeline
   :load-path "~/.emacs.d/lisp"
-  :preface
-  (byte-recompile-directory "~/.emacs.d/lisp")
   :config
   (defun +doom-modeline|init ()
     "Set the default modeline."
