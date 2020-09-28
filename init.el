@@ -53,6 +53,7 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       auto-window-vscroll nil
+      read-process-output-max (* 3 1024 1024)
       locale-coding-system 'utf-8)
 
 (setq-default
@@ -849,6 +850,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-enable-indentation nil
         lsp-diagnostic-package :none
         lsp-rust-server 'rust-analyzer
+        lsp-rust-analyzer-call-info-full nil
         lsp-rust-analyzer-completion-postfix-enable nil)
   (add-hook 'rust-mode-hook #'lsp)
   (add-hook 'c-mode-hook #'lsp)
