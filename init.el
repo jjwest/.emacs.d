@@ -4,7 +4,7 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(defvar preferred-gc-threshold (* 20 1024 1024))
+(defvar preferred-gc-threshold (* 100 1024 1024))
 (setq gc-cons-threshold most-positive-fixnum)
 
 (add-hook 'emacs-startup-hook
