@@ -53,6 +53,7 @@
       display-time-day-and-date t
       display-time-default-load-average nil
       auto-window-vscroll nil
+      exec-path-from-shell-check-startup-files nil
       read-process-output-max (* 3 1024 1024)
       locale-coding-system 'utf-8)
 
@@ -359,6 +360,9 @@ is already narrowed."
   (add-hook 'minibuffer-setup-hook #'maybe-use-solaire))
 
 
+(use-package undo-fo
+  :ensure t)
+
 (use-package evil
   :ensure t
   :config
@@ -376,7 +380,8 @@ is already narrowed."
                       "C-q" #'evil-scroll-line-up
                       "C-e" #'evil-scroll-line-down
                       "S" #'my/split-line
-                      "U" #'redo
+                      "u" #'undo-fu-only-undo
+                      "U" #'undo-fu-only-redo
                       "M-." #'xref-find-definitions
                       "M-C-." #'xref-find-definitions-other-window
                       "M-," #'xref-pop-marker-stack
