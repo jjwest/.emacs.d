@@ -360,7 +360,7 @@ is already narrowed."
   (add-hook 'minibuffer-setup-hook #'maybe-use-solaire))
 
 
-(use-package undo-fo
+(use-package undo-fu
   :ensure t)
 
 (use-package evil
