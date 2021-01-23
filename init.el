@@ -853,6 +853,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-enable-on-type-formatting nil
         lsp-enable-symbol-highlighting nil
         lsp-enable-indentation nil
+        lsp-headerline-breadcrumb-enable nil
         lsp-diagnostic-package :none
         lsp-rust-server 'rust-analyzer
         lsp-rust-analyzer-call-info-full nil
