@@ -721,7 +721,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     ("q" nil "cancel" :color blue))
   :hook (magit-diff-visit-file . (lambda ()
                                    (when smerge-mode
-                                     (unpackaged/smerge-hydra/body)))))
+                                     (smerge-hydra/body)))))
 
 
 (use-package hungry-delete
