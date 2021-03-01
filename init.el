@@ -199,7 +199,7 @@
   (interactive)
   (save-some-buffers t))
 
-(defvar delete-trailing-whitespace-on-save t
+(defcustom delete-trailing-whitespace-on-save t
   "Sets if trailing whitespace should be deleted one saving file")
 
 (defun my/maybe-delete-trailing-whitespace ()
