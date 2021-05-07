@@ -490,6 +490,7 @@ is already narrowed."
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
 	    company-dabbrev-downcase nil
+        company-format-margin-function nil
 	    company-require-match nil))
 
 
