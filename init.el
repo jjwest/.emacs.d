@@ -306,12 +306,10 @@ is already narrowed."
   :preface
   (defun tweak-doom-theme (&rest args)
     (when (member 'doom-one custom-enabled-themes)
-      (solaire-mode-swap-bg)
       (custom-theme-set-faces
        'doom-one
        `(font-lock-preprocessor-face ((t (:foreground "#DA8548" :bold t))))
        `(line-number ((t (:foreground "#5B6268"))))
-       `(fringe ((t (:inherit solaire-default-face))))
        `(font-lock-variable-name-face ((t (:foreground "#DFDFDF")))))))
 
   (defun load-doom-theme (frame)
@@ -355,9 +353,7 @@ is already narrowed."
     (when use-solaire-mode
       (turn-on-solaire-mode)))
 
-  (add-hook 'after-change-major-mode-hook #'maybe-use-solaire)
-  (add-hook 'after-revert-hook #'maybe-use-solaire)
-  (add-hook 'minibuffer-setup-hook #'maybe-use-solaire))
+  (solaire-global-mode))
 
 
 (use-package undo-fu
