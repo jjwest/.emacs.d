@@ -293,6 +293,21 @@ is already narrowed."
 		              "ss" #'my/split-window-horizontal
 		              "sv" #'my/split-window-vertical))
 
+
+(use-package solaire-mode
+  :ensure t
+  :config
+  (setq solaire-mode-remap-line-numbers t)
+  (defcustom use-solaire-mode t
+    "Use solaire mode"
+    :type 'boolean)
+
+  (defun maybe-use-solaire ()
+    (when use-solaire-mode
+      (turn-on-solaire-mode)))
+
+  (solaire-global-mode +1))
+
 (use-package doom-common
   :ensure s
   :ensure f
@@ -340,20 +355,6 @@ is already narrowed."
   (with-current-buffer "*Messages*"
     (doom-set-modeline 'main))
   (add-hook 'after-init-hook #'+doom-modeline|init))
-
-(use-package solaire-mode
-  :ensure t
-  :config
-  (setq solaire-mode-remap-line-numbers t)
-  (defcustom use-solaire-mode t
-    "Use solaire mode"
-    :type 'boolean)
-
-  (defun maybe-use-solaire ()
-    (when use-solaire-mode
-      (turn-on-solaire-mode)))
-
-  (solaire-global-mode))
 
 
 (use-package undo-fu
