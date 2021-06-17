@@ -495,7 +495,7 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
-  (setq projectile-indexing-method 'hybrid)
+  (setq projectile-indexing-method 'alien)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
