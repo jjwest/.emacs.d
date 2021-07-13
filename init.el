@@ -495,7 +495,8 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
-  (setq projectile-indexing-method 'alien)
+  (setq projectile-indexing-method 'alien
+        projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -807,7 +808,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq c-basic-offset 4
 	    gdb-many-windows t
 	    c-default-style "bsd")
-  (c-set-offset 'innamespace 0))
+  (c-set-offset 'innamespace 0)
+  (c-set-offset 'inextern-lang 0))
 
 (use-package cmake-mode
   :ensure t
@@ -853,6 +855,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-enable-indentation nil
         lsp-headerline-breadcrumb-enable nil
         lsp-diagnostic-package :none
+        lsp-enable-file-watchers nil
         lsp-rust-server 'rust-analyzer
         lsp-rust-analyzer-call-info-full nil
         lsp-rust-analyzer-completion-postfix-enable nil)
