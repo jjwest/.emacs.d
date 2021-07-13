@@ -495,8 +495,7 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
-  (setq projectile-indexing-method 'alien
-        projectile-enable-caching t)
+  (setq projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
