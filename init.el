@@ -495,7 +495,6 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
-  (setq projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -504,6 +503,17 @@ is already narrowed."
   		              "pk" 'projectile-kill-buffers
   		              "t" 'projectile-find-other-file
 		              "T" 'projectile-find-other-file-other-window)
+
+  (setq my/projectile-ignored-project-directories '(".rustup" ".cargo"))
+  (defun my/projectile-ignore-project-function (file)
+    (let ((result nil))
+            (dolist (ignored-dir my/projectile-ignored-project-directories)
+              (if (string-search ignored-dir file)
+                  (setq result t)))
+            result))
+
+  (setq projectile-enable-caching t
+        projectile-ignored-project-function #'my/projectile-ignore-project-function)
 
   (setq projectile-other-file-alist
         '(("cpp" "h" "hpp" "ipp" "hh")
@@ -523,10 +533,6 @@ is already narrowed."
           (nil "lock" "gpg")
           ("lock" "")
           ("gpg" "")))
-
-  (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
-  (add-to-list 'projectile-globally-ignored-directories ".rustup")
-  (add-to-list 'projectile-globally-ignored-directories ".cargo")
 
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
