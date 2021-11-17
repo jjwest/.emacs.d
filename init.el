@@ -623,6 +623,9 @@ is already narrowed."
   :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook #'eldoc-mode))
 
+(use-package editorconfig
+  :ensure t)
+
 (use-package dired
   :preface
   (defun my/dired-parent-dir ()
