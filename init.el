@@ -843,7 +843,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
-  (setq rust-match-angle-brackets nil)
+  (setq rust-match-angle-brackets nil
+        rust-format-on-save t)
   (add-hook 'rust-mode-hook #'eldoc-mode))
 
 (use-package lsp-mode
