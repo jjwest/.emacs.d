@@ -2,4 +2,4 @@
 # name: eprint
 # key: ep
 # --
-eprint!("${1:text}"${2:, ${3:args}});$0
+eprint!("${1:text}"${2:, ${3:args}})$0

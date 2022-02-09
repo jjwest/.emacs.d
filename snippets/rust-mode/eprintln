@@ -2,4 +2,4 @@
 # name: lneprint
 # key: e
 # --
-eprintln!("${1:text}"${2:, ${3:args}});$0
+eprintln!("${1:text}"${2:, ${3:args}})$0
