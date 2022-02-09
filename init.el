@@ -152,6 +152,12 @@
 (when (>= emacs-major-version 26)
   (add-hook 'prog-mode-hook (lambda () (setq display-line-numbers 'relative))))
 
+(when (executable-find "sccache")
+  (let ((env-vars initial-environment)
+        (sccache-wrapper (concat "RUSTC_WRAPPER=" (executable-find "sccache"))))
+    (add-to-list 'env-vars sccache-wrapper)
+    (setq compilation-environment env-vars)))
+
 (defun maybe-kill-buffers (frame)
   "Kill all live buffers when the last frame is closed."
   (when (<= (length (frame-list)) 2)
