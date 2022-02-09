@@ -556,7 +556,10 @@ is already narrowed."
 
 (use-package terminal-here
   :ensure t
-  :config (general-define-key :prefix my-leader :states 'normal "x" #'terminal-here))
+  :config
+  (when (executable-find "alacritty")
+    (setq terminal-here-linux-terminal-command 'alacritty))
+  (general-define-key :prefix my-leader :states 'normal "x" #'terminal-here))
 
 (use-package iedit
   :ensure t
