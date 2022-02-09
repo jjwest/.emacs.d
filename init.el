@@ -862,6 +862,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         lsp-headerline-breadcrumb-enable nil
         lsp-diagnostic-package :none
         lsp-enable-file-watchers nil
+        lsp-lens-enable nil
         lsp-rust-server 'rust-analyzer
         lsp-rust-analyzer-call-info-full nil
         lsp-rust-analyzer-completion-postfix-enable nil)
