@@ -18,6 +18,14 @@
 
 (require 'use-package)
 
+(use-package gcmh
+  :ensure t
+  :config
+  (setq gcmh-idle-delay 10)
+  (setq gcmh-high-cons-threshold (* 16 1024 1024))
+  (gcmh-mode))
+
+
 ;; General settings and better defaults
 (setq custom-safe-themes t
       custom--inhibit-theme-enable nil
@@ -98,6 +106,7 @@
 (unless (file-exists-p "~/.emacs.d/local")
   (mkdir "~/.emacs.d/local"))
 (setq custom-file "~/.emacs.d/local/custom-set.el")
+(load-file custom-file)
 
 (defun set-font-on-start (frame)
   (select-frame frame)
@@ -284,13 +293,6 @@ is already narrowed."
 		              "ss" #'my/split-window-horizontal
 		              "sv" #'my/split-window-vertical))
 
-
-(use-package gcmh
-  :ensure t
-  :config
-  (setq gcmh-idle-delay 10)
-  (setq gcmh-high-cons-threshold (* 16 1024 1024))
-  (gcmh-mode))
 
 (use-package solaire-mode
   :ensure t
