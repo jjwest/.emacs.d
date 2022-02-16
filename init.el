@@ -4,21 +4,6 @@
 ;;; Code:
 
 ;; Better garbage collection settings
-(defvar preferred-gc-threshold (* 100 1024 1024))
-(setq gc-cons-threshold most-positive-fixnum)
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold preferred-gc-threshold)))
-
-(defun inhibit-gc ()
-  (setq gc-cons-threshold most-positive-fixnum))
-
-(defun resume-gc ()
-  (setq gc-cons-threshold preferred-gc-threshold))
-
-(add-hook 'minibuffer-setup-hook #'inhibit-gc)
-(add-hook 'minibuffer-exit-hook #'resume-gc)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -299,6 +284,13 @@ is already narrowed."
 		              "ss" #'my/split-window-horizontal
 		              "sv" #'my/split-window-vertical))
 
+
+(use-package gcmh
+  :ensure t
+  :config
+  (setq gcmh-idle-delay 10)
+  (setq gcmh-high-cons-threshold (* 16 1024 1024))
+  (gcmh-mode))
 
 (use-package solaire-mode
   :ensure t
