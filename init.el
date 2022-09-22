@@ -16,6 +16,15 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(defun inhibit-gc ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun resume-gc ()
+  (setq gc-cons-threshold gcmh-high-cons-threshold))
+
+(add-hook 'minibuffer-setup-hook #'inhibit-gc)
+(add-hook 'minibuffer-exit-hook #'resume-gc)
+
 (require 'use-package)
 
 (use-package gcmh
