@@ -551,12 +551,6 @@ is already narrowed."
   (projectile-mode))
 
 
-(use-package flymake
-  :config
-  (general-define-key :states 'normal
-                      "M-n" #'flymake-goto-next-error
-                      "M-p" #'flymake-goto-prev-error))
-
 (use-package terminal-here
   :ensure t
   :config
