@@ -829,7 +829,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package ccls
   :ensure t
-  :after lsp-mode
+  :after eglot-mode
   :config
   (general-define-key :keymaps '(c-mode-map c++-mode-map)
                       :states 'normal
@@ -853,33 +853,20 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
         rust-format-on-save t)
   (add-hook 'rust-mode-hook #'eldoc-mode))
 
-(use-package lsp-mode
+(use-package eglot
   :ensure t
   :config
-  (require 'lsp-rust)
-  (setq lsp-eldoc-hook '(lsp-hover)
-        lsp-eldoc-render-all nil
-        lsp-signature-auto-activate nil
-        lsp-enable-links nil
-        lsp-keep-workspace-alive nil
-        lsp-enable-on-type-formatting nil
-        lsp-enable-symbol-highlighting nil
-        lsp-enable-indentation nil
-        lsp-headerline-breadcrumb-enable nil
-        lsp-diagnostic-package :none
-        lsp-enable-file-watchers nil
-        lsp-lens-enable nil
-        lsp-rust-server 'rust-analyzer
-        lsp-rust-analyzer-call-info-full nil
-        lsp-rust-analyzer-completion-postfix-enable nil)
-  (add-hook 'rust-mode-hook #'lsp)
-  (add-hook 'c-mode-hook #'lsp)
-  (add-hook 'c++-mode-hook #'lsp)
+  (setq eglot-stay-out-of '("flymake" "eldoc"))
   (general-define-key :keymaps '(rust-mode-map c-mode-map c++-mode-map)
-		              :states 'normal
-		              :prefix my-leader
-		              "R" 'lsp-rename))
-
+                      :states 'normal
+                      "M--" #'eglot-find-implementation
+                      :prefix my-leader
+                      "R" #'eglot-rename)
+  (general-define-key :keymaps ' (rust-mode-map c-mode-map c++-mode-map)
+                      "<C-M-return>" #'eglot-code-actions)
+  (add-hook 'rust-mode-hook 'eglot-ensure)
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  (add-hook 'c++-mode-hook 'eglot-ensure))
 
 (use-package typescript-mode
   :ensure t)
