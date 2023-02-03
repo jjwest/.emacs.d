@@ -120,14 +120,14 @@
 (defun set-font-on-start (frame)
   (select-frame frame)
   (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro-10" t t))
+    (set-frame-font "Office Code Pro Medium-10" t t))
   (remove-hook 'after-make-frame-functions 'set-font-on-start))
 
 ;; Set font
 (if (daemonp)
     (add-hook 'after-make-frame-functions #'set-font-on-start)
   (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro-10" t t)))
+    (set-frame-font "Office Code Pro Medium-10" t t)))
 
 ;; Strip UI
 (scroll-bar-mode -1)
