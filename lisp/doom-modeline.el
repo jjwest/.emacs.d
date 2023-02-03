@@ -119,7 +119,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   (when-let* ((modeline (doom-modeline key)))
     (setf (if default
               (default-value 'mode-line-format)
-            (buffer-local-value 'mode-line-format (current-buffer)))
+            mode-line-format)
           modeline)))
 
 
