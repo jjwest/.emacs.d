@@ -883,6 +883,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (add-hook 'c-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
   (general-define-key :keymaps '(rust-mode-map c-mode-map c++-mode-map)
+                      :states '(normal insert)
+                      "C-M-<return>" 'lsp-execute-code-action)
+  (general-define-key :keymaps '(rust-mode-map c-mode-map c++-mode-map)
 		              :states 'normal
 		              :prefix my-leader
 		              "R" 'lsp-rename))
