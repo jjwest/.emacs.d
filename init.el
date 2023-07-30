@@ -280,6 +280,12 @@ is already narrowed."
 
 (add-hook 'emacs-lisp-mode-hook #'maybe-insert-elisp-header)
 
+(defun my/xref-go-back ()
+  (interactive)
+  (if (>= emacs-major-version 29)
+      (xref-go-back)
+    (xref-pop-marker-stack)))
+
 ;; Packages
 (use-package general
   :ensure t
@@ -391,7 +397,7 @@ is already narrowed."
                       "U" #'undo-fu-only-redo
                       "M-." #'xref-find-definitions
                       "M-C-." #'xref-find-definitions-other-window
-                      "M-," #'xref-pop-marker-stack
+                      "M-," #'my/xref-go-back
                       "M--" #'xref-find-references
                       "Q" "@q"
                       "Y" "y$")
