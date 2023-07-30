@@ -115,7 +115,8 @@
 (unless (file-exists-p "~/.emacs.d/local")
   (mkdir "~/.emacs.d/local"))
 (setq custom-file "~/.emacs.d/local/custom-set.el")
-(load-file custom-file)
+(when (file-exists-p custom-file)
+  (load-file custom-file))
 
 (defun set-font-on-start (frame)
   (select-frame frame)
