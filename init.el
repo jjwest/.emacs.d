@@ -871,8 +871,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :config
   (require 'lsp-rust)
-  (setq lsp-eldoc-hook '(lsp-hover)
-        lsp-eldoc-render-all nil
+  (setq lsp-eldoc-render-all nil
         lsp-signature-auto-activate nil
         lsp-enable-links nil
         lsp-keep-workspace-alive nil
