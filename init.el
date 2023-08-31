@@ -286,6 +286,13 @@ is already narrowed."
       (xref-go-back)
     (xref-pop-marker-stack)))
 
+(defun my/colorize-compilation ()
+  "Colorize from `compilation-filter-start' to `point'."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region
+     compilation-filter-start (point))))
+
+(add-hook 'compilation-filter-hook #'my/colorize-compilation)
 ;; Packages
 (use-package general
   :ensure t
