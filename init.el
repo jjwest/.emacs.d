@@ -286,13 +286,6 @@ is already narrowed."
       (xref-go-back)
     (xref-pop-marker-stack)))
 
-(defun my/colorize-compilation ()
-  "Colorize from `compilation-filter-start' to `point'."
-  (let ((inhibit-read-only t))
-    (ansi-color-apply-on-region
-     compilation-filter-start (point))))
-
-(add-hook 'compilation-filter-hook #'my/colorize-compilation)
 ;; Packages
 (use-package general
   :ensure t
@@ -706,6 +699,14 @@ is already narrowed."
   (define-key transient-map        "q" 'transient-quit-one)
   (define-key transient-edit-map   "q" 'transient-quit-one)
   (define-key transient-sticky-map "q" 'transient-quit-seq) )
+
+(use-package xterm-color
+  :config
+  (setq compilation-environment '("TERM=xterm-256color"))
+  (defun my/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'my/advice-compilation-filter))
+
 
 (use-package smerge-mode
   :ensure hydra
