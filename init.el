@@ -866,7 +866,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :config
   (setq rust-match-angle-brackets nil
         rust-format-on-save t)
-  (add-hook 'rust-mode-hook #'eldoc-mode))
+  (add-hook 'rust-mode-hook #'eldoc-mode)
+  (add-hook 'rust-mode-hook (lambda () (setq-local compile-command "cargo check"))))
 
 (use-package lsp-mode
   :ensure t
