@@ -771,6 +771,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 	     :map ivy-mode-map
 	     ("<escape>" . minibuffer-keyboard-quit))
   :init
+  (projectile-known-projects)
   (setq projectile-switch-project-action #'counsel-projectile-find-file
 	    projectile-completion-system 'ivy
 	    ivy-height 15
