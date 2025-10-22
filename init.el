@@ -550,6 +550,19 @@ is already narrowed."
           ("lock" "")
           ("gpg" "")))
 
+
+  (defun my/grandparent-directory (file-name)
+    (file-name-parent-directory (file-name-parent-directory file-name)))
+
+  (defun my/projectile-other-file-filter (orig-fun &rest args)
+    (let* ((base-name (car args))
+           (dir (my/grandparent-directory base-name))
+           (result (apply orig-fun args)))
+      (cl-remove-if-not (lambda (file)
+                          (equal (concat (projectile-project-root) (my/grandparent-directory file)) dir)) result)))
+
+  (advice-add 'projectile-get-other-files :around #'my/projectile-other-file-filter)
+
   ;; Don't slow Emacs to a crawl when working with TRAMP.
   (defadvice projectile-project-root (around ignore-remote first activate)
     (unless (file-remote-p default-directory)
