@@ -27,6 +27,16 @@
 
 (require 'use-package)
 
+(defun inhibit-gc ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun resume-gc ()
+  (setq gc-cons-threshold gcmh-high-cons-threshold))
+
+(add-hook 'minibuffer-setup-hook #'inhibit-gc)
+(add-hook 'minibuffer-exit-hook #'resume-gc)
+
+
 (use-package gcmh
   :ensure t
   :config
@@ -78,7 +88,7 @@
  ibuffer-use-other-window t
  resize-mini-windows 'grow-only         ; Minibuffer resizing
  show-help-function nil                 ; hide :help-echo text
- split-width-threshold 160              ; favor horizontal splits
+ split-width-threshold 250; favor horizontal splits
  uniquify-buffer-name-style 'forward
  use-dialog-box nil                     ; always avoid GUI
  visible-cursor nil
@@ -121,14 +131,14 @@
 (defun set-font-on-start (frame)
   (select-frame frame)
   (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro Medium-10" t t))
+    (set-frame-font "Office Code Pro Medium-9" t t))
   (remove-hook 'after-make-frame-functions 'set-font-on-start))
 
 ;; Set font
 (if (daemonp)
     (add-hook 'after-make-frame-functions #'set-font-on-start)
   (when (member "Office Code Pro" (font-family-list))
-    (set-frame-font "Office Code Pro Medium-10" t t)))
+    (set-frame-font "Office Code Pro Medium-9" t t)))
 
 ;; Strip UI
 (scroll-bar-mode -1)
@@ -209,7 +219,7 @@
   (interactive)
   (save-some-buffers t))
 
-(defcustom delete-trailing-whitespace-on-save t
+(defcustom delete-trailing-whitespace-on-save nil
   "Sets if trailing whitespace should be deleted one saving file")
 
 (defun my/maybe-delete-trailing-whitespace ()
@@ -244,7 +254,7 @@ is already narrowed."
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
 
-(defvar current-brace-style 'same-line
+(defvar current-brace-style 'own-line
   "Sets the brace style for yasnippet.")
 
 (defun toggle-brace-style ()
@@ -323,6 +333,11 @@ is already narrowed."
       (turn-on-solaire-mode)))
 
   (solaire-global-mode +1))
+
+(use-package tramp
+  :config
+  (setq tramp-verbose 2))
+
 
 (use-package doom-common
   :ensure s
@@ -499,7 +514,7 @@ is already narrowed."
   (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
-  (setq company-idle-delay 0.0
+  (setq company-idle-delay 0.1
 	    company-tooltip-align-annotations t
 	    company-dabbrev-ignore-case nil
 	    company-dabbrev-downcase nil
@@ -511,6 +526,8 @@ is already narrowed."
   :ensure t
   :diminish projectile-mode
   :init
+  (setq projectile-indexing-method 'alien
+        projectile-enable-caching t)
   (general-define-key :prefix my-leader
                       :states 'normal
   		              "pp" 'counsel-projectile-switch-project
@@ -520,16 +537,8 @@ is already narrowed."
   		              "t" 'projectile-find-other-file
 		              "T" 'projectile-find-other-file-other-window)
 
-  (setq my/projectile-ignored-project-directories '(".rustup" ".cargo"))
-  (defun my/projectile-ignore-project-function (file)
-    (let ((result nil))
-            (dolist (ignored-dir my/projectile-ignored-project-directories)
-              (if (string-search ignored-dir file)
-                  (setq result t)))
-            result))
-
   (setq projectile-enable-caching t
-        projectile-ignored-project-function #'my/projectile-ignore-project-function)
+        projectile-fd-executable nil)
 
   (setq projectile-other-file-alist
         '(("cpp" "h" "hpp" "ipp" "hh")
@@ -554,19 +563,19 @@ is already narrowed."
   (defun my/grandparent-directory (file-name)
     (file-name-parent-directory (file-name-parent-directory file-name)))
 
-  (defun my/projectile-other-file-filter (orig-fun &rest args)
-    (let* ((base-name (car args))
-           (dir (my/grandparent-directory base-name))
-           (result (apply orig-fun args)))
-      (cl-remove-if-not (lambda (file)
-                          (equal (concat (projectile-project-root) (my/grandparent-directory file)) dir)) result)))
+  ;; (defun my/projectile-other-file-filter (orig-fun &rest args)
+  ;;   (let* ((base-name (car args))
+  ;;          (dir (my/grandparent-directory base-name))
+  ;;          (result (apply orig-fun args)))
+  ;;     (cl-remove-if-not (lambda (file) (equal (concat (projectile-project-root) (my/grandparent-directory file)) dir))
+  ;;                       result)))
 
-  (advice-add 'projectile-get-other-files :around #'my/projectile-other-file-filter)
+  ;; (advice-add 'projectile-get-other-files :around #'my/projectile-other-file-filter)
 
   ;; Don't slow Emacs to a crawl when working with TRAMP.
-  (defadvice projectile-project-root (around ignore-remote first activate)
-    (unless (file-remote-p default-directory)
-      ad-do-it))
+  ;; (defadvice projectile-project-root (around ignore-remote first activate)
+  ;;   (unless (file-remote-p default-directory)
+  ;;     ad-do-it))
   :config
   (projectile-mode))
 
@@ -610,7 +619,7 @@ is already narrowed."
 
   (rg-define-search my/rg-search-dir
     :query ask
-    :dir current
+    :dir (concat default-directory "..")
     :files "all")
 
   (defun my/rg-search (arg)
@@ -851,8 +860,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (setq c-basic-offset 4
 	    gdb-many-windows t
 	    c-default-style "bsd")
+  (c-set-offset 'inextern-lang 0)
   (c-set-offset 'innamespace 0)
-  (c-set-offset 'inextern-lang 0))
+  (c-set-offset 'case-label '+))
 
 (use-package cmake-mode
   :ensure t
@@ -867,14 +877,50 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                       :states 'normal
                       "M--" #'lsp-find-references))
 
+(use-package clang-format
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook #'clang-format-on-save-mode)
+
+  (defun my-clang-format-region ()
+    (interactive)
+    (let ((start (if (use-region-p) (region-beginning) (point)))
+          (end (if (use-region-p) (region-end) (point)))
+          (assumed-filename (if (file-remote-p buffer-file-name)
+                                (concat (getenv "HOME") "/" (file-name-nondirectory buffer-file-name))
+                              buffer-file-name)))
+      (clang-format-region start end clang-format-style assumed-filename)))
+  (global-set-key '[(control meta tab)] 'my-clang-format-region)
+
+  (defun my-clang-format-buffer ()
+    (interactive)
+    (let ((start (point-min))
+          (end (point-max))
+          (assumed-filename (if (file-remote-p buffer-file-name)
+                                (concat (getenv "HOME") "/" (file-name-nondirectory buffer-file-name))
+                              buffer-file-name)))
+      (clang-format-region start end clang-format-style assumed-filename)))
+
+  (add-hook 'c-mode-hook (lambda ()
+                           (when (file-remote-p buffer-file-name)
+                             (add-hook 'before-save-hook #'my-clang-format-buffer nil t))))
+  (add-hook 'c++-mode-hook (lambda ()
+                             (when (file-remote-p buffer-file-name)
+                               (add-hook 'before-save-hook #'my-clang-format-buffer nil t)))))
+
+;; (use-package clang-format+
+;;   :load-path "~/.emacs.d/emacs-clang-format-plus"
+;;   :config
+;;   (add-hook 'c-mode-common-hook #'clang-format+-mode))
+
 (use-package glsl-mode
   :ensure t
   :mode ("\\.[fv]s\\'" . glsl-mode))
 
-(use-package elpy
-  :ensure t
-  :config
-  (elpy-enable))
+;; (use-package elpy
+;;   :ensure t
+;;   :config
+;;   (elpy-enable))
 
 ;; RUST SETTINGS
 (use-package rust-mode
@@ -919,10 +965,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package typescript-mode
   :ensure t)
 
-(use-package tramp
-  :config
-  (setq tramp-verbose 2))
-
 (use-package neotree
   :ensure t
   :config
@@ -960,6 +1002,21 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (general-define-key :keymaps 'normal "C-t" #'my/new-tab)
 (general-define-key :keymaps 'normal "C-w" #'my/close-tab)
 
+(connection-local-set-profile-variables
+ 'remote-direct-async-process
+ '((tramp-direct-async-process . t)))
+
+(connection-local-set-profiles
+ '(:application tramp :protocol "scp")
+ 'remote-direct-async-process)
+
+(setq magit-tramp-pipe-stty-settings 'pty)
+
+(setq remote-file-name-inhibit-locks t
+      tramp-use-scp-direct-remote-copying t
+      remote-file-name-inhibit-auto-save-visited t)
+
+(setq tramp-copy-size-limit (* 1024 1024))
 
 ;; Escape quits everything
 (defun minibuffer-keyboard-quit ()
