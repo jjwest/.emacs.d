@@ -903,14 +903,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :config
   (setq tramp-verbose 2))
 
-(use-package neotree
-  :ensure t
-  :config
-  (general-define-key :keymaps 'neotree-mode-map
-		              :states 'normal
-		              "<return>" #'neotree-enter
-		              "<tab>" #'neotree-enter))
-
 (use-package markdown-mode
   :ensure t
   :mode ("\\.md\\'" . markdown-mode))
