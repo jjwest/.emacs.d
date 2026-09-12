@@ -496,6 +496,7 @@ is already narrowed."
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
+  (company-frontends-set 'company-frontends '(company-pseudo-tooltip-unless-just-one-frontend))
   (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
