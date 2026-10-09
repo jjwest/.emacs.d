@@ -529,7 +529,7 @@ is already narrowed."
                   (setq result t)))
             result))
 
-  (setq projectile-enable-caching t
+  (setq projectile-enable-caching 'persistent
         projectile-ignored-project-function #'my/projectile-ignore-project-function)
 
   (setq projectile-other-file-alist
