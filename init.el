@@ -511,6 +511,7 @@ is already narrowed."
   :init
   (add-hook 'prog-mode-hook #'company-mode)
   :config
+  (company-frontends-set 'company-frontends '(company-pseudo-tooltip-unless-just-one-frontend))
   (general-define-key "C-SPC" 'company-complete)
   (general-define-key :states '(normal insert)
 		              "C-SPC" 'company-complete)
@@ -537,8 +538,16 @@ is already narrowed."
   		              "t" 'projectile-find-other-file
 		              "T" 'projectile-find-other-file-other-window)
 
-  (setq projectile-enable-caching t
-        projectile-fd-executable nil)
+  (setq my/projectile-ignored-project-directories '(".rustup" ".cargo"))
+  (defun my/projectile-ignore-project-function (file)
+    (let ((result nil))
+            (dolist (ignored-dir my/projectile-ignored-project-directories)
+              (if (string-search ignored-dir file)
+                  (setq result t)))
+            result))
+
+  (setq projectile-enable-caching 'persistent
+        projectile-ignored-project-function #'my/projectile-ignore-project-function)
 
   (setq projectile-other-file-alist
         '(("cpp" "h" "hpp" "ipp" "hh")
@@ -725,13 +734,8 @@ is already narrowed."
   (define-key transient-edit-map   "q" 'transient-quit-one)
   (define-key transient-sticky-map "q" 'transient-quit-seq) )
 
-(use-package xterm-color
-  :config
-  (setq compilation-environment '("TERM=xterm-256color"))
-  (defun my/advice-compilation-filter (f proc string)
-    (funcall f proc (xterm-color-filter string)))
-  (advice-add 'compilation-filter :around #'my/advice-compilation-filter))
-
+(require 'ansi-color)
+(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
 (use-package smerge-mode
   :ensure hydra
@@ -965,13 +969,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package typescript-mode
   :ensure t)
 
-(use-package neotree
-  :ensure t
+(use-package tramp
   :config
-  (general-define-key :keymaps 'neotree-mode-map
-		              :states 'normal
-		              "<return>" #'neotree-enter
-		              "<tab>" #'neotree-enter))
+  (setq tramp-verbose 2))
 
 (use-package markdown-mode
   :ensure t

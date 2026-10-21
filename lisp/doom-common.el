@@ -1,4 +1,4 @@
-;;; doom-common.el
+;;; doom-common.el  -*- lexical-binding: t; -*-
 (require 'f)
 (require 's)
 (require 'evil)

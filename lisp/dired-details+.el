@@ -1,4 +1,4 @@
-;;; dired-details+.el --- Enhancements to library `dired-details+.el'.
+;;; dired-details+.el --- Enhancements to library `dired-details+.el'.  -*- lexical-binding: t; -*-
 ;;
 ;; Filename: dired-details+.el
 ;; Description: Enhancements to library `dired-details+.el'.
