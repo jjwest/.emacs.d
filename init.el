@@ -334,10 +334,14 @@ is already narrowed."
 
   (solaire-global-mode +1))
 
-(use-package tramp
+(use-package tramp-rpc
+  :after tramp
+  :vc (:url "https://github.com/ArthurHeymans/emacs-tramp-rpc"
+       :rev :newest
+       :lisp-dir "lisp")
   :config
-  (setq tramp-verbose 2))
-
+  (setq tramp-rpc-deploy-prefer-build t)
+  (add-to-list 'tramp-remote-path tramp-rpc-deploy-remote-directory))
 
 (use-package doom-common
   :ensure s
